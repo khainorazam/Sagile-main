@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SprintController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,7 @@ Route::post('sprint', 'SprintController@store')->name('sprints.store');
 Route::post('sprint/{sprint}', 'SprintController@update')->name('sprints.update');
 Route::post('sprint/{sprint}/destroy', 'SprintController@destroy')->name('sprints.destroy');
 Route::get('search','SprintController@search');
+Route::get('/update',[SprintController::class, 'update2'])->name('sprint.update');
 
 //Route for product feature
 Route::get('profeature', 'ProductFeatureController@index')->name('profeature.index');

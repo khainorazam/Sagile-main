@@ -5,6 +5,7 @@ use App\Sprint;
 use App\Project;
 use App\User;
 use App\ProductFeature;
+use DB;
 
 use Illuminate\Http\Request;
 
@@ -98,6 +99,18 @@ class SprintController extends Controller
         return view('sprint.edit',['sprint'=>$sprint, 'projects'=>$project->all()]);
     }
 
+    public function update2(Request $request){
+        DB::table('sprint')->where('sprint_id', $request->sprint_id)->update([
+            'proj_name'=> $request->proj_name,
+            'sprint_name'=>$request->sprint_name,
+            'sprint_desc'=>$request->sprint_desc,
+            'users_name'=>$request->users_name,
+            'start_sprint'=>$request->start_sprint,
+            'end_sprint'=>$request->end_sprint
+
+        ]);
+        return back()->with('success','Sprint updated successfully');
+    }
 
     public function update( Request $request, Sprint $sprint, $proj_name = [])
     {
