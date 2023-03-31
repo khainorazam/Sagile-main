@@ -6,6 +6,7 @@ use App\Team;
 use App\User;
 use App\Role;
 use App\TeamMapping;
+use App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 
@@ -14,16 +15,22 @@ class TeamMappingController extends Controller
 {
     public function index($team_name)
     {
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+
         $team = new Team();
         $teammapping = new TeamMapping();
         $teammapping = TeamMapping::where('team_name', '=', "$team_name")->get();
-        return view('teammapping.index',['teammappings'=>$teammapping, 'teams'=>$team->all()]);
+        return view('teammapping.index',['teammappings'=>$teammapping, 'teams'=>$team->all()])
+            ->with('role_name', $user_role_name);
         
         //return view('teammapping.index')->with ('teammappings', $teammapping->all(), 'teams',$team->all());
     }
     
     public function create($team_name)
     {
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
         $teammapping = new TeamMapping;
       
         // $user = new User;
@@ -37,7 +44,8 @@ class TeamMappingController extends Controller
         
         $roles = $role->select('role_name')->get();
         $teammapping = TeamMapping::where('team_name', '=', "$team_name")->get();
-        return view('teammapping.create',['teammappings'=>$teammapping, 'roles'=>$role->all()]);
+        return view('teammapping.create',['teammappings'=>$teammapping, 'roles'=>$role->all()])
+            ->with('role_name', $user_role_name);
     }
     
     public function store(Request $request)

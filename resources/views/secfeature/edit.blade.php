@@ -16,6 +16,24 @@
 @endif
 @endsection
 
+@section('navbar')
+@if ($role_name == 'Admin')
+    @include('inc.navbar')
+
+@elseif ($role_name == 'Project Manager')
+    @include('inc.navprojectmanager')
+
+@elseif ($role_name == 'Product Owner')
+    @include('inc.navproductowner')
+
+@elseif ($role_name == 'Scrum Master')
+    @include('inc.navscrummaster')
+
+@elseif ($role_name == 'Developer')
+    @include('inc.navdeveloper')
+@endif
+@endsection
+
 @section('content')
 <br><br><br>
 <form action="{{route('secfeature.update', $secfeature)}}" method="post">

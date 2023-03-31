@@ -5,19 +5,30 @@ namespace App\Http\Controllers;
 use App\Status;
 use App\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Auth;
+
 
 class StatusController extends Controller
 {
     public function index()
     {
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
         $tasks = auth()->user()->statuses()->with('tasks')->get();
-        return view('status.index')->with ('statuses', $tasks->all());
+        return view('status.index')->with ('statuses', $tasks->all())
+            ->with('role_name', $user_role_name);
     }
 
     public function create()
     {
+
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+
         $status = new Status;
-        return view('status.create')->with ('statuses',$status->all());
+        return view('status.create')
+            ->with ('statuses',$status->all())
+            ->with('role_name', $user_role_name);
     }
 
     public function store(Request $request)
@@ -44,8 +55,13 @@ class StatusController extends Controller
 
     public function edit(Status $status)
     {
-    
-        return view('status.edit')->with('statuses', Status::all())->with('status', $status);
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+
+        return view('status.edit')
+            ->with('statuses', Status::all())
+            ->with('status', $status)
+            ->with('role_name', $user_role_name);
     }
 
     public function update(Request $request, Status $statuses)

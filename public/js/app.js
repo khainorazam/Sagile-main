@@ -2330,44 +2330,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -2411,7 +2373,6 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('v-select', vue_select__WEB
             return JSON.stringify(option);
           } catch (e) {
             return console.warn("[vue-select warn]: Could not stringify option " + "to generate unique key. Please provide 'getOptionKey' prop " + "to return a unique key for each option.\n" + 'https://vue-select.org/api/props.html#getoptionkey');
-            return null;
           }
         }
       }
@@ -2434,7 +2395,8 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('v-select', vue_select__WEB
     errorMessage: ""
   };
 }), _defineProperty(_components$data$prop, "mounted", function mounted() {
-  this.newTask.status_id = this.statusId;
+  this.newTask.status_id = this.statusId; // this.sprints = ["sprint", "sprint2"]
+
   this.sprints = JSON.parse(JSON.stringify(this.sprint));
   this.userstories = JSON.parse(JSON.stringify(this.userstory));
 }), _defineProperty(_components$data$prop, "methods", {
@@ -2524,78 +2486,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.umd.js");
 /* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuedraggable__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _AddTaskForm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AddTaskForm */ "./resources/js/components/AddTaskForm.vue");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -2764,7 +2654,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.status-drag[data-v-12d93558] {\n  transition: transform 0.5s;\n  transition-property: all;\n}\n", ""]);
+exports.push([module.i, "\n.status-drag[data-v-12d93558] {\r\n  transition: transform 0.5s;\r\n  transition-property: all;\n}\r\n", ""]);
 
 // exports
 
@@ -24915,58 +24805,63 @@ var render = function() {
           1
         ),
         _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model.trim",
-              value: _vm.newTask.id,
-              expression: "newTask.id",
-              modifiers: { trim: true }
-            }
-          ],
-          staticClass:
-            "block w-full px-2 py-1 mt-4 text-lg border-b border-blue-800 rounded",
-          attrs: { type: "text", placeholder: "Task ID" },
-          domProps: { value: _vm.newTask.id },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+        _c("div", [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model.trim",
+                value: _vm.newTask.id,
+                expression: "newTask.id",
+                modifiers: { trim: true }
               }
-              _vm.$set(_vm.newTask, "id", $event.target.value.trim())
-            },
-            blur: function($event) {
-              return _vm.$forceUpdate()
+            ],
+            staticClass:
+              "block w-full px-2 py-1 mt-4 text-lg border-b border-blue-800 rounded",
+            attrs: { type: "text", placeholder: "Task ID" },
+            domProps: { value: _vm.newTask.id },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.newTask, "id", $event.target.value.trim())
+              },
+              blur: function($event) {
+                return _vm.$forceUpdate()
+              }
             }
-          }
-        }),
+          })
+        ]),
         _vm._v(" "),
-        _c("textarea", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model.trim",
-              value: _vm.newTask.description,
-              expression: "newTask.description",
-              modifiers: { trim: true }
-            }
-          ],
-          staticClass: "mt-3 mb-2 p-2 block w-full p-1 border text-sm rounded",
-          attrs: { rows: "2", placeholder: "Add a description (optional)" },
-          domProps: { value: _vm.newTask.description },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+        _c("div", [
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model.trim",
+                value: _vm.newTask.description,
+                expression: "newTask.description",
+                modifiers: { trim: true }
               }
-              _vm.$set(_vm.newTask, "description", $event.target.value.trim())
-            },
-            blur: function($event) {
-              return _vm.$forceUpdate()
+            ],
+            staticClass:
+              "mt-3 mb-2 p-2 block w-full p-1 border text-sm rounded",
+            attrs: { rows: "2", placeholder: "Add a description (optional)" },
+            domProps: { value: _vm.newTask.description },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.newTask, "description", $event.target.value.trim())
+              },
+              blur: function($event) {
+                return _vm.$forceUpdate()
+              }
             }
-          }
-        }),
+          })
+        ]),
         _vm._v(" "),
         _c(
           "div",
@@ -25049,7 +24944,7 @@ var render = function() {
                 }
               }
             },
-            [_vm._v("\n      Cancel\n    ")]
+            [_vm._v("Cancel")]
           ),
           _vm._v(" "),
           _c(
@@ -25059,7 +24954,7 @@ var render = function() {
                 "px-3 py-1 leading-5 text-white bg-orange-600 hover:bg-orange-500 rounded",
               attrs: { type: "submit" }
             },
-            [_vm._v("\n      Add\n    ")]
+            [_vm._v("Add")]
           )
         ]
       )
@@ -25105,7 +25000,7 @@ var render = function() {
               },
               [
                 _c("h4", { staticClass: "font-medium text-white" }, [
-                  _vm._v("\n          " + _vm._s(status.title) + "\n        ")
+                  _vm._v(_vm._s(status.title))
                 ]),
                 _vm._v(" "),
                 _c(
@@ -25119,7 +25014,7 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("\n          Add Task\n        ")]
+                  [_vm._v("Add Task")]
                 )
               ]
             ),
@@ -25183,89 +25078,47 @@ var render = function() {
                               {
                                 staticClass: "block mb-2 text-xl text-gray-900"
                               },
-                              [
-                                _vm._v(
-                                  "\n                " +
-                                    _vm._s(task.title) +
-                                    "\n              "
-                                )
-                              ]
+                              [_vm._v(_vm._s(task.title))]
                             ),
                             _vm._v(" "),
                             _c("p", { staticClass: "text-gray-700 mb-3" }, [
-                              _vm._v(
-                                "\n                  " +
-                                  _vm._s(task.description) +
-                                  "\n              "
-                              )
+                              _vm._v(_vm._s(task.description))
                             ]),
                             _vm._v(" "),
                             _c("p", { staticClass: "text-gray-700 mb-1" }, [
                               _c(
                                 "span",
                                 { staticClass: "font-semibold text-black-900" },
-                                [
-                                  _vm._v(
-                                    "\n                Sprint : \n                "
-                                  )
-                                ]
+                                [_vm._v("Sprint :")]
                               ),
-                              _vm._v(
-                                "\n                " +
-                                  _vm._s(task.sprint_id) +
-                                  "\n              "
-                              )
+                              _vm._v(_vm._s(task.sprint_id))
                             ]),
                             _vm._v(" "),
                             _c("p", { staticClass: "text-gray-700 mb-1" }, [
                               _c(
                                 "span",
                                 { staticClass: "font-semibold text-black-900" },
-                                [
-                                  _vm._v(
-                                    "\n                User Story : \n                "
-                                  )
-                                ]
+                                [_vm._v("User Story :")]
                               ),
-                              _vm._v(
-                                "\n                 " +
-                                  _vm._s(task.u_id) +
-                                  "\n              "
-                              )
+                              _vm._v(_vm._s(task.u_id))
                             ]),
                             _vm._v(" "),
                             _c("p", { staticClass: "text-gray-700 mb-1" }, [
                               _c(
                                 "span",
                                 { staticClass: "font-semibold text-black-900" },
-                                [
-                                  _vm._v(
-                                    "\n                Start Date :\n                "
-                                  )
-                                ]
+                                [_vm._v("Start Date :")]
                               ),
-                              _vm._v(
-                                "\n                 " +
-                                  _vm._s(task.start_date) +
-                                  "\n              "
-                              )
+                              _vm._v(_vm._s(task.start_date))
                             ]),
                             _vm._v(" "),
                             _c("p", { staticClass: "text-gray-700 mb-1" }, [
                               _c(
                                 "span",
                                 { staticClass: "font-semibold text-black-900" },
-                                [
-                                  _vm._v(
-                                    "\n                End Date :\n                "
-                                  )
-                                ]
+                                [_vm._v("End Date :")]
                               ),
-                              _vm._v(
-                                "\n                " +
-                                  _vm._s(task.end_date) +
-                                  "\n              "
-                              )
+                              _vm._v(_vm._s(task.end_date))
                             ]),
                             _vm._v(" "),
                             _c(
@@ -25286,11 +25139,7 @@ var render = function() {
                                       }
                                     }
                                   },
-                                  [
-                                    _vm._v(
-                                      "\n              Edit\n              "
-                                    )
-                                  ]
+                                  [_vm._v("Edit")]
                                 ),
                                 _vm._v(" "),
                                 _c(
@@ -25304,11 +25153,7 @@ var render = function() {
                                       }
                                     }
                                   },
-                                  [
-                                    _vm._v(
-                                      "\n              Delete\n             "
-                                    )
-                                  ]
+                                  [_vm._v("Delete")]
                                 )
                               ]
                             )
@@ -25354,14 +25199,9 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v("\n            Add one\n          ")]
-                    ),
-                    _vm._v(" "),
-                    _c("addtask-form", {
-                      attrs: { sprint: _vm.sprints, userstory: _vm.userstories }
-                    })
-                  ],
-                  1
+                      [_vm._v("Add one")]
+                    )
+                  ]
                 )
               ],
               1

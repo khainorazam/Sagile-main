@@ -5,6 +5,7 @@ use App\Sprint;
 use App\Project;
 use App\User;
 use App\ProductFeature;
+use App\Http\Controllers\Auth;
 use DB;
 
 use Illuminate\Http\Request;
@@ -31,13 +32,17 @@ class SprintController extends Controller
 
     public function create()
     {
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+
         $project = new Project;
         $projects = $project->select('proj_name')->get();
-
+        
         $user = new User;
         $users = $user->select('name')->get();
 
-        return view('sprint.create', ['users'=>$user->all(), 'projects'=>$project->all()]);
+        return view('sprint.create', ['users'=>$user->all(), 'projects'=>$project->all()])
+            ->with('role_name', $user_role_name);
     }
 
     public function destroy(Sprint $sprint)
@@ -92,11 +97,15 @@ class SprintController extends Controller
 
     public function edit(Sprint $sprint, $id)
     {
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+
         $project = new Project;
         $sprint = new Sprint;
         $sprint = Sprint::find($id);
        // return view('project.edit')->with('projects', $project->all());
-        return view('sprint.edit',['sprint'=>$sprint, 'projects'=>$project->all()]);
+        return view('sprint.edit',['sprint'=>$sprint, 'projects'=>$project->all()])
+            ->with('role_name', $user_role_name);
     }
 
     public function update2(Request $request){
@@ -109,7 +118,8 @@ class SprintController extends Controller
             'end_sprint'=>$request->end_sprint
 
         ]);
-        return back()->with('success','Sprint updated successfully');
+        return back()->with('message', 'Sprint Updated!');
+        
     }
 
     public function update( Request $request, Sprint $sprint, $proj_name = [])

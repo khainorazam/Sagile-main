@@ -9,6 +9,7 @@ use App\Role;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
@@ -16,8 +17,12 @@ class RegisterController extends Controller
 
     public function showRegistrationForm()
     {
-        $role_name = new Role;
-        $role_name = $role_name->select('role_name')->get();
+        // $role_name = new Role;
+        // $role_name = $role_name->select('role_name')->where('role_name', '!=', 'Admin')->get();
+        $role_name = DB::table('roles')
+                ->select('role_name')
+                ->whereNotIn('role_name', ['Admin', 'User'])
+                ->get();
         
         return view('auth.register')->with('role_name', $role_name);
     }
@@ -69,8 +74,6 @@ class RegisterController extends Controller
             'username' => $data['username'],
             'role_name' => $data['role'],
             'country' => $data['country'],
-            //'district'=>$data ['district'],
-            //'role_id' =>$data['role_id'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);

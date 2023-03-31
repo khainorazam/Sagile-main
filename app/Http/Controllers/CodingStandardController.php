@@ -4,24 +4,31 @@ namespace App\Http\Controllers;
 use App\Project;
 use App\CodingStandard;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Auth;
+
 
 class CodingStandardController extends Controller
 {
     public function index()
-    {
+    {   
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
         $project = new Project();
         $codestand = new CodingStandard();
         //return view('sprint.create',['projects'=> $project->all(), 'users'=> $user->all()]);
-        return view ('codestand.index', ['codestands'=>$codestand->all(), 'projects'=>$project->all()]);
+        return view ('codestand.index', ['codestands'=>$codestand->all(), 'projects'=>$project->all()])
+            ->with('role_name', $user_role_name);
     }
 
     public function create()
     {
-        // $team = new Team;
-        // return view('team.create')->with ('teams',$team->all());
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+
         $project = new Project();
         $codestand = new CodingStandard();
-        return view('codestand.create',['codestands'=>$codestand->all(), 'projects'=>$project->all()]);
+        return view('codestand.create',['codestands'=>$codestand->all(), 'projects'=>$project->all()])
+            ->with('role_name', $user_role_name);
     }
 
     public function store(Request $request)
@@ -40,7 +47,13 @@ class CodingStandardController extends Controller
 
     public function edit(CodingStandard $codestand)
     {
-        return view('codestand.edit')->with('codestands', CodingStandard::all())->with('codestand', $codestand);
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+
+        return view('codestand.edit')
+            ->with('codestands', CodingStandard::all())
+            ->with('codestand', $codestand)
+            ->with('role_name', $user_role_name);
     }
 
     public function update(Request $request, CodingStandard $codestand)

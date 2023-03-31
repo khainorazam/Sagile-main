@@ -10,6 +10,7 @@ use App\PerformanceFeature;
 use App\Project;
 use App\Mapping;
 use App\Sprint;
+use App\Http\Controllers\Auth;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -75,6 +76,10 @@ class UserStoryController extends Controller
     
     public function create(Userstory $sprint_id)
     {
+
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+
         Route::currentRouteName();
         $sprint = Sprint::all();
         //$userstory = UserStory::find($request->sprint_id);        
@@ -90,7 +95,8 @@ class UserStoryController extends Controller
         
         //$sprint_id = $request->sprint_id;
         $sprint = Sprint::where('sprint_id', '=', "$sprint_id")->get();
-        return view('userstory.create',compact('sprint_id'),['proj_name','perfeatures'=> $perfeature->all(),'prios'=> $prio->all(), 'secfeatures'=> $secfeature->all(), 'projects'=>$project->all(),'statuses'=>$status->all(), 'sprint'=>$sprint_id]);
+        return view('userstory.create',compact('sprint_id'),['proj_name','perfeatures'=> $perfeature->all(),'prios'=> $prio->all(), 'secfeatures'=> $secfeature->all(), 'projects'=>$project->all(),'statuses'=>$status->all(), 'sprint'=>$sprint_id])
+            ->with('role_name', $user_role_name);
     }
 
     /**
@@ -154,6 +160,9 @@ class UserStoryController extends Controller
     {
         //$project = new Project;
         //return view('userstory.edit',['userstory'=>$userStory,'projects'=>$project->all()]);
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+        
         $project = new Project;
         // $workflow = new WorkflowStep;
         $status = new Status;
@@ -173,7 +182,8 @@ class UserStoryController extends Controller
 
         $status = $status->select('title')->get();
        
-        return view('userstory.edit',['secfeatures'=>$secfeature->all(), 'perfeatures'=>$perfeature->all(),'statuses'=>$status->all(),'userstory'=>$userstory, 'projects'=>$project->all()]);
+        return view('userstory.edit',['secfeatures'=>$secfeature->all(), 'perfeatures'=>$perfeature->all(),'statuses'=>$status->all(),'userstory'=>$userstory, 'projects'=>$project->all()])
+            ->with('role_name', $user_role_name);
         // 'maps'=>$map->all(),
     }
 

@@ -15,10 +15,13 @@ class RoleController extends Controller
      */
     public function index()
     {
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
         $project = new Project();
         $role = new Role;
         // return view('role.index')->with ('roles',$role->all());
-        return view ('role.index', ['roles'=>$role->all(), 'projects'=>$project->all()]);
+        return view ('role.index', ['roles'=>$role->all(), 'projects'=>$project->all()])
+            ->with('role_name', $user_role_name);
     }
 
     /**
@@ -28,8 +31,12 @@ class RoleController extends Controller
      */
     public function create()
     {
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
         $role = new Role;
-        return view('role.create')->with ('roles',$role->all());
+        return view('role.create')
+            ->with ('roles',$role->all())
+            ->with('role_name', $user_role_name);
     }
 
     /**
@@ -69,8 +76,12 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-    
-        return view('role.edit')->with('roles', Role::all())->with('role', $role);
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+        return view('role.edit')
+            ->with('roles', Role::all())
+            ->with('role', $role)
+            ->with('role_name', $user_role_name);
     }
 
     /**

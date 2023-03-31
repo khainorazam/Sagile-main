@@ -33,6 +33,15 @@
                      
 @endsection
 
+@section('navbar')
+@if ($role_name == 'Admin')
+  @include('inc.navbar')
+
+@elseif ($role_name == 'Project Manager')
+  @include('inc.navprojectmanager')
+@endif
+
+@endsection
 
 @section('content')
 <br><br><br>

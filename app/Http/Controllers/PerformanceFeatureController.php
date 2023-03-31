@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Project;
 use App\PerformanceFeature;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Auth;
+
 
 class PerformanceFeatureController extends Controller
 {
@@ -14,10 +16,13 @@ class PerformanceFeatureController extends Controller
      */
     public function index()
     {
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
         $project = new Project();
         $perfeature = new PerformanceFeature();
         //return view('sprint.create',['projects'=> $project->all(), 'users'=> $user->all()]);
-        return view ('perfeature.index', ['perfeatures'=>$perfeature->all(), 'projects'=>$project->all()]);
+        return view ('perfeature.index', ['perfeatures'=>$perfeature->all(), 'projects'=>$project->all()])
+            ->with('role_name', $user_role_name);
     }
 
     /**
@@ -27,8 +32,11 @@ class PerformanceFeatureController extends Controller
      */
     public function create()
     {
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
         $project = new Project();
-        return view ('perfeature.create')->with('projects',$project->all());
+        return view ('perfeature.create')->with('projects',$project->all())
+            ->with('role_name', $user_role_name);
     }
 
     /**
@@ -76,7 +84,15 @@ class PerformanceFeatureController extends Controller
      */
     public function edit(PerformanceFeature $perfeature)
     {
-        return view('perfeature.edit')->with('perfeatures', PerformanceFeature::all())->with('perfeature', $perfeature);
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+        $project = new Project();
+
+        return view('perfeature.edit',['projects'=>$project->all()])
+            ->with('perfeatures', PerformanceFeature::all())
+            ->with('perfeature', $perfeature)
+            ->with('role_name', $user_role_name);
+
     }
 
 

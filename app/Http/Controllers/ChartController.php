@@ -7,6 +7,7 @@ use App\User;
 use App\UserStory;
 use App\Project;
 use App\Sprint;
+use App\Http\Controllers\Auth;
 use DB;
 
 use Illuminate\Http\Request;
@@ -21,6 +22,9 @@ class ChartController extends Controller
      */
     public function index($sprint_id)
     {
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+
         $project = new Project;
         //$userstory = new UserStory;
         $sprint = new Sprint();
@@ -41,7 +45,9 @@ class ChartController extends Controller
         //         }
         $userstory = \App\UserStory::where('sprint_id', '=', $sprint_id)->get();
         //return view('chart.index',['userstories'=>$userstory->all(),'sprint'=>$sprint,'usersprint'=>$usersprint,'projects'=>$project->all()]);
-        return view('chart.index',['userstories'=>$userstory,'sprint'=>$sprint,'usersprint'=>$usersprint,'projects'=>$project->all()])->with('sprint_id', $sprint_id);
+        return view('chart.index',['userstories'=>$userstory,'sprint'=>$sprint,'usersprint'=>$usersprint,'projects'=>$project->all()])
+            ->with('role_name', $user_role_name)
+            ->with('sprint_id', $sprint_id);
         // ->with('start_date', json_encode($array))
     }
    

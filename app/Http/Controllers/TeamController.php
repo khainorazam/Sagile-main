@@ -14,21 +14,27 @@ class TeamController extends Controller
 {
     public function index()
     {
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
         $project = new Project();
         $team = new Team;
         // return view('team.index')->with ('teams',$team->all());
-        return view ('team.index', ['teams'=>$team->all(), 'projects'=>$project->all()]);
+        return view ('team.index', ['teams'=>$team->all(), 'projects'=>$project->all()])
+            ->with('role_name', $user_role_name);
     }
     
     public function create()
     {
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
         $team = new Team;
         // $role = new Role;
         
         // $roles = $role->select('role_name')->get();
         // $teammapping = TeamMapping::where('team_name', '=', "$team_name")->get();
         // return view('teammapping.create',['teammappings'=>$teammapping, 'roles'=>$role->all()]);
-        return view('team.create')->with ('teams',$team->all());
+        return view('team.create')->with ('teams',$team->all())
+            ->with('role_name', $user_role_name);
     }
     
     public function store(Request $request)
@@ -53,7 +59,11 @@ class TeamController extends Controller
 
     public function edit(Team $team)
     {
-        return view('team.edit')->with('teams', Team::all())->with('team', $team);
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+        return view('team.edit')->with('teams', Team::all())
+            ->with('team', $team)
+            ->with('role_name', $user_role_name);
     }
 
     public function update(Request $request, Team $team)

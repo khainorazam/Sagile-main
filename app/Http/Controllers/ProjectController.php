@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Project;
+use App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -36,9 +37,13 @@ class ProjectController extends Controller
      */
     public function create()
     {
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
         $project = new Project;
         // $pro = new Project;
-        return view('project.create')->with ('projects',$project->all());
+        return view('project.create')
+            ->with ('projects',$project->all())
+            ->with('role_name', $user_role_name);
         // return view('profeature.index')->with ('projects',$project->all());
         // return view('profeature.index',['projects'=>$project, 'pros'=>$pro]);
     }
@@ -105,7 +110,12 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('project.edit')->with('projects', Project::all())->with('project', $project);
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+        return view('project.edit')->with('projects', Project::all())
+        ->with('project', $project)
+        ->with('role_name', $user_role_name);
+
     }
 
     /**

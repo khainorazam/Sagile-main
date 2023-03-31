@@ -26,6 +26,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
+//Route for Project Actions
 Route::get('projects', 'ProjectController@index')->name('project.index');
 Route::get('projects/create', 'ProjectController@create')->name('projects.create');
 Route::get('projects/{project}/edit', 'ProjectController@edit')->name('projects.edit');
@@ -41,10 +42,11 @@ Route::post('sprint', 'SprintController@store')->name('sprints.store');
 Route::post('sprint/{sprint}', 'SprintController@update')->name('sprints.update');
 Route::post('sprint/{sprint}/destroy', 'SprintController@destroy')->name('sprints.destroy');
 Route::get('search','SprintController@search');
-Route::get('/update',[SprintController::class, 'update2'])->name('sprint.update');
+Route::post('/update',[SprintController::class, 'update2'])->name('sprint.update');
 
-//Route for product feature
+//Route for Project List
 Route::get('profeature', 'ProductFeatureController@index')->name('profeature.index');
+//Main Sprint Page
 Route::get('profeature/{proj_name}', 'ProductFeatureController@index2')->name('profeature.index2');
 // Route::post('profeature/{proj_name}', 'ProductFeatureController@index2')->name('profeature.index2');
 Route::get('profeature/userstory/{sprint_id}', 'ProductFeatureController@index3')->name('profeature.index3');
@@ -54,6 +56,8 @@ Route::get('sprint/{sprint_id}/edit2', 'ProductFeatureController@edit2')->name('
 
 //Route for chart
 Route::get('chart/{sprint_id}', 'ChartController@index')->name('chart.index');
+Route::get('/create-burndown', 'BurndownChartController@create');
+// Route::get('/create-burnup', 'BurnupChartController@create');
 
 //Route for team
 Route::get('team', 'TeamController@index')->name('team.index');
@@ -136,9 +140,11 @@ Route::get('attachment/create', 'AttachmentController@createForm')->name('attach
 Route::post('attachments', 'AttachmentController@fileUpload')->name('attachment.fileUpload');
 Route::get('attachments/{attachment}/destroy', 'AttachmentController@destroy')->name('attachments.destroy');
 
-//Route for teammapping
+//Route for Team Mapping (Assign Team Member to Team)
 //Route::get('teammapping', 'TeamMappingController@index')->name('teammapping.index');
-Route::get('teammappings/{team_name}', 'TeamMappingController@index')->name('teammapping.index');
+
+//view team members
+Route::get('teammappings/{team_name}', 'TeamMappingController@index')->name('teammapping.index'); 
 Route::get('teammappings/{team_name}/create', 'TeamMappingController@create')->name('teammappings.create');
 Route::get('teammappings/show', 'TeamMappingController@show')->name('teammappings.show');
 Route::get('teammappings/{teammapping_id}/edit', 'TeamMappingController@edit')->name('teammappings.edit');
@@ -167,7 +173,9 @@ Route::post('backlogs/{backlog}', 'BacklogController@update')->name('backlogs.up
 Route::post('backlogs/{backlog}/destroy', 'BacklogController@destroy')->name('backlogs.destroy');
 
 //Route for Task Assign
-Route::get('sprint/task', 'TaskController@index')->name('tasks.index');
+//Kanban Board
+Route::get('sprint/task', 'TaskController@index')->name('tasks.index'); 
+//Main Task Page 
 Route::get('task/{u_id}', 'TaskController@index2')->name('tasks.index2');
 Route::get('sprint/task/create', 'TaskController@create')->name('tasks.create');
 Route::get('task/{task}/destroy', 'TaskController@destroy')->name('tasks.destroy');

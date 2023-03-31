@@ -1,43 +1,5 @@
+<!--Project Main Page-->
 @extends('layouts.app2')
-
-
-<!--
-$connect = mysqli_connect("localhost", "root", "", "psmtrial");
-
-function fill_project($connect)
-{
-  $output = '';
-  $sql = "SELECT * FROM projects";
-  $result = mysqli_query($connect, $sql);
-
-  while($row = mysqli_fetch_array($result))
-  {
-    $output .='<option value="'$row["id"].'">'.$row["proj_name"].'</option>';
-  }
-  return $output;
-}
-
-function fill_sprint($connect)
-{
-  $output = '';
-  $sql = "SELECT * FROM sprint";
-  $result = mysqli_query($connect, $sql);
-
-  while($row = mysqli_fetch_array($result))
-  {
-    
-    $output .= '<div class="col-md-3">'
-    $output .= '<div style="boarder:1px solid #ccc; padding:20px; margin-bottom:20px;">' .$row["sprint_name"].'';
-    $output .='</div>';
-    $output .='</div>';
-  }
-  return $output;
-
-?>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>-->
 <style>
         table {
           font-family: arial, sans-serif;
@@ -65,19 +27,26 @@ function fill_sprint($connect)
             </a>
                      
         </li>
-@endforeach 
-
-{{-- @foreach($projects as $project)
-        <li>
-            <a href="{{ route('projects.edit', [$project]) }}">
-             {{ $project->proj_name }} 
-            </a>
-                     
-        </li>
-@endforeach --}}
-                     
+@endforeach                      
 @endsection
 
+@section('navbar')
+@if ($role_name == 'Admin')
+    @include('inc.navbar')
+
+@elseif ($role_name == 'Project Manager')
+    @include('inc.navprojectmanager')
+
+@elseif ($role_name == 'Product Owner')
+    @include('inc.navproductowner')
+
+@elseif ($role_name == 'Scrum Master')
+    @include('inc.navscrummaster')
+
+@elseif ($role_name == 'Developer')
+    @include('inc.navdeveloper')
+@endif
+@endsection
 
 @section('content')
 <br><br><br>
@@ -90,9 +59,20 @@ function fill_sprint($connect)
     <th>Description</th>
     <th>Start Date</th>
     <th>End Date</th>
+
+    <!--Project Features only given to Project Manager and Admin-->
+    @if ($role_name == 'Admin' || $role_name == 'Project Manager')
     <th>Edit</th>
-    <th>View</th>
+    @endif
+
+    <!--View Sprint only given to Product Owner and Admin-->
+    @if ($role_name == 'Admin' || $role_name == 'Product Owner')
+        <th>View</th>
+    @endif
+
+    @if ($role_name == 'Admin' || $role_name == 'Project Manager')
     <th>Delete</th>
+    @endif
 
 </tr>
 
@@ -114,18 +94,26 @@ function fill_sprint($connect)
           <th>
                   {{ $pro->end_date }}
           </th>
-
+        
+          <!--Project Features only given to Project Manager and Admin-->
+          @if ($role_name == 'Admin' || $role_name == 'Project Manager')
           <th>
               <button type="submit"><a href="{{route('projects.edit', $pro)}}">Edit</a></button>
           </th>
+          @endif
 
-          <th>
-              <button type="submit"><a href="{{action('ProductFeatureController@index2', $pro['proj_name'])}}">View</button>
-          </th>
-
+          <!--View Sprint only given to Product Owner and Admin-->
+          @if ($role_name == 'Admin' || $role_name == 'Product Owner')
+            <th>
+                <button type="submit"><a href="{{action('ProductFeatureController@index2', $pro['proj_name'])}}">View</button>
+            </th>
+          @endif
+          
+          @if ($role_name == 'Admin' || $role_name == 'Project Manager')
           <th>
               <button type="submit"><a href="{{route('projects.destroy', $pro)}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this project?');">Delete</button>
           </th>
+          @endif
           
       </tr>
 
@@ -134,7 +122,9 @@ function fill_sprint($connect)
   </table>
   <br><br><br>
 
+  @if ($role_name == 'Admin' || $role_name == 'Project Manager')
   <button type="submit"><a href="{{route('projects.create')}}">Add Project</a></button>
+  @endif
 
 @endsection
 

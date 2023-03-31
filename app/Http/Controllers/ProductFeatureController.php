@@ -1,4 +1,5 @@
 <?php
+//Controller for Project List, Sprint
 
 namespace App\Http\Controllers;
 use App\Project;
@@ -16,6 +17,8 @@ class ProductFeatureController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    //Projects List Page
     public function index(User $id, Project $project)
     {
 
@@ -26,9 +29,12 @@ class ProductFeatureController extends Controller
             
         }
         if($id)
-        {
+        {   
+            $user = \Auth::user();
+            $user_role_name = $user->role_name;
             $pro = \App\Project::where('user_id', '=', $id)->get();     
-            return view('profeature.index',['projects'=>$project->all(), 'pros'=>$pro->all()]);
+            return view('profeature.index',['projects'=>$project->all(), 'pros'=>$pro->all()])
+                ->with('role_name', $user_role_name);
 
             // $project =\App\Project::where('proj_name', '=', "$proj_name")->get();
             // return view('profeature.index',['projects'=>$project]);
@@ -37,15 +43,24 @@ class ProductFeatureController extends Controller
             
     }
 
+    //Main Sprint Page 
     public function index2($proj_name)
     {
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+
         $project = new Project();
         $sprint = Sprint::where('proj_name', '=', "$proj_name")->get();
-        return view('profeature.index2',['sprints'=>$sprint, 'projects'=>$project->all()]);
+        return view('profeature.index2',['sprints'=>$sprint, 'projects'=>$project->all()])
+            ->with('role_name', $user_role_name);
     }
 
+    //Main UserStory Page 
     public function index3($sprint_id)
     {
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+
         $project = new Project();
         $create = new UserStory();
         $sprint = new Sprint();
@@ -53,7 +68,9 @@ class ProductFeatureController extends Controller
         
         $userstory = \App\UserStory::where('sprint_id', '=', $sprint_id)->get();
         //dd($userstory);
-        return view('profeature.index3',['create'=>$create, 'sprint'=>$sprint, 'usersprint'=>$usersprint,'userstories'=>$userstory, 'projects'=>$project->all()])->with('sprint_id', $sprint_id);
+        return view('profeature.index3',['create'=>$create, 'sprint'=>$sprint, 'usersprint'=>$usersprint,'userstories'=>$userstory, 'projects'=>$project->all()])
+            ->with('role_name', $user_role_name)
+            ->with('sprint_id', $sprint_id);
         
     }
     /**

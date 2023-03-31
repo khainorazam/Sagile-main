@@ -44,6 +44,24 @@
 @endif
 @endsection
 
+@section('navbar')
+@if ($role_name == 'Admin')
+    @include('inc.navbar')
+
+@elseif ($role_name == 'Project Manager')
+    @include('inc.navprojectmanager')
+
+@elseif ($role_name == 'Product Owner')
+    @include('inc.navproductowner')
+
+@elseif ($role_name == 'Scrum Master')
+    @include('inc.navscrummaster')
+
+@elseif ($role_name == 'Developer')
+    @include('inc.navdeveloper')
+@endif
+@endsection
+
 @section('content')
 <br><br>
     <a href="{{route('profeature.index')}}" class="button">Project List</a>
@@ -55,13 +73,13 @@
     <table>
         <tr>
             <th>ID</th>
-            <th>Title</th>
+            <th>Task</th>
             <th>Description</th>
             <th>Start Date</th>
             <th>End Date</th>
             <th>Order</th>
             <th>Status ID</th>   
-            <th>Edit</th>
+            <th>Edit</th> <!--Not Done-->
             <th>Delete</th>
         </tr>
       @if(count($tasks) )
@@ -95,6 +113,7 @@
               {{ $task->status_id }}
             </th>
 
+            <!--Not Done-->
             <th>
             <a href="{{route('tasks.create')}}">
             Edit

@@ -8,12 +8,16 @@ use App\UserStory;
 use App\User;
 use App\Sprint;
 use App\Project;
+use App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
     public function index2($u_id)
     {
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+
         $project = new Project;
         $tasks = auth()->user()->statuses()->with('tasks')->get();
         $userstory = new UserStory;
@@ -21,7 +25,9 @@ class TaskController extends Controller
         $usersprint = new userStory();
         $tasks = \App\Task::where('u_id', '=', $u_id)->get();
 
-        return view('tasks.index2',['tasks'=>$tasks,'userstories'=>$userstory,'sprint'=>$sprint,'usersprint'=>$usersprint,'projects'=>$project->all()],compact('tasks'))->with('u_id', $u_id);
+        return view('tasks.index2',['tasks'=>$tasks,'userstories'=>$userstory,'sprint'=>$sprint,'usersprint'=>$usersprint,'projects'=>$project->all()],compact('tasks'))
+            ->with('u_id', $u_id)
+            ->with('role_name', $user_role_name);
     }
 
     public function index()
@@ -38,10 +44,9 @@ class TaskController extends Controller
 
     //    $userstory = \App\Task::where('sprint_id', '=', $sprint_id)->get();
     //    $tasks2 = \App\Task::where('u_id', '=', $u_id)->get();
-        //\App\Status::where('user_id', '=', 1)->get();
-        //auth()->user()->statuses()->with('tasks')->get();
-        //['projects'=>$project, 'pros'=>$pro])
-        //return view('tasks.index', ['tasks'=>$tasks]);
+    //\App\Status::where('user_id', '=', 1)->get();
+    //auth()->user()->statuses()->with('tasks')->get();
+    //['projects'=>$project, 'pros'=>$pro])
         return view('tasks.index',['sprints'=>$sprint->all(), 'userstories'=>$userstory->all()])->with(compact('tasks','sprints','userstories'));
     //    return view('tasks.index',['tasks2'=>$tasks2,'userstories'=>$userstory,'sprint'=>$sprint,'usersprint'=>$usersprint,'projects'=>$project->all()],compact('tasks'))->with('sprint_id', $sprint_id);
     }
@@ -53,7 +58,9 @@ class TaskController extends Controller
      */
     public function create()
     {
-        
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+
         $sprint= new Sprint;
         //$sprint = \App\Sprint::where('proj_name', '=', $proj_name)->get();
         $sprints= $sprint->select('sprint_id')->get();
@@ -68,7 +75,8 @@ class TaskController extends Controller
         //$userstory = \App\UserStory::where('sprint_id', '=', $sprint_id)->get();
         $userstories = $userstory->select('u_id')->get();
 
-        return view('tasks.create',['statuses'=>$status->all(), 'sprints'=>$sprint->all(), 'userstories'=>$userstory->all(), 'projects'=>$project->all()]);
+        return view('tasks.create',['statuses'=>$status->all(), 'sprints'=>$sprint->all(), 'userstories'=>$userstory->all(), 'projects'=>$project->all()])
+            ->with('role_name', $user_role_name);
         //return view('tasks.create',['statuses'=>$status->all(), 'sprints'=>$sprint->all(), 'userstories'=>$userstory->all(), 'projects'=>$project->all()])->with(compact('proj_name', 'sprint_id'));
     }
     //public function create($u_id)

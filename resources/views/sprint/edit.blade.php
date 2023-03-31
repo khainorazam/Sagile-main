@@ -16,10 +16,28 @@
 @endif
 @endsection
 
+@section('navbar')
+@if ($role_name == 'Admin')
+    @include('inc.navbar')
+
+@elseif ($role_name == 'Project Manager')
+    @include('inc.navprojectmanager')
+
+@elseif ($role_name == 'Product Owner')
+    @include('inc.navproductowner')
+
+@elseif ($role_name == 'Scrum Master')
+    @include('inc.navscrummaster')
+
+@elseif ($role_name == 'Developer')
+    @include('inc.navdeveloper')
+@endif
+@endsection
+
 @section('content')
 
 <br><br><br>
-<form action="{{route('sprint.update')}}" method="get">
+<form action="{{route('sprint.update')}}" method="post">
     
         @csrf
  
@@ -46,4 +64,11 @@
         <button type="submit", formaction="{{route('sprints.destroy', $sprint)}}", method="post" onclick="return confirm('Are you sure to delete this sprint?')">Delete</button>
 </form>
     <br><br><br>
+
+    @if(session()->has('message'))
+    <div class="alert alert-success">
+        {{ session()->get('message') }}
+    </div>
+@endif
 @endsection
+

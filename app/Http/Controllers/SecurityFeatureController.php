@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\SecurityFeature;
 use App\Project;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Auth;
 
 class SecurityFeatureController extends Controller
 {
@@ -15,6 +16,8 @@ class SecurityFeatureController extends Controller
      */
     public function index()
     {
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
         $project = new Project;
         // if (\Auth::check())
         // {
@@ -28,7 +31,7 @@ class SecurityFeatureController extends Controller
         // }
         
         $secfeature = new SecurityFeature();
-        return view ('secfeature.index',['secfeatures'=>$secfeature->all(), 'projects'=>$project->all()]);
+        return view ('secfeature.index',['secfeatures'=>$secfeature->all(), 'projects'=>$project->all()])->with('role_name', $user_role_name);
     }
 
     /**
@@ -38,7 +41,10 @@ class SecurityFeatureController extends Controller
      */
     public function create()
     {
-        return view ('secfeature.create');
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+        return view ('secfeature.create')
+            ->with('role_name', $user_role_name);
     }
 
     /**
@@ -89,9 +95,15 @@ class SecurityFeatureController extends Controller
      */
     public function edit(SecurityFeature $secfeature)
     {
+        $user = \Auth::user();
+        $user_role_name = $user->role_name;
+
         $project = new Project;
-        $secfeature = new SecurityFeature;
-        return view('secfeature.edit',['secfeature'=>$secfeature->all(), 'projects'=>$project->all()]);
+
+        return view('secfeature.edit',['projects'=>$project->all()])
+            ->with('secfeatures', SecurityFeature::all())
+            ->with('secfeature', $secfeature)
+            ->with('role_name', $user_role_name);
 
     }
 

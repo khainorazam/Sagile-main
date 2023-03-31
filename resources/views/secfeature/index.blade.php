@@ -33,6 +33,24 @@
 @endif
 @endsection
 
+@section('navbar')
+@if ($role_name == 'Admin')
+    @include('inc.navbar')
+
+@elseif ($role_name == 'Project Manager')
+    @include('inc.navprojectmanager')
+
+@elseif ($role_name == 'Product Owner')
+    @include('inc.navproductowner')
+
+@elseif ($role_name == 'Scrum Master')
+    @include('inc.navscrummaster')
+
+@elseif ($role_name == 'Developer')
+    @include('inc.navdeveloper')
+@endif
+@endsection
+
 @section('content')
 <br><br><br>
 <table>
@@ -54,9 +72,7 @@
     </th>
 
     <th>
-      <button type="submit">
-          <a href="{{action('SecurityFeatureController@edit', $secfeature['secfeature_name'])}}">Edit</a>
-      </button>
+      <button type="submit"><a href="{{route('secfeature.edit', $secfeature)}}">Edit</a></button>
     </th>
 
     <th>
