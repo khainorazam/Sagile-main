@@ -1,4 +1,4 @@
-# ---SAgile Project Management Tool
+# SAgile Project Management Tool
 SAgile is a project management tool built with Laravel 7. It allows teams to manage projects, tasks, and deadlines in a collaborative environment. The tool is designed to improve team productivity and collaboration, enabling you to easily manage your project from start to finish.
 
 Features
