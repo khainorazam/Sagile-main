@@ -17,14 +17,8 @@ class RegisterController extends Controller
 
     public function showRegistrationForm()
     {
-        // $role_name = new Role;
-        // $role_name = $role_name->select('role_name')->where('role_name', '!=', 'Admin')->get();
-        $role_name = DB::table('roles')
-                ->select('role_name')
-                ->whereNotIn('role_name', ['Admin', 'User'])
-                ->get();
         
-        return view('auth.register')->with('role_name', $role_name);
+        return view('auth.register');
     }
 
     /**
@@ -72,7 +66,6 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'username' => $data['username'],
-            'role_name' => $data['role'],
             'country' => $data['country'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),

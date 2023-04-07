@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  <title>Project Management Tool</title>
+  <title>SAgile</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
@@ -130,7 +130,7 @@
     </style>
   </head>
   <body>
-  <header><h3>Project Management Tool</h3></header>
+  <header><h3>SAgile Project Management Tool</h3></header>
       <section>
         <nav>
           <ul>

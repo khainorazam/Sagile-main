@@ -17,12 +17,10 @@ class PerformanceFeatureController extends Controller
     public function index()
     {
         $user = \Auth::user();
-        $user_role_name = $user->role_name;
         $project = new Project();
         $perfeature = new PerformanceFeature();
         //return view('sprint.create',['projects'=> $project->all(), 'users'=> $user->all()]);
-        return view ('perfeature.index', ['perfeatures'=>$perfeature->all(), 'projects'=>$project->all()])
-            ->with('role_name', $user_role_name);
+        return view ('perfeature.index', ['perfeatures'=>$perfeature->all(), 'projects'=>$project->all()]);
     }
 
     /**
@@ -33,12 +31,9 @@ class PerformanceFeatureController extends Controller
     public function create()
     {
         $user = \Auth::user();
-        $user_role_name = $user->role_name;
         $project = new Project();
-        return view ('perfeature.create')->with('projects',$project->all())
-            ->with('role_name', $user_role_name);
+        return view ('perfeature.create')->with('projects',$project->all());
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -85,13 +80,11 @@ class PerformanceFeatureController extends Controller
     public function edit(PerformanceFeature $perfeature)
     {
         $user = \Auth::user();
-        $user_role_name = $user->role_name;
         $project = new Project();
 
         return view('perfeature.edit',['projects'=>$project->all()])
             ->with('perfeatures', PerformanceFeature::all())
-            ->with('perfeature', $perfeature)
-            ->with('role_name', $user_role_name);
+            ->with('perfeature', $perfeature);
 
     }
 

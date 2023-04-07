@@ -8,7 +8,7 @@ class Team extends Model
 {
     protected $table = 'teams';
 
-    protected $fillable = ['team_name'];
+    protected $fillable = ['team_name','proj_name'];
 
     public $primaryKey = 'team_id';
 }

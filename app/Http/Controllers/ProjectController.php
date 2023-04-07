@@ -12,6 +12,8 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    //not real index
     public function index()
     {
         $project = new Project;
@@ -38,14 +40,10 @@ class ProjectController extends Controller
     public function create()
     {
         $user = \Auth::user();
-        $user_role_name = $user->role_name;
         $project = new Project;
         // $pro = new Project;
         return view('project.create')
-            ->with ('projects',$project->all())
-            ->with('role_name', $user_role_name);
-        // return view('profeature.index')->with ('projects',$project->all());
-        // return view('profeature.index',['projects'=>$project, 'pros'=>$pro]);
+            ->with ('projects',$project->all());
     }
 
     /**
@@ -111,10 +109,11 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $user = \Auth::user();
-        $user_role_name = $user->role_name;
-        return view('project.edit')->with('projects', Project::all())
-        ->with('project', $project)
-        ->with('role_name', $user_role_name);
+        $pro = \App\Project::where('team_name', '=', $user->team_name)->get();
+
+        return view('project.edit')
+        ->with('projects', $pro)
+        ->with('project', $project);
 
     }
 

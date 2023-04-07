@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-    protected $fillable = ['user_id','proj_name','proj_desc','start_date','end_date'];
+    protected $fillable = ['user_id','team_name', 'proj_name','proj_desc','start_date','end_date'];
 
     //public $foreignKey = 'user_id';
      

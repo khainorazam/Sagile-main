@@ -6,7 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>PMT</title>
+        <title>SAgile</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -83,7 +83,7 @@
                 <br><br>
                     <img src="/images/Agile.jpg" > 
                
-                    <h6>Project Management Tool For Agile Development<h6>
+                    <h6>SAgile Project Management Tool<h6>
                 </div>
 
               

@@ -23,17 +23,6 @@
                                 <p class="text-red-500 text-xs italic mt-4">{{ $message }}</p>
                             @enderror
                         </div>
-                        <div class="flex flex-wrap mb-6"><!--Role-->
-                            <label for="role" class="block text-gray-700 text-sm font-bold mb-2"> {{ __('Role') }}:</label>
-                            <select id="role" type="text" class="form-input w-full @error('role')  border-red-500 @enderror" name="role" value="{{ old('role') }}" required autocomplete="role" autofocus>
-                                @foreach($role_name as $role_name)
-                                    <option value="{{ $role_name->role_name}}" {{ ((isset($role->role_name) && $role->role_name== $role->role_name)? "selected":"") }}>{{$role_name->role_name}}</option>
-                                @endforeach
-                            </select>
-                            @error('role')
-                                <p class="text-red-500 text-xs italic mt-4">{{ $message }}</p>
-                            @enderror
-                        </div>
                         <div class="flex flex-wrap mb-6"><!--Country-->
                             <label for="country" class="block text-gray-700 text-sm font-bold mb-2">{{ __('Country') }}:</label>
                                 <select id="country" type="text" class="form-input w-full @error('name')  border-red-500 @enderror" name="country" value="{{ old('country') }}" required autocomplete="country" autofocus>

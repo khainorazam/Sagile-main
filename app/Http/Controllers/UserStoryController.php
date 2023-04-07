@@ -78,7 +78,6 @@ class UserStoryController extends Controller
     {
 
         $user = \Auth::user();
-        $user_role_name = $user->role_name;
 
         Route::currentRouteName();
         $sprint = Sprint::all();
@@ -95,8 +94,7 @@ class UserStoryController extends Controller
         
         //$sprint_id = $request->sprint_id;
         $sprint = Sprint::where('sprint_id', '=', "$sprint_id")->get();
-        return view('userstory.create',compact('sprint_id'),['proj_name','perfeatures'=> $perfeature->all(),'prios'=> $prio->all(), 'secfeatures'=> $secfeature->all(), 'projects'=>$project->all(),'statuses'=>$status->all(), 'sprint'=>$sprint_id])
-            ->with('role_name', $user_role_name);
+        return view('userstory.create',compact('sprint_id'),['proj_name','perfeatures'=> $perfeature->all(),'prios'=> $prio->all(), 'secfeatures'=> $secfeature->all(), 'projects'=>$project->all(),'statuses'=>$status->all(), 'sprint'=>$sprint_id]);
     }
 
     /**
@@ -161,7 +159,6 @@ class UserStoryController extends Controller
         //$project = new Project;
         //return view('userstory.edit',['userstory'=>$userStory,'projects'=>$project->all()]);
         $user = \Auth::user();
-        $user_role_name = $user->role_name;
         
         $project = new Project;
         // $workflow = new WorkflowStep;
@@ -182,9 +179,7 @@ class UserStoryController extends Controller
 
         $status = $status->select('title')->get();
        
-        return view('userstory.edit',['secfeatures'=>$secfeature->all(), 'perfeatures'=>$perfeature->all(),'statuses'=>$status->all(),'userstory'=>$userstory, 'projects'=>$project->all()])
-            ->with('role_name', $user_role_name);
-        // 'maps'=>$map->all(),
+        return view('userstory.edit',['secfeatures'=>$secfeature->all(), 'perfeatures'=>$perfeature->all(),'statuses'=>$status->all(),'userstory'=>$userstory, 'projects'=>$project->all()]);
     }
 
     /**

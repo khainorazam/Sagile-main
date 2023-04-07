@@ -1,3 +1,4 @@
+<!--Kanban Board-->
 @extends('layouts.app')
 
 @section('content')

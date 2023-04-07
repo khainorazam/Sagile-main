@@ -15,36 +15,42 @@ class TeamController extends Controller
     public function index()
     {
         $user = \Auth::user();
-        $user_role_name = $user->role_name;
-        $project = new Project();
+
+        $projects = \App\Project::where('team_name', '=', $user->team_name)->get();
+
         $team = new Team;
-        // return view('team.index')->with ('teams',$team->all());
-        return view ('team.index', ['teams'=>$team->all(), 'projects'=>$project->all()])
-            ->with('role_name', $user_role_name);
+
+        return view ('team.index', ['teams'=>$team->all(), 'projects'=>$projects->all()]);
     }
     
     public function create()
     {
         $user = \Auth::user();
-        $user_role_name = $user->role_name;
+
         $team = new Team;
         // $role = new Role;
+
+        // Retrieve the projects with team_name == null 
+        $project = Project::whereNull('team_name')->get();
         
-        // $roles = $role->select('role_name')->get();
-        // $teammapping = TeamMapping::where('team_name', '=', "$team_name")->get();
-        // return view('teammapping.create',['teammappings'=>$teammapping, 'roles'=>$role->all()]);
-        return view('team.create')->with ('teams',$team->all())
-            ->with('role_name', $user_role_name);
+        return view('team.create')
+            ->with('teams',$team->all())
+            ->with('project', $project->all());
     }
     
     public function store(Request $request)
     {
+        $user = \Auth::user();
         $team =new Team();
-       
-        //$team->user_name = $request->user_name;
-        //$team->role = $request->role;
-        $team->team_name = $request->team_name;
+        
 
+        $team->team_name = $request->team_name;
+        $team->proj_name = $request->proj_name;
+
+        $project = Project::where('proj_name', $request->proj_name)->first();
+        $project->team_name = $request->team_name;
+
+        $project->save();
         $team->save();
         $message="successfully add!";
         echo "<script type='text/javascript'>alert('$message');</script>";
@@ -60,17 +66,30 @@ class TeamController extends Controller
     public function edit(Team $team)
     {
         $user = \Auth::user();
-        $user_role_name = $user->role_name;
-        return view('team.edit')->with('teams', Team::all())
-            ->with('team', $team)
-            ->with('role_name', $user_role_name);
+
+        $project = new Project; 
+
+        // Retrieve the projects associated with the current user
+        $project = Project::where('user_id', $user->id)->get();
+        
+        return view('team.edit')
+            ->with('project', $project)
+            ->with('team', $team);
     }
 
     public function update(Request $request, Team $team)
     {
-        //$team->user_name = $request->user_name;
-        //$team->role = $request->role;
+        $user = \Auth::user();
+
+        $project = new Project();
+        $project = Project::where('user_id', $user->id)->first();
+       
+        $project->team_name = $request->team_name;
+        
         $team->team_name = $request->team_name;
+        $team->proj_name = $request->proj_name;
+        
+        $project->save();
         $team->save(); 
     
         return redirect()->route('team.index', $team);

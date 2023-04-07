@@ -33,7 +33,6 @@ class SprintController extends Controller
     public function create()
     {
         $user = \Auth::user();
-        $user_role_name = $user->role_name;
 
         $project = new Project;
         $projects = $project->select('proj_name')->get();
@@ -41,8 +40,7 @@ class SprintController extends Controller
         $user = new User;
         $users = $user->select('name')->get();
 
-        return view('sprint.create', ['users'=>$user->all(), 'projects'=>$project->all()])
-            ->with('role_name', $user_role_name);
+        return view('sprint.create', ['users'=>$user->all(), 'projects'=>$project->all()]);
     }
 
     public function destroy(Sprint $sprint)
@@ -98,14 +96,12 @@ class SprintController extends Controller
     public function edit(Sprint $sprint, $id)
     {
         $user = \Auth::user();
-        $user_role_name = $user->role_name;
 
         $project = new Project;
         $sprint = new Sprint;
         $sprint = Sprint::find($id);
        // return view('project.edit')->with('projects', $project->all());
-        return view('sprint.edit',['sprint'=>$sprint, 'projects'=>$project->all()])
-            ->with('role_name', $user_role_name);
+        return view('sprint.edit',['sprint'=>$sprint, 'projects'=>$project->all()]);
     }
 
     public function update2(Request $request){

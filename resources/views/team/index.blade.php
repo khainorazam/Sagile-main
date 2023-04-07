@@ -32,12 +32,7 @@
 @endsection
 
 @section('navbar')
-@if ($role_name == 'Admin')
-  @include('inc.navbar')
-
-@elseif ($role_name == 'Project Manager')
-  @include('inc.navprojectmanager')
-@endif
+    @include('inc.navbar')
 @endsection
 
 @section('content')
@@ -48,7 +43,7 @@
 
 <tr>
     <th>Team Name</th>
-    <th>Edit</th>
+    <th>Project</th>
     <th>View</th>
     <th>Delete</th>
 
@@ -61,15 +56,15 @@
           <th>
                   {{ $team->team_name }}
           </th>
-
           <th>
-              <button type="submit"><a href="{{route('teams.edit', $team)}}">Edit</a></button>
+                  {{ $team->proj_name }}
           </th>
-
+          {{-- <th>
+              <button type="submit"><a href="{{route('teams.edit', $team)}}">Edit</a></button>
+          </th> --}}
           <th>
               <button type="submit"><a href="{{action('TeamMappingController@index', $team['team_name'])}}">View</button>
           </th>
-
           <th>
               <button type="submit"><a href="{{route('teams.destroy', $team)}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this team?');">Delete</button>
           </th>

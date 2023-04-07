@@ -13,21 +13,7 @@
 @endsection
 
 @section('navbar')
-@if ($role_name == 'Admin')
     @include('inc.navbar')
-
-@elseif ($role_name == 'Project Manager')
-    @include('inc.navprojectmanager')
-
-@elseif ($role_name == 'Product Owner')
-    @include('inc.navproductowner')
-
-@elseif ($role_name == 'Scrum Master')
-    @include('inc.navscrummaster')
-
-@elseif ($role_name == 'Developer')
-    @include('inc.navdeveloper')
-@endif
 @endsection
 
 
@@ -37,9 +23,9 @@
 <form action="{{route('projects.update', $project)}}" method="post">
         @csrf
         
-Project Title :<input type="text" name="proj_name" style="margin-left:2.5em" value="{{$project->proj_name}}">
+Project Title :<input type="text" name="proj_name" style="margin-left:2.5em" readonly value="{{$project->proj_name}}">
 <br><br><br>
- Description :<input type="text" name="proj_desc" style="margin-left:2.6em" value="{{$project->proj_desc}}">
+ Description :<input type="text" name="proj_desc" style="margin-left:2.6em"  value="{{$project->proj_desc}}">
  <br><br><br>
  Start Date :<input type="date" name="start_date" style="margin-left:2.6em" value="{{$project->start_date}}">
  <br><br><br>

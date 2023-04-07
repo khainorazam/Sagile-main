@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 use App\Project;
+use App\TeamMapping;
 use App\Sprint;
 use App\User;
 use App\UserStory;
@@ -30,14 +31,19 @@ class ProductFeatureController extends Controller
         }
         if($id)
         {   
-            $user = \Auth::user();
-            $user_role_name = $user->role_name;
-            $pro = \App\Project::where('user_id', '=', $id)->get();     
-            return view('profeature.index',['projects'=>$project->all(), 'pros'=>$pro->all()])
-                ->with('role_name', $user_role_name);
+            //get the project where user's team name(s) is the same with project's team name
+            // $user = \Auth::user();
+            // $teammapping = \App\TeamMapping::where('username', '=', $user->username)->get();
+            // $pro = \App\Project::where('team_name', '=', $teammapping->team_name)->get();
 
-            // $project =\App\Project::where('proj_name', '=', "$proj_name")->get();
-            // return view('profeature.index',['projects'=>$project]);
+            $user = \Auth::user();
+            $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
+            $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
+
+
+            return view('profeature.index')
+                ->with('pros', $pro);
+
         }
         return view('project.index',['projects'=>$project->all(), 'pros'=>$pro->all()]);
             
@@ -47,19 +53,16 @@ class ProductFeatureController extends Controller
     public function index2($proj_name)
     {
         $user = \Auth::user();
-        $user_role_name = $user->role_name;
 
         $project = new Project();
         $sprint = Sprint::where('proj_name', '=', "$proj_name")->get();
-        return view('profeature.index2',['sprints'=>$sprint, 'projects'=>$project->all()])
-            ->with('role_name', $user_role_name);
+        return view('profeature.index2',['sprints'=>$sprint, 'projects'=>$project->all()]);
     }
 
     //Main UserStory Page 
     public function index3($sprint_id)
     {
         $user = \Auth::user();
-        $user_role_name = $user->role_name;
 
         $project = new Project();
         $create = new UserStory();
@@ -69,7 +72,6 @@ class ProductFeatureController extends Controller
         $userstory = \App\UserStory::where('sprint_id', '=', $sprint_id)->get();
         //dd($userstory);
         return view('profeature.index3',['create'=>$create, 'sprint'=>$sprint, 'usersprint'=>$usersprint,'userstories'=>$userstory, 'projects'=>$project->all()])
-            ->with('role_name', $user_role_name)
             ->with('sprint_id', $sprint_id);
         
     }
