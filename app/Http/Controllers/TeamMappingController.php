@@ -45,6 +45,16 @@ class TeamMappingController extends Controller
     
     public function store(Request $request)
     {
+        $validation = $request->validate([
+
+            'username' => 'required',
+            'role' => 'required',
+        ],
+        [
+            'username.required' => '*The User is required',
+            'role.required' => '*The Role Name is required',
+        ]);
+
         $teammapping = new TeamMapping();
         
         //for team mapping table: save username, rolename and team name
@@ -58,7 +68,9 @@ class TeamMappingController extends Controller
         $teammapping = TeamMapping::where('team_name', '=', "$request->team_name")->get();
 
         return view('teammapping.index',['teammappings'=>$teammapping])
-            ->with('teams', $team);
+            ->with('teams', $team)
+            ->with('success', 'Team member has successfully been added to team!');
+;
 
     }
 
@@ -88,7 +100,8 @@ class TeamMappingController extends Controller
     public function destroy(Teammapping $teammapping)
     {
         $teammapping->delete();
-        return redirect()->route('teammapping.index', $teammapping);
+        return redirect()->route('teammapping.index', $teammapping->team_name)
+            ->with('success', 'Team member has been removed successfully');
     }
 
     public function search(Request $request)

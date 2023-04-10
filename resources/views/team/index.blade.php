@@ -18,6 +18,8 @@
         }
 </style>
 
+@include('inc.success')
+
 @section('dashboard')
 
 @foreach($projects as $project)

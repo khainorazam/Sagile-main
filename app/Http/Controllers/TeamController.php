@@ -40,6 +40,18 @@ class TeamController extends Controller
     
     public function store(Request $request)
     {
+        $validation = $request->validate([
+
+            'team_name' => 'required|unique:teams',
+            'proj_name' => 'required',
+        ],
+        [
+            'team_name.required' => '*The Team Name is required',
+            'proj_name.unique' => '*There is already an existing team with the same name',
+            'proj_name.required' => '*The Project Name is required',
+        ]);
+
+
         $user = \Auth::user();
         $team =new Team();
         
@@ -52,9 +64,7 @@ class TeamController extends Controller
 
         $project->save();
         $team->save();
-        $message="successfully add!";
-        echo "<script type='text/javascript'>alert('$message');</script>";
-        return redirect()->route('team.index');
+        return redirect()->route('team.index')->with('success', 'Team has successfully been created!');
     }
 
     public function show(Team $team)
@@ -92,12 +102,24 @@ class TeamController extends Controller
         $project->save();
         $team->save(); 
     
-        return redirect()->route('team.index', $team);
+        return redirect()->route('team.index', $team)
+            ->with('success', 'Team has successfully been updated!');
+
     }
 
     public function destroy(Team $team)
     {
+        //when delete a team, change the project associated's team_name to null; 
+        $project = \App\Project::where('team_name', $team->team_name)->first();
+        $project->team_name = null;
+        $project->save();
+
+        //delete all the team mappings associated with this team
+        $teammapping = \App\Teammapping::where('team_name', $team->team_name)->delete();
+
         $team->delete();
-        return redirect()->route('team.index', $team);
+        return redirect()->route('team.index', $team)
+            ->with('success', 'Team has been deleted successfully');
+
     }
 }

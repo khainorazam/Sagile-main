@@ -19,6 +19,8 @@
         }
 </style>
 
+@include('inc.success')
+
 @section('dashboard')
 {{-- @foreach($teams as $team)
         <li>
@@ -44,7 +46,7 @@
                 <tr>
                     <th>Username</th>  
                     <th>Role</th>
-                    <th>Delete</th>
+                    <th>Remove</th>
                 </tr>
                 
                 @forelse($teammappings as $teammapping)
@@ -56,7 +58,7 @@
                             {{ $teammapping->role_name }}
                         </th>
                         <th>
-                            <button type="submit"><a href="{{route('teammappings.destroy', $teammapping)}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this role?');">Delete</button>
+                            <button type="submit"><a href="{{route('teammappings.destroy', $teammapping)}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to remove this team member?');">Remove</button>
                         </th>
                     </tr>
                 @empty

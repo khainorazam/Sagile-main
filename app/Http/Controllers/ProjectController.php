@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Project;
+use App\Team;
+use App\TeamMapping;
 use App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 
@@ -64,28 +66,22 @@ class ProjectController extends Controller
         //it will store the current logged in user id in user_id field
         
         $validation = $request->validate([
-
-            'proj_name' => 'required',
+            'proj_name' => 'required|unique:projects',
             'proj_desc' => 'required',
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after_or_equal:start_date'
-        ],
-    
-        [
+        ], [
             'proj_name.required' => '*The Project Title is required',
+            'proj_name.unique' => '*There is already an existing project with the same name',
             'proj_desc.required' => '*The Description is required',
             'start_date.required' => '*The Start Date is required',
             'end_date.required' => '*The Completion Date is required'
-
-
-        ]
-   
-        );
+        ]);
+        
 
         $project->save();
-        $message="successfully add!";
-        echo "<script type='text/javascript'>alert('$message');</script>";
-        return redirect()->route('profeature.index');
+        return redirect()->route('profeature.index')
+            ->with('success', 'Project has successfully been created!');
     }
 
     /**
@@ -132,7 +128,9 @@ class ProjectController extends Controller
         $project->end_date=$request->end_date; 
         $project->save(); 
     
-        return redirect()->route('profeature.index', $project);
+        return redirect()->route('profeature.index', $project)
+            ->with('success', 'Project has successfully been updated!');
+
     }
     
 
@@ -144,7 +142,17 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        //deletes the team and team mapping records that are associated with the project
+        $team = \App\Team::where('proj_name', $project->proj_name)->first();
+        $teammapping = \App\Teammapping::where('team_name', $team->team_name)->delete();
+
+        $team->delete();
+
+        //delete the project record
         $project->delete();
-        return redirect()->route('profeature.index', $project);
+
+        return redirect()->route('profeature.index', $project)
+            ->with('success', 'Project has been deleted successfully');
+        
     }
 }
