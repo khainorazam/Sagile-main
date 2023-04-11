@@ -37,8 +37,9 @@
 @endsection
 
 @section('content')
-<br><br><br>
 
+@include('inc.title')
+<br>
 
 <table>
 
@@ -51,6 +52,15 @@
     <th>View</th>
     <th>Delete</th>
 </tr>
+
+@if ($pros->isEmpty())
+    <h3>If you don't have a team:</h3>
+    <p>Assign yourself to a team in <b>Team</b></p>
+
+    <h3>If your team does not have project:</h3>
+    <p>Create a project here and then assign it to your team in <b>Team</b></p>
+    
+@else
 
 @foreach($pros as $pro)
 
@@ -85,6 +95,8 @@
       </tr>
 
 @endforeach
+
+@endif
 
   </table>
   <br><br><br>

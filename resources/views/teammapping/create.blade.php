@@ -5,6 +5,7 @@
 @endsection
 
 @section('content')
+@include('inc.title')
 
 <form action="{{route('teammappings.store')}}" method="post" enctype="multipart/form-data">
 @csrf

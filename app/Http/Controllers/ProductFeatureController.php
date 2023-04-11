@@ -32,17 +32,14 @@ class ProductFeatureController extends Controller
         if($id)
         {   
             //get the project where user's team name(s) is the same with project's team name
-            // $user = \Auth::user();
-            // $teammapping = \App\TeamMapping::where('username', '=', $user->username)->get();
-            // $pro = \App\Project::where('team_name', '=', $teammapping->team_name)->get();
-
             $user = \Auth::user();
             $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
             $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
 
 
             return view('profeature.index')
-                ->with('pros', $pro);
+                ->with('pros', $pro)
+                ->with('title', 'Project');
 
         }
         return view('project.index',['projects'=>$project->all(), 'pros'=>$pro->all()]);

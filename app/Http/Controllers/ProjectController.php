@@ -45,7 +45,8 @@ class ProjectController extends Controller
         $project = new Project;
         // $pro = new Project;
         return view('project.create')
-            ->with ('projects',$project->all());
+            ->with ('projects',$project->all())
+            ->with('title', 'Create Project');
     }
 
     /**
@@ -81,7 +82,7 @@ class ProjectController extends Controller
 
         $project->save();
         return redirect()->route('profeature.index')
-            ->with('success', 'Project has successfully been created!');
+            ->with('success', 'Project has successfully been created! Assign this project in to start working on the project!');
     }
 
     /**

@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-
+@include('inc.title')
 <br><br><br>
 <form action="{{route('teams.store')}}" method="post" enctype="multipart/form-data">
 @csrf

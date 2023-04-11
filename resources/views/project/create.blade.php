@@ -5,7 +5,8 @@
 @endsection
 
 @section('content')
-<br><br>
+@include('inc.title')
+<br>
 <form action="{{route('projects.store')}}" method="post" enctype="multipart/form-data">
 @csrf
  

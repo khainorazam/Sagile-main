@@ -20,7 +20,8 @@ class TeamController extends Controller
 
         $team = new Team;
 
-        return view ('team.index', ['teams'=>$team->all(), 'projects'=>$projects->all()]);
+        return view ('team.index', ['teams'=>$team->all(), 'projects'=>$projects->all()])
+            ->with('title', 'Team');
     }
     
     public function create()
@@ -35,7 +36,8 @@ class TeamController extends Controller
         
         return view('team.create')
             ->with('teams',$team->all())
-            ->with('project', $project->all());
+            ->with('project', $project->all())
+            ->with('title', 'Create Team');
     }
     
     public function store(Request $request)

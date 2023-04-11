@@ -19,27 +19,34 @@ class TeamMappingController extends Controller
         
         $team = new Team();
         $team = Team::where('team_name', $team_name)->first();
+        $title = $team->team_name;
         $teammapping = new TeamMapping();
         $teammapping = TeamMapping::where('team_name', '=', "$team_name")->get();
         return view('teammapping.index',['teammappings'=>$teammapping])
-            ->with('teams', $team);
+            ->with('teams', $team)
+            ->with('title', $title);
         
     }
     
-    public function create($team_name)
+    public function create(Request $request)
     {
         $user = new User();
         $teammapping = new TeamMapping();
         $role = new Role();
         
-        $user = $user->all();
+        $teammapping = TeamMapping::where('team_name', '=', $request->team_name)->get();
+        $user = User::whereNotIn('username', $teammapping->pluck('username'))->get();
+
         $role = $role->all();
-        // $roles = $role->select('role_name')->get();
-        // $teammapping = TeamMapping::where('team_name', '=', "$team_name")->get();
+
+        $teams = $request->teams;
+        $team_name = $request->team_name;
+        $title = 'Add Team Member to ' . $team_name;
         return view('teammapping.create')
             ->with('roles', $role)
             ->with('users', $user)
-            ->with('team_name', $team_name);
+            ->with('team_name', $team_name)
+            ->with('title', $title);
 
     }
     

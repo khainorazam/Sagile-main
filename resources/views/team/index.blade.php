@@ -22,14 +22,15 @@
 
 @section('dashboard')
 
-@foreach($projects as $project)
+
+{{-- @foreach($projects as $project)
         <li>
             <a href="{{ route('projects.edit', [$project]) }}">
               {{ $project->proj_name }} 
             </a>
                      
         </li>
-@endforeach
+@endforeach --}}
                      
 @endsection
 
@@ -38,18 +39,22 @@
 @endsection
 
 @section('content')
-<br><br><br>
-
+@include('inc.title')
 
 <table>
 
 <tr>
     <th>Team Name</th>
     <th>Project</th>
-    <th>View</th>
+    <th>View Members</th>
     <th>Delete</th>
 
 </tr>
+
+@if ($teams->isEmpty())
+    <h3>Create a team and assign a project to the team</h3>
+    <h3>Then, assign yourself (and/or your team members) to the team</h3>
+@else
 
 @foreach($teams as $team)
 
@@ -74,6 +79,8 @@
       </tr>
 
 @endforeach
+
+@endif
 
   </table>
   <br><br><br>

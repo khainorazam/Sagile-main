@@ -37,11 +37,8 @@
 @endsection
 
 @section('content')
-
+@include('inc.title')
         <!-- The Team -->
-        <div>
-          <h1>{{ $teams->team_name }}
-        </div>
         <table>
                 <tr>
                     <th>Username</th>  
@@ -69,7 +66,9 @@
           </table>
   <br><br><br>
 
-   <button type="submit"><a href="{{route('teammappings.create', $teams['team_name'])}}">Add New Member</a></button>
+   <button type="submit">
+        <a href="{{ route('teammappings.create', ['teams' => $teams, 'team_name' => $teams->team_name]) }}">Add New Member</a>
+   </button>
    
 
 @endsection
