@@ -8,5 +8,5 @@ class SecurityFeature extends Model
 {
     protected $fillable = ['secfeature_name', 'secfeature_desc'];
 
-    public $primaryKey = 'SecFeature_id';
+    public $primaryKey = 'secfeature_id';
 }

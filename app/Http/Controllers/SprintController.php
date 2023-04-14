@@ -30,150 +30,133 @@ class SprintController extends Controller
         return view ('sprint.index', ['sprints'=>$sprint->all(), 'projects'=>$project->all()]);
     }
 
-    public function create()
+    public function create($proj_name)
     {
-        $user = \Auth::user();
+        //We want to send project to store project name and display 
+        //the start and end project date at the create sprint page
 
-        $project = new Project;
-        $projects = $project->select('proj_name')->get();
-        
-        $user = new User;
-        $users = $user->select('name')->get();
-
-        return view('sprint.create', ['users'=>$user->all(), 'projects'=>$project->all()]);
+        $project = Project::where('proj_name', $proj_name)->first();
+        return view('sprint.create')
+            ->with('title', 'Create Sprint for '. $project->proj_name)
+            ->with('project', $project);
     }
 
     public function destroy(Sprint $sprint)
-    {
+    {   
+        $proj_name = $sprint->proj_name;
+        $deleted_sprint = $sprint->sprint_name;
+        $sprints = Sprint::where('proj_name', $proj_name)->get();
+        $project = Project::where('proj_name', $proj_name)->first();
+
         $sprint->delete();
-        return redirect()->route('sprints.index');
+
+        return redirect()->route('profeature.index2', ['proj_name' => $proj_name])
+            ->with('title', 'Sprints for ' . $proj_name)
+            ->with('success', $deleted_sprint . ' has successfully been deleted!')
+            ->with('sprints', $sprints)
+            ->with('projects', $project);
     }
  
-    /*public function search(Request $request)
-    {
-        $project = new Project;
-        $search = $request->get('search');
-        $sprint = \App\Sprint::query()->where('proj_name', 'LIKE', "%{$search}%")->get();
-        return view('sprint.index',['sprints'=>$sprint, 'projects'=>$project->all()]);
-   
-    }*/
     
-    public function store(Request $request,Project $project)
+    public function store(Request $request)
     {
-        $project = Project::all();
-        $project2 = Project::where('proj_name',$request->proj_name)->first();
-     
-        $sprint =new Sprint();
-      
-    if($request->start_sprint > $project2->start_date && $request->end_sprint<=$project2->end_date)
-        {
-            //$sprint = Sprint::find($request->sprint_id);
-            $sprint->sprint_name=$request->sprint_name;
-            $sprint->proj_name=$request->proj_name;
-            $sprint->users_name=$request->users_name;
-            $sprint->sprint_desc=$request->sprint_desc;
-            $sprint->start_sprint=$request->start_sprint;
-            $sprint->end_sprint=$request->end_sprint;
-            $sprint->save();
-        }
-    else
-        {
-                print "<h2>cannot input date!</h2>";
-        
-            //$message="cannot input date";
-        }
-        
-        $proj_name = $request->proj_name;
-        // $status_title = $request->status_title;
-        // $sprint = Sprint::where('proj_name', '=', "$proj_name", 'status_title', '=', "$status_title")->get();
-        $sprint = Sprint::where('proj_name', '=', $proj_name)->get();
-        // $sprint = Sprint::where('status_title', '=', "$status_title")->get();
-        return view('profeature.index2', ['sprints'=>$sprint, 'projects'=>$project]);
-        
-        //return redirect()->route('sprints.index');
-    }
+        //Get the current project
+        $project = Project::where('proj_name', $request->proj_name)->first();
 
-    public function edit(Sprint $sprint, $id)
-    {
-        $user = \Auth::user();
+        //we need to validate the request
+        $validation = $request->validate([
+            //validate for existing sprint_names
+            'sprint_name' => 'required|unique:sprint,sprint_name,NULL,sprint_id,proj_name,'.$request->proj_name, 
+            'sprint_desc' => 'required',
 
-        $project = new Project;
-        $sprint = new Sprint;
-        $sprint = Sprint::find($id);
-       // return view('project.edit')->with('projects', $project->all());
-        return view('sprint.edit',['sprint'=>$sprint, 'projects'=>$project->all()]);
-    }
+            //validate that start of sprint should be after or equal the project's start date
+            'start_sprint' => 'required|date|after_or_equal:'.$project->start_date,
 
-    public function update2(Request $request){
-        DB::table('sprint')->where('sprint_id', $request->sprint_id)->update([
-            'proj_name'=> $request->proj_name,
-            'sprint_name'=>$request->sprint_name,
-            'sprint_desc'=>$request->sprint_desc,
-            'users_name'=>$request->users_name,
-            'start_sprint'=>$request->start_sprint,
-            'end_sprint'=>$request->end_sprint
-
+            //validate that end of sprint should be before or equal the project's end date
+            'end_sprint' => 'required|date|before_or_equal:'.$project->end_date.'|after_or_equal:start_sprint'
+        ], [
+            'sprint_name.required' => '*The Sprint Name is required',
+            'sprint_name.unique' => '*There is already an existing sprint in the project with the same name',
+            'sprint_desc.required' => '*The Description is required',
+            'start_sprint.required' => '*The Start Date is required',
+            'start_sprint.after_or_equal' => '*The Start Date must be equal to or after the project start date',
+            'end_sprint.required' => '*The End Date is required',
+            'end_sprint.before_or_equal' => '*The End Date must be equal to or before the project end date',
+            'end_sprint.after_or_equal' => '*The End Date must be equal to or after the Start Date'
         ]);
-        return back()->with('message', 'Sprint Updated!');
-        
-    }
 
-    public function update( Request $request, Sprint $sprint, $proj_name = [])
-    {
-        $project = Project::all();
-        // $sprint = Sprint::find($request->sprint_id);
-        $sprint->sprint_id=$request->sprint_id;
-        $sprint->proj_name=$request->proj_name;
-        $sprint->sprint_name=$request->sprint_name; 
-        $sprint->sprint_desc=$request->sprint_desc;
-        $sprint->users_name=$request->users_name;
-        $sprint->start_sprint=$request->start_sprint;
-        $sprint->end_sprint=$request->end_sprint; 
-    
-    $validation = $request->validate([
-
-        'proj_name' => 'required',
-        'sprint_name' => 'required',
-        'sprint_desc' => 'required',
-        'user_name' => 'required',
-        'start_sprint' => 'required|date|after_or_equal:today',
-        'end_sprint' => 'required|date|after_or_equal:start_date',
-    ],
-
-    [
-        'proj_name' => 'Choose the Project Name',
-        'sprint_name' => 'Please fill the Sprint Name',
-        'sprint_desc' => 'Please fill the Sprint Description',
-        'user_name' => 'Choose the User',
-        'start_sprint' => 'Please enter the date',
-        'end_sprint' => 'Please enter the date',
-    ]);
-
-        error_log($sprint);
+        //assign request values to new sprint 
+        $sprint = new Sprint();
+        $sprint->sprint_name = $request->sprint_name;
+        $sprint->proj_name = $request->proj_name;
+        $sprint->sprint_desc = $request->sprint_desc;
+        $sprint->start_sprint = $request->start_sprint;
+        $sprint->end_sprint = $request->end_sprint;
         $sprint->save();
-        $proj_name = $request->proj_name;
-        $sprint = Sprint::where('proj_name', '=', $proj_name)->get();
-        return redirect()->route('profeature.index2', ['sprints'=>$sprint, 'projects'=>$project]);
-        // return view('profeature.index2', ['sprints'=>$sprint, 'projects'=>$project]);
 
-               // $sprint = Sprint::where('status_title', '=', "$status_title")->get();
-          // $status_title = $request->status_title;
-        // $sprint = Sprint::where('proj_name', '=', "$proj_name", 'status_title', '=', "$status_title")->get();
+        $sprints = Sprint::where('proj_name', $request->proj_name)->get();
+
+        //return title, current project and sprints related to the project
+        return redirect()->route('profeature.index2', ['proj_name' => $request->proj_name])
+            ->with('title', 'Sprints for ' . $request->proj_name)
+            ->with('success', 'Sprint has successfully been created!')
+            ->with('sprints', $sprints)
+            ->with('projects', $project);
+
     }
+
+    public function edit($sprint_id)
+    {
+        //Get the current sprint
+        $sprint = Sprint::where('sprint_id', $sprint_id)->first();
+        $project =Project::where('proj_name', $sprint->proj_name)->first();
+
+        return view('sprint.edit')
+            ->with('title', 'Edit '. $sprint->sprint_name . ' in '. $sprint->proj_name)
+            ->with('project', $project)
+            ->with('sprint', $sprint);
+    }
+
+    public function update(Request $request, Sprint $sprint)
+    {
+        //Only save desc, and dates because no need to update name and project name
+        $sprint->sprint_desc = $request->sprint_desc;
+        $sprint->start_sprint = $request->start_sprint;
+        $sprint->end_sprint = $request->end_sprint; 
+    
+        //Get the current project
+        $project = Project::where('proj_name', $sprint->proj_name)->first();
+
+        $validation = $request->validate([
+            'sprint_desc' => 'required',
+
+            //validate that start of sprint should be after or equal the project's start date
+            'start_sprint' => 'required|date|after_or_equal:'.$project->start_date,
+
+            //validate that end of sprint should be before or equal the project's end date
+            'end_sprint' => 'required|date|before_or_equal:'.$project->end_date.'|after_or_equal:start_sprint'
+        ], [
+            'sprint_desc.required' => '*The Description is required',
+            'start_sprint.required' => '*The Start Date is required',
+            'start_sprint.after_or_equal' => '*The Start Date must be equal to or after the project start date',
+            'end_sprint.required' => '*The End Date is required',
+            'end_sprint.before_or_equal' => '*The End Date must be equal to or before the project end date',
+            'end_sprint.after_or_equal' => '*The End Date must be equal to or after the Start Date'
+        ]);
+
+        $sprint->save();
+        $sprints = Sprint::where('proj_name', $sprint->proj_name)->get();
+
+        //return title, current project and sprints related to the project
+        return redirect()->route('profeature.index2', ['proj_name' => $sprint->proj_name])
+            ->with('title', 'Sprints for ' . $sprint->proj_name)
+            ->with('success', 'Sprint has successfully been updated!')
+            ->with('sprints', $sprints)
+            ->with('projects', $project);
+    }
+    
 
 }
 
- //$project3 = Project::where('proj_name','=', $request->proj_name)->get((['end_date']));
-        //$projectStartDate = $project->start_date;
-        //$projectEndDate = $project->end_date;
-        //$start_date = Project::where('start_date','=', 'start_date')->first();
-        //$end_date = Project::where('end_date','=', 'end_date')->first();
-
-        //$input = $request->all();
-    	//$data = [];
-    	//$data['sprint_name'] = json_encode($input['sprint_name']);
-
-    	//Sprint::create($data);
-        //return response()->json(['success'=>'Success Fully Insert Recoreds']);
        
         

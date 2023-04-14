@@ -12,9 +12,7 @@
 @endforeach
 @endsection
 
-@section('navbar')
-    @include('inc.navbar')
-@endsection
+@include('inc.navbar')
 
 @section('content')
 <br><br><br>
