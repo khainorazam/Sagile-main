@@ -24,7 +24,7 @@ class TeamMappingController extends Controller
         $teammapping = TeamMapping::where('team_name', '=', "$team_name")->get();
         return view('teammapping.index',['teammappings'=>$teammapping])
             ->with('teams', $team)
-            ->with('title', 'Team ' . $title);
+            ->with('title', $title);
         
     }
     

@@ -36,11 +36,13 @@ Route::get('projects/{project}/destroy', 'ProjectController@destroy')->name('pro
 
 //Route for sprint
 Route::get('sprint', 'SprintController@index')->name('sprints.index');
-Route::get('sprint/create/{proj_name}', 'SprintController@create')->name('sprints.create');
+Route::get('sprint/create', 'SprintController@create')->name('sprints.create');
 Route::get('sprint/{sprint_id}/edit', 'SprintController@edit')->name('sprints.edit');
 Route::post('sprint', 'SprintController@store')->name('sprints.store');
 Route::post('sprint/{sprint}', 'SprintController@update')->name('sprints.update');
-Route::get('sprint/{sprint}/destroy', 'SprintController@destroy')->name('sprints.destroy');
+Route::post('sprint/{sprint}/destroy', 'SprintController@destroy')->name('sprints.destroy');
+Route::get('search','SprintController@search');
+Route::post('/update',[SprintController::class, 'update2'])->name('sprint.update');
 
 //Route for Project List
 Route::get('profeature', 'ProductFeatureController@index')->name('profeature.index');
@@ -155,7 +157,7 @@ Route::post('getUsers', 'TeamMappingController@getUsers')->name('getUsers.post')
 //Route for user stories
 Route::get('userstory', 'UserStoryController@getID')->name('userstory.getID');
 Route::get('userstory', 'UserStoryController@index')->name('userstory.index');
-Route::get('userstory/{sprint_id}/create', 'UserStoryController@create')->name('userstory.create');
+Route::get('userstory/create', 'UserStoryController@create')->name('userstory.create');
 Route::get('userstory/{userstory}/edit', 'UserStoryController@edit')->name('userstory.edit');
 Route::post('userstory', 'UserStoryController@store')->name('userstory.store');
 Route::post('userstory/{userstory}', 'UserStoryController@update')->name('userstory.update');
@@ -185,7 +187,7 @@ Route::get('secfeatures/create', 'SecurityFeatureController@create')->name('secf
 Route::get('secfeatures/{secfeature}/edit', 'SecurityFeatureController@edit')->name('secfeature.edit');
 Route::post('secfeatures', 'SecurityFeatureController@store')->name('secfeature.store');
 Route::post('secfeatures/{secfeature}', 'SecurityFeatureController@update')->name('secfeature.update');
-Route::get('secfeatures/{secfeature}/destroy', 'SecurityFeatureController@destroy')->name('secfeature.destroy');
+Route::get('secfeatures/{secfeature}/destroy', 'SecurityFeatureController@destroy')->name('usesecfeature.destroy');
 
 //Route for Performance Feature
 Route::get('perfeatures', 'PerformanceFeatureController@index')->name('perfeature.index');

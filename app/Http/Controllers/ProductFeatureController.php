@@ -30,7 +30,8 @@ class ProductFeatureController extends Controller
             
         }
         if($id)
-        {   //get the project where user's team name(s) is the same with project's team name
+        {   
+            //get the project where user's team name(s) is the same with project's team name
             $user = \Auth::user();
             $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
             $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
@@ -48,41 +49,27 @@ class ProductFeatureController extends Controller
     //Main Sprint Page 
     public function index2($proj_name)
     {
-        //Get the project where user's team name(s) is the same with project's team name
         $user = \Auth::user();
-        $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
-        $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
 
-
-        //Gets the current project
-        $project = Project::where('proj_name', $proj_name)->first();
-
-        //Gets all the sprints related to the project
+        $project = new Project();
         $sprint = Sprint::where('proj_name', '=', "$proj_name")->get();
-
-        return view('profeature.index2')
-            ->with('title', 'Sprints for ' . $proj_name)
-            ->with('sprints', $sprint)
-            ->with('pros', $pro)
-            ->with('projects', $project);
+        return view('profeature.index2',['sprints'=>$sprint, 'projects'=>$project->all()]);
     }
 
     //Main UserStory Page 
     public function index3($sprint_id)
     {
-        //Get the project where user's team name(s) is the same with project's team name
         $user = \Auth::user();
-        $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
-        $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
 
-        //Get current sprint 
-        $sprint = Sprint::where('sprint_id', $sprint_id)->first();
+        $project = new Project();
+        $create = new UserStory();
+        $sprint = new Sprint();
+        $usersprint = new userStory();
         
         $userstory = \App\UserStory::where('sprint_id', '=', $sprint_id)->get();
-        return view('profeature.index3',['userstories'=>$userstory,])
-            ->with('sprint_id', $sprint->sprint_id)
-            ->with('pros', $pro)
-            ->with('title', 'User Story for ' . $sprint->sprint_name);
+        //dd($userstory);
+        return view('profeature.index3',['create'=>$create, 'sprint'=>$sprint, 'usersprint'=>$usersprint,'userstories'=>$userstory, 'projects'=>$project->all()])
+            ->with('sprint_id', $sprint_id);
         
     }
     /**

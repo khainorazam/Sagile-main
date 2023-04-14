@@ -38,7 +38,9 @@
 @endif
 @endsection
 
-@include('inc.navbar')
+@section('navbar')
+    @include('inc.navbar')
+@endsection
 
 @section('content')
 

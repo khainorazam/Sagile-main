@@ -1,5 +1,32 @@
 @extends('layouts.app2')
-@include('inc.style')
+<style>
+        table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
+        
+        td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+        }
+        
+        tr:nth-child(even) {
+          background-color: #dddddd;
+        }
+
+        .button {
+         background-color: #4CAF50; /* Green */
+         border: none;
+         color: white;
+         padding: 15px 32px;
+         text-align: center;
+         text-decoration: none;
+         display: inline-block;
+         font-size: 16px;
+        }
+</style>
 
 @section('dashboard')
 
@@ -17,7 +44,9 @@
 @endif
 @endsection
 
-@include('inc.navbar')
+@section('navbar')
+    @include('inc.navbar')
+@endsection
 
 @section('content')
 <h1>Add Task</h1>

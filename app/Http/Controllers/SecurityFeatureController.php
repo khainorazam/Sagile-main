@@ -15,16 +15,22 @@ class SecurityFeatureController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   
-        //Get the project where user's team name(s) is the same with project's team name
+    {
         $user = \Auth::user();
-        $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
-        $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
-
+        $project = new Project;
+        // if (\Auth::check())
+        // {
+        //     $id = \Auth::user()->getId();
+            
+        // }
+        // if($id)
+        // {
+        //     $pro = \App\Project::where('id', '=', $id)->get();
+        //    //return view('profeature.index',['projects'=>$project, 'pros'=>$pro]);
+        // }
+        
         $secfeature = new SecurityFeature();
-        return view ('secfeature.index',['secfeatures'=>$secfeature->all()])
-            ->with('title', 'Security Feature')
-            ->with('pros', $pro);
+        return view ('secfeature.index',['secfeatures'=>$secfeature->all(), 'projects'=>$project->all()]);
     }
 
     /**
@@ -34,9 +40,8 @@ class SecurityFeatureController extends Controller
      */
     public function create()
     {
-        return view ('secfeature.create')
-            ->with('title', 'Create Security Feature');
-        
+        $user = \Auth::user();
+        return view ('secfeature.create');
     }
 
     /**
@@ -47,26 +52,25 @@ class SecurityFeatureController extends Controller
      */
     public function store(Request $request)
     {
-        //validate the request
+        $project = new Project;
+
+        $secfeature = new SecurityFeature();
+        $secfeature->secfeature_name=$request->secfeature_name;
+        $secfeature->secfeature_desc=$request->secfeature_desc;
+        
         $validation = $request->validate([
-            'secfeature_name' => 'required|unique:security_features',
+
+            'secfeature_name' => 'required',
             'secfeature_desc' => 'required'
         ],
+    
         [
             'secfeature_name.required' => '*The Security Feature is required',
-            'secfeature_name.unique' => '*There is already an existing Security Feature with the same name',
-            'secfeature_desc.required' => '*The Security Description is required'
+            'secfeature_desc.required' => '*Please fill the Security Description'
         ]);
-
-        //assign the request parameters
-        $secfeature = new SecurityFeature();
-        $secfeature->secfeature_name = $request->secfeature_name;
-        $secfeature->secfeature_desc = $request->secfeature_desc;
+        
         $secfeature->save();
-
-        return redirect()->route('secfeature.index' ,['secfeatures'=>$secfeature->all()])
-            ->with('title', 'Security Feature')
-            ->with('success', 'Security Feature has successfully been created!');
+        return redirect()->route('secfeature.index' ,['secfeatures'=>$secfeature->all(), 'projects'=>$project->all()]);
     }
 
     /**
@@ -75,7 +79,6 @@ class SecurityFeatureController extends Controller
      * @param  \App\SecurityFeature  $securityFeature
      * @return \Illuminate\Http\Response
      */
-
     public function show(SecurityFeature $secfeature)
     {
         //
@@ -87,12 +90,16 @@ class SecurityFeatureController extends Controller
      * @param  \App\SecurityFeature  $securityFeature
      * @return \Illuminate\Http\Response
      */
-    
     public function edit(SecurityFeature $secfeature)
     {
-        return view('secfeature.edit')
-            ->with('secfeature', $secfeature)
-            ->with('title', 'Edit ' . $secfeature->secfeature_name);
+        $user = \Auth::user();
+
+        $project = new Project;
+
+        return view('secfeature.edit',['projects'=>$project->all()])
+            ->with('secfeatures', SecurityFeature::all())
+            ->with('secfeature', $secfeature);
+
     }
 
     /**
@@ -104,22 +111,10 @@ class SecurityFeatureController extends Controller
      */
     public function update(Request $request, SecurityFeature $secfeature)
     {
-        //validate the request
-        $validation = $request->validate([
-            'secfeature_desc' => 'required'
-        ],
-        [
-            'secfeature_desc.required' => '*The Security Description is required'
-        ]);
-
-        $secfeature->secfeature_desc = $request->secfeature_desc;
+        $secfeature->secfeature_name=$request->secfeature_name;
+        $secfeature->secfeature_desc=$request->secfeature_desc;
         $secfeature->save();
-
-        $secfeatures = new SecurityFeature;
-
-        return redirect()->route('secfeature.index' ,['secfeatures'=>$secfeatures->all()])
-            ->with('title', 'Security Feature')
-            ->with('success', $secfeature->secfeature_name . ' has successfully been updated!');
+        return redirect()->route('secfeature.index');
     }
 
     /**
@@ -131,10 +126,6 @@ class SecurityFeatureController extends Controller
     public function destroy(SecurityFeature $secfeature)
     {
         $secfeature->delete();
-        
-        $secfeatures = new SecurityFeature;
-        return redirect()->route('secfeature.index' ,['secfeatures'=>$secfeatures->all()])
-            ->with('title', 'Security Feature')
-            ->with('success', 'Security Feature has successfully been deleted!');
+        return redirect()->route('secfeature.index', $secfeature);
     }
 }

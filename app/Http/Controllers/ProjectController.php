@@ -82,7 +82,7 @@ class ProjectController extends Controller
 
         $project->save();
         return redirect()->route('profeature.index')
-            ->with('success', 'Project has successfully been created! Assign this project in Team to start working on the project!');
+            ->with('success', 'Project has successfully been created! Assign this project in to start working on the project!');
     }
 
     /**
@@ -110,8 +110,7 @@ class ProjectController extends Controller
 
         return view('project.edit')
         ->with('projects', $pro)
-        ->with('project', $project)
-        ->with('title', 'Edit ' . $project->proj_name);
+        ->with('project', $project);
 
     }
 

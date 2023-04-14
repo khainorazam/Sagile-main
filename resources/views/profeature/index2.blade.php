@@ -1,33 +1,75 @@
-<!--Sprint Index/Sprint Page-->
-@include('inc.success')
 @extends('layouts.app2')
-@include('inc.style')
+<style>
+        table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
+        
+        td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+        }
+        
+        tr:nth-child(even) {
+          background-color: #dddddd;
+        }
 
-@include('inc.dashboard')
+        .button {
+         background-color: #4CAF50; /* Green */
+         border: none;
+         color: white;
+         padding: 15px 32px;
+         text-align: center;
+         text-decoration: none;
+         display: inline-block;
+         font-size: 16px;
+        }
+</style>
 
-@include('inc.navbar')
+@section('dashboard')
+
+      @foreach($projects as $project)
+              <li>
+                  <a href="{{ route('projects.edit', [$project]) }}">
+                  {{ $project->proj_name }} 
+                  </a>
+                          
+              </li>
+      @endforeach
+        
+@endsection
+
+@section('navbar')
+    @include('inc.navbar')
+@endsection
 
 @section('content')
-@include('inc.title')
 <br><br>
-    {{-- <a href="{{route('profeature.index')}}" class="button">Project List</a> --}}
+    <a href="{{route('profeature.index')}}" class="button">Project List</a>
+<br><br><br>
 
 @csrf
-<table id="sprint">
+<table  id="sprint">
   <tr>
+      <th>ID</th>
       <th>Sprint Name</th>
       <th>Description</th>
       <th>Start Date</th>
       <th>End Date</th>
+      <th>Task Assign To</th>
       <th>Edit</th>
-      <th>Delete</th>
-      <th>User Story</th>
+      <th>View</th>
+      <th>Burndown Chart</th>
   </tr>
-
-
   
-  @forelse($sprints as $sprint)
+  @foreach($sprints as $sprint)
     <tr>
+      <th>
+        {{$sprint->sprint_id}}
+      </th>
+
       <th>
         {{$sprint->sprint_name}}
       </th>
@@ -37,36 +79,36 @@
       </th>
 
       <th>
-        {{ date('d F Y', strtotime($sprint->start_sprint)) }}
+        {{$sprint->start_sprint}}
       </th>
 
       <th>
-        {{ date('d F Y', strtotime($sprint->end_sprint)) }}
+        {{$sprint->end_sprint}}
       </th>
 
       <th>
-        <button type="submit"><a href="{{route('sprints.edit', [$sprint->sprint_id])}}">Edit</a></button>
+        {{$sprint->users_name}}
       </th>
 
       <th>
-        <button type="submit"><a href="{{route('sprints.destroy', $sprint)}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this sprint?');">Delete</button>
+        <a href="{{route('sprints.edit', [$sprint->sprint_id])}}">Edit</a>
       </th>
 
       <th>
-        <button type="submit"><a href="{{action('ProductFeatureController@index3', $sprint['sprint_id'])}}">View</a></button>
+          <a href="{{action('ProductFeatureController@index3', $sprint['sprint_id'])}}">View</a>
+      </th>
+
+      <th>
+        <a href="{{action('ChartController@index', $sprint['sprint_id'])}}">Show</a>
       </th>
     </tr>
-
-  @empty
-  <tr>
-      <td colspan="6">No sprints added yet</td>
-  </tr>
   
-  @endforelse
+ 
+  @endforeach
   </table>
   
   <br><br><br>
   
-  <button type="submit"><a href="{{route('sprints.create', $projects['proj_name'])}}">Create Sprint</a></button>
+  <button type="submit"><a href="{{route('sprints.create')}}">Create Sprint</a></button>
  
 @endsection

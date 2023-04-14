@@ -14,7 +14,7 @@ class CreateSecurityFeaturesTable extends Migration
     public function up()
     {
         Schema::create('security_features', function (Blueprint $table) {
-            $table->bigIncrements('secfeature_id');
+            $table->bigIncrements('SecFeature_id');
             $table->string('secfeature_name');
             $table->string('secfeature_desc');
             $table->timestamps();

@@ -1,47 +1,80 @@
-<!--Coding Standard Index-->
-
 @extends('layouts.app2')
-@include('inc.success')
-@include('inc.style')
+<style>
+        table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
+        
+        td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+        }
+        
+        tr:nth-child(even) {
+          background-color: #dddddd;
+        }
+</style>
 
-@include('inc.dashboard')
-@include('inc.navbar')
+@section('dashboard')
+
+@foreach($projects as $project)
+        <li>
+            <a href="{{ route('projects.edit', [$project]) }}">
+             {{ $project->proj_name }} 
+            </a>
+                     
+        </li>
+@endforeach
+        
+@if($projects->isEmpty())
+     No project.
+@endif
+                    
+
+@endsection
+
+@section('navbar')
+    @include('inc.navbar')
+@endsection
 
 @section('content')
-@include('inc.title')
-<br>
-  <table>
-  <tr>
-      <th>Coding Standard</th>
-      <th>Edit</th>
-      <th>Delete</th>
-      
-  </tr>
+<br><br><br>
+<table>
+<tr>
+    <th>Code ID</th>
+    <th>Coding Standard Title</th>
+    <th>Edit</th>
+    <th>Delete</th>
+    
+</tr>
 
-  @forelse($codestands as $codestand)
-  <tr> 
-      <th>
-        {{ $codestand->codestand_name }}
-      </th>
+@foreach($codestands as $codestand)
+<tr> 
+    <th>
+            {{ $codestand->codestand_id }}
+    </th>
 
-      <th>
-          <button type="submit"><a href="{{route('codestand.edit', $codestand)}}">Edit</a></button>
-      </th>
+    <th>
+            {{ $codestand->codestand_name }}
+    </th>
 
-      <th>
-          <button type="submit"><a href="{{route('codestand.destroy', $codestand)}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this Coding Standard?');">Delete</button>
-      </th>
+    <th>
+        <button type="submit"><a href="{{route('codestand.edit', $codestand)}}">Edit</a></button>
+    </th>
 
-  </tr>
-  @empty
-  <tr>
-    <td colspan="3">No coding standard added yet</td>
-  </tr>
+     <th>
+        <button type="submit"><a href="{{route('codestand.destroy', $codestand)}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this codestand?');">Delete</button>
+     </th>
 
-  @endforelse
-  </table>
-  <br><br><br>
+     
 
-  <button type="submit"><a href="{{route('codestand.create')}}">Add Coding Standard</a></button>
+</tr>
+@endforeach
+</table>
+<br><br><br>
+
+<button type="submit"><a href="{{route('codestand.create')}}">Add Coding Standard</a></button>
 
 @endsection

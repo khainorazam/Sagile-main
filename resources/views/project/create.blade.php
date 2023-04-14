@@ -1,6 +1,8 @@
 @extends('layouts.app2')
-@include('inc.style')
-@include('inc.navbar')
+
+@section('navbar')
+    @include('inc.navbar')
+@endsection
 
 @section('content')
 @include('inc.title')
