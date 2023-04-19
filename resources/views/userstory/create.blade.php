@@ -1,104 +1,77 @@
+<!--Create User Story Page-->
 @extends('layouts.app2')
 
-@section('dashboard')
+@include('inc.style')
 
-@foreach($projects as $project)
-        <li>
-            <a href="{{ route('projects.edit', [$project]) }}">
-             {{ $project->proj_name }} 
-            </a>
-                     
-        </li>
-@endforeach
-        
-@if($projects->isEmpty())
-     No project.
-@endif
-@endsection
-
-@section('navbar')
-    @include('inc.navbar')
-@endsection
+@include('inc.navbar')
 
 @section('content')
-<br><br><br>
+@include('inc.title')
+<br><br>
 <form action="{{route('userstory.store')}}" method="post" enctype="multipart/form-data">
-        @csrf
+    @csrf
 
-    Sprint ID: <input type="text" name="sprint_id" 
-        value=<?php use App\Http\Controllers\UserStoryController;
-        echo UserStoryController::getID(); ?>
-    ></input>
+    <!--Sprint Name Value -->
+    <input type="hidden" name="sprint_id" value="{{ $sprint_id }}"> 
 
-    {{-- Sprint ID :<input type="text" name="sprint_id" style="margin-left:2.5em" value="{{$sprint->sprint_id}}"> --}}
-     <br><br><br>   
-     
-    User Story : <textarea id = "user_story"
-        rows = "2"
-        cols = "100"
-        name="user_story" ></textarea>
+
+    User Story Name :<input type="text" name="user_story" style="margin-left:2.5em" >
+    <div class="error"><font color="red" size="2">{{ $errors->first('user_story') }}</p></font></div>
+    <br>
+
+    Description :<input type="text" name="desc_story" style="margin-left:2.6em" >
+    <div class="error"><font color="red" size="2">{{ $errors->first('desc_story') }}</p></font></div>
+    <br>
     
-    <br><br><br>
-
-    Description : <textarea id = "user_story"
-    rows = "2"
-    cols = "100"
-    name="desc_story"></textarea>
-
-    <br><br><br>
-
-    Due date : <textarea id = "user_story"
-    rows = "2"
-    cols = "100"
-    name="due_day"></textarea>
-
-    <br><br><br>
-    
-    Priority : 
+    {{-- Priority : 
     <select name="prio_story">
-        @foreach($prios as $prio)
+    @foreach($prios as $prio)
         <option value="{{ $prio->prio_name}}" {{ ((isset($prio->prio_name) && $prio->prio_name== $prio->prio_name)? "selected":"") }}>{{$prio->prio_name}}</option>
-        @endforeach
-        
-    </select>
-
-    <br><br><br>
-
-    Status : 
-    <select name="title">
-        @foreach($statuses as $statuses)
-        <option value="{{ $statuses->title}}" {{ ((isset($statuses->title) && $statuses->title== $statuses->title)? "selected":"") }}>{{$statuses->title}}</option>
-        @endforeach
-        
-    </select>
-<br><br><br>
-    
-    Security Feature :  
-  </select>
-<br><br><br>
-    @foreach($secfeatures as $secfeature)
-        <label class="checkbox-inline">
-            <input type="checkbox" id="SecFeature_id" name="SecFeature_id[]" value="{{$secfeature->secfeature_name}}"> {{$secfeature->secfeature_name}}
-        </label>
     @endforeach
+    </select>
 
-<br><br><br>
+    <br><br><br> --}}
+    <div>
+        <label for="title">Status :</label>
+        <select name="title" id="title" class="form-control">
+            <option value="" selected disabled>Select</option>
+            @foreach($statuses as $statuses)
+                <option value="{{ $statuses->title }}"> {{ $statuses->title }}</option>
+            @endforeach
+        </select> 
+        <div class="error"><font color="red" size="2">{{ $errors->first('title') }}</p></font></div>
+    </div>
 
+    {{-- Status : <select name="title">
+        @foreach($statuses as $statuses)
+            <option value="{{ $statuses->title}}" {{ ((isset($statuses->title) && $statuses->title== $statuses->title)? "selected":"") }}>{{$statuses->title}}</option>
+        @endforeach
+    </select> --}}
+    <br>
+    
+    <div>
+        <label for="secfeatures">Security Features:</label>
+        <br><br>
+        @foreach($secfeatures as $secfeature)
+            <label class="checkbox-inline">
+                <input type="checkbox" id="secfeature_id" name="secfeature_id[]" value="{{ $secfeature->secfeature_name }}"> {{ $secfeature->secfeature_name }}
+            </label>
+        @endforeach
+        <br><br><br>
+    </div>
 
-    Performance Feature : 
-  </select>
-<br><br><br>
-    @foreach($perfeatures as $perfeature)
-        <label class="checkbox-inline">
-            <input type="checkbox" id="perfeature_id" name="perfeature_id[]" value="{{$perfeature->perfeature_name}}"> {{$perfeature->perfeature_name}}
-        </label>
-    @endforeach 
+    <div>
+        <label for="perfeatures">Performance Features:</label>
+        <br><br>
+        @foreach($perfeatures as $perfeature)
+            <label class="checkbox-inline">
+                <input type="checkbox" id="perfeature_id" name="perfeature_id[]" value="{{ $perfeature->perfeature_name }}"> {{ $perfeature->perfeature_name }}
+            </label>
+        @endforeach
+        <br><br><br>
+    </div>
 
-    <br><br><br>
-
-
-        <button type="submit">Add Story</button>
-        <button type="submit"><a href="{{route('userstory.index')}}", method="post">Cancel</a></button>
+    <button type="submit">Add User Story</button>
    
     </form>
     <br><br><br>

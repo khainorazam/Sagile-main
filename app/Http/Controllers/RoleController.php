@@ -15,11 +15,17 @@ class RoleController extends Controller
      */
     public function index()
     {
+        //Get the project where user's team name(s) is the same with project's team name
         $user = \Auth::user();
-        $project = new Project();
+        $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
+        $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
+
         $role = new Role;
-        // return view('role.index')->with ('roles',$role->all());
-        return view ('role.index', ['roles'=>$role->all(), 'projects'=>$project->all()]);
+
+        return view ('role.index', ['roles'=>$role->all()])
+            ->with('title', 'Role')
+            ->with('pros', $pro);
+
     }
 
     /**
@@ -29,10 +35,8 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $user = \Auth::user();
-        $role = new Role;
         return view('role.create')
-            ->with ('roles',$role->all());
+            ->with('title', 'Create Role');
     }
 
     /**
@@ -43,14 +47,24 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        //validate the request
+        $validation = $request->validate([
+            'role_name' => 'required|unique:roles',
+        ],
+        [
+            'role_name.required' => '*The Role name is required',
+            'role_name.unique' => '*There is already an existing Role with the same name',
+        ]);
+        
+        //assign the request parameters
         $role =new Role();
-       
         $role->role_name = $request->role_name;
-
         $role->save();
-        $message="successfully add!";
-        echo "<script type='text/javascript'>alert('$message');</script>";
-        return redirect()->route('role.index');
+
+        return redirect()->route('role.index' ,['roles'=>$role->all()])
+        ->with('title', 'Role')
+        ->with('success', 'Role has successfully been created!');
+
     }
 
     /**
@@ -102,6 +116,10 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         $role->delete();
-        return redirect()->route('role.index', $role);
+
+        $roles = new Role;
+        return redirect()->route('role.index' ,['roles'=>$roles->all()])
+            ->with('title', 'Role')
+            ->with('success', 'Role has successfully been deleted!');    
     }
 }

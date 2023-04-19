@@ -1,8 +1,6 @@
 @extends('layouts.app2')
-
-@section('navbar')
-    @include('inc.navbar')
-@endsection
+@include('inc.style')
+@include('inc.navbar')
 
 @section('content')
 @include('inc.title')
@@ -28,7 +26,6 @@
 
     <div>
         <button type="submit">Create Team</button>
-        <button type="submit"><a href="{{route('team.index')}}">Cancel</a></button>
     </div>
     <br><br>
 </form>

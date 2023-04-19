@@ -1,40 +1,12 @@
 <!--Project Main Page-->
 @extends('layouts.app2')
-<style>
-        table {
-          font-family: arial, sans-serif;
-          border-collapse: collapse;
-          width: 100%;
-        }
-        
-        td, th {
-          border: 1px solid #dddddd;
-          text-align: left;
-          padding: 8px;
-        }
-        
-        tr:nth-child(even) {
-          background-color: #dddddd;
-        }
-</style>
+@include('inc.style')
 
 @include('inc.success')
 
-@section('dashboard')
+@include('inc.dashboard')
 
- @foreach($pros as $pro)
-        <li>
-            <a href="{{ route('projects.edit', [$pro]) }}">
-             {{ $pro->proj_name }} 
-            </a>
-                     
-        </li>
-@endforeach                      
-@endsection
-
-@section('navbar')
-    @include('inc.navbar')
-@endsection
+@include('inc.navbar')
 
 @section('content')
 
@@ -49,8 +21,8 @@
     <th>Start Date</th>
     <th>End Date</th>
     <th>Edit</th>
-    <th>View</th>
     <th>Delete</th>
+    <th>Sprint</th>
 </tr>
 
 @if ($pros->isEmpty())
@@ -74,24 +46,24 @@
           </th>
 
           <th>
-                  {{ $pro->start_date }}
+            {{ date('d F Y', strtotime($pro->start_date)) }}
           </th>
 
           <th>
-                  {{ $pro->end_date }}
-          </th>
-        
-          <th>
-              <button type="submit"><a href="{{route('projects.edit', $pro)}}">Edit</a></button>
+            {{ date('d F Y', strtotime($pro->end_date)) }}
           </th>
 
           <th>
-              <button type="submit"><a href="{{action('ProductFeatureController@index2', $pro['proj_name'])}}">View</button>
+            <button type="submit"><a href="{{route('projects.edit', $pro)}}">Edit</a></button>
           </th>
-          
+
           <th>
-              <button type="submit"><a href="{{route('projects.destroy', $pro)}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this project?');">Delete</button>
+            <button type="submit"><a href="{{route('projects.destroy', $pro)}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this project?');">Delete</button>
           </th>
+
+          <th>
+            <button type="submit"><a href="{{action('ProductFeatureController@index2', $pro['proj_name'])}}">View</button>
+        </th>
       </tr>
 
 @endforeach

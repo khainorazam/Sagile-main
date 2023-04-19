@@ -15,12 +15,16 @@ class PerformanceFeatureController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {   
+        //Get the project where user's team name(s) is the same with project's team name
         $user = \Auth::user();
-        $project = new Project();
+        $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
+        $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
+
         $perfeature = new PerformanceFeature();
-        //return view('sprint.create',['projects'=> $project->all(), 'users'=> $user->all()]);
-        return view ('perfeature.index', ['perfeatures'=>$perfeature->all(), 'projects'=>$project->all()]);
+        return view ('perfeature.index', ['perfeatures'=>$perfeature->all()])
+            ->with('title', 'Performance Feature')
+            ->with('pros', $pro);
     }
 
     /**
@@ -30,9 +34,8 @@ class PerformanceFeatureController extends Controller
      */
     public function create()
     {
-        $user = \Auth::user();
-        $project = new Project();
-        return view ('perfeature.create')->with('projects',$project->all());
+        return view ('perfeature.create')
+            ->with('title', 'Create Performance Feature');
     }
     /**
      * Store a newly created resource in storage.
@@ -42,21 +45,21 @@ class PerformanceFeatureController extends Controller
      */
     public function store(Request $request)
     {
-        $perfeature = new PerformanceFeature;
-
-        $perfeature->perfeature_name=$request->perfeature_name;
-       
+        //validate the request
         $validation = $request->validate([
-            'perfeature_name' => 'required'
-        ],
-    
-        [
-            'perfeature_name.required' => '*The Performance Feature is required'
+            'perfeature_name' => 'required|unique:performance_features'
+        ],[
+            'perfeature_name.required' => '*The Performance Feature is required',
+            'perfeature_name.unique' => '*There is an existing Performance Feature with the same name',
         ]);
-            
-       
+
+        $perfeature = new PerformanceFeature;
+        $perfeature->perfeature_name = $request->perfeature_name;
         $perfeature->save();
-        return redirect()->route('perfeature.index');
+
+        return redirect()->route('perfeature.index' ,['perfeatures'=>$perfeature->all()])
+            ->with('title', 'Performance Feature')
+            ->with('success', 'Performance Feature has successfully been created!');
 
     }
 
@@ -112,6 +115,9 @@ class PerformanceFeatureController extends Controller
     public function destroy(PerformanceFeature $perfeature)
     {
         $perfeature->delete();
-        return redirect()->route('perfeature.index', $perfeature);
+
+        return redirect()->route('perfeature.index' ,['perfeatures'=>$perfeature->all()])
+            ->with('title', 'Performance Feature')
+            ->with('success', 'Performance Feature has successfully been deleted!');
     }
 }
