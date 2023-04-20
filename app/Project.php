@@ -14,6 +14,45 @@ class Project extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    protected static function booted()
+    {
+        static::created(function ($project) {
+            // Create default statuses
+            $project->statuses()->createMany([
+                [
+                    'title' => 'Backlog',
+                    'slug' => 'backlog',
+                    'order' => 1
+                ],
+                [
+                    'title' => 'Up Next',
+                    'slug' => 'up-next',
+                    'order' => 2
+                ],
+                [
+                    'title' => 'In Progress',
+                    'slug' => 'in-progress',
+                    'order' => 3
+                ],
+                [
+                    'title' => 'Done',
+                    'slug' => 'done',
+                    'order' => 4
+                ]
+            ]);
+        });
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class)->orderBy('order');
+    }
+
+    public function statuses()
+    {   
+        return $this->hasMany(Status::class)->orderBy('order');
+    }
 }
 
 

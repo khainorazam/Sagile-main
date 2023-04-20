@@ -1,35 +1,22 @@
 @extends('layouts.app2')
-
+@include('inc.style')
 @include('inc.navbar')
 
 @section('content')
-
-<br><br><br>
-<form action="{{route('statuses.store')}}" method="post" enctype="multipart/form-data">
-@csrf
-
-Status :<input type="text" name="title" style="margin-left:2.5em">
-
-   <div class="error"><font color="red" size="2">{{ $errors->first('title') }}</p></font></div>
-   <br>
-
-Slug :<input type="text" name="slug" style="margin-left:2.5em">
-
-   <div class="error"><font color="red" size="2">{{ $errors->first('slug') }}</p></font></div>
-   <br>
-
-Order :<input type="text" name="order" style="margin-left:2.5em">
-
-   <div class="error"><font color="red" size="2">{{ $errors->first('order') }}</p></font></div>
-   <br>
-
-User ID :<input type="text" name="user_id" style="margin-left:2.5em">
-
-<div class="error"><font color="red" size="2">{{ $errors->first('user_id') }}</p></font></div>
+@include('inc.title')
 <br><br>
+   <form action="{{route('statuses.store')}}" method="post" enctype="multipart/form-data">
+   @csrf
 
- <button type="submit">Add Status</button>
- <button type="submit"><a href="{{route('status.index')}}">Cancel</a></button>
- <br><br><br>
+      Status Name:<input type="text" name="title" style="margin-left:2.5em">
+      <div class="error"><font color="red" size="2">{{ $errors->first('title') }}</p></font></div>
+      <br>
+
+      <input type="hidden" name="project_id" value="{{ $project->id }}">
+
+
+      <button type="submit">Add Status</button>
+   </form>
+ <br>
 
 @endsection

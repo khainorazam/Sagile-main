@@ -19,10 +19,6 @@ Route::get('/', function () {
 });
 Auth::routes();
 
-//Route::get('/home', function () {
-//    return redirect()->route('tasks.index');
-//})->name('home');
-
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
@@ -76,17 +72,6 @@ Route::post('deffeature', 'DefectFeatureController@store')->name('deffeature.sto
 Route::post('deffeature/{deffeature}', 'DefectFeatureController@update')->name('deffeature.update');
 Route::post('deffeature/{deffeature}/destroy', 'DefectFeatureController@destroy')->name('deffeature.destroy');
 
-// Route::group(['middleware' => 'auth'], function () {
-//     Route::get('tasks', 'TaskController@index')->name('tasks.index');
-//     Route::post('tasks', 'TaskController@store')->name('tasks.store');
-//     Route::put('tasks/sync', 'TaskController@sync')->name('tasks.sync');
-//     Route::put('tasks/{task}', 'TaskController@update')->name('tasks.update');
-// });
-
-// Route::group(['middleware' => 'auth'], function () {
-//     Route::post('statuses', 'StatusController@store')->name('statuses.store');
-//     Route::put('statuses', 'StatusController@update')->name('statuses.update');
-// });
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('tasks', 'TaskController@index')->name('tasks.index');
@@ -97,7 +82,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('status', 'StatusController@index')->name('status.index');
-    Route::get('statuses/create', 'StatusController@create')->name('statuses.create');
+    Route::get('status/{proj_ID}', 'StatusController@indexProjectStatus')->name('status.project');    
+    Route::get('statuses/create/{proj_ID}', 'StatusController@create')->name('statuses.create');
     Route::get('statuses/{status}/edit', 'StatusController@edit')->name('statuses.edit');
     Route::post('status', 'StatusController@store')->name('statuses.store');
     Route::post('statuses', 'StatusController@update')->name('statuses.update');
@@ -172,12 +158,11 @@ Route::post('backlogs/{backlog}/destroy', 'BacklogController@destroy')->name('ba
 
 //Route for Task Assign
 //Kanban Board
-Route::get('sprint/task', 'TaskController@index')->name('tasks.index'); 
+Route::get('sprint/task', 'TaskController@kanbanBoard')->name('tasks.kanban'); 
 //Main Task Page 
-Route::get('task/{u_id}', 'TaskController@index2')->name('tasks.index2');
+Route::get('task/{u_id}', 'TaskController@index')->name('tasks.index');
 Route::get('sprint/task/create', 'TaskController@create')->name('tasks.create');
 Route::get('task/{task}/destroy', 'TaskController@destroy')->name('tasks.destroy');
-//Route::post('tasks', 'TaskController@store2')->name('tasks.store2');
 
 //Route for security feature
 Route::get('secfeatures', 'SecurityFeatureController@index')->name('secfeature.index');

@@ -13,7 +13,8 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    public function index2($u_id)
+    //Main Sprint Page
+    public function index($u_id)
     {
         $user = \Auth::user();
 
@@ -24,11 +25,12 @@ class TaskController extends Controller
         $usersprint = new userStory();
         $tasks = \App\Task::where('u_id', '=', $u_id)->get();
 
-        return view('tasks.index2',['tasks'=>$tasks,'userstories'=>$userstory,'sprint'=>$sprint,'usersprint'=>$usersprint,'projects'=>$project->all()],compact('tasks'))
+        return view('tasks.index',['tasks'=>$tasks,'userstories'=>$userstory,'sprint'=>$sprint,'usersprint'=>$usersprint,'projects'=>$project->all()],compact('tasks'))
             ->with('u_id', $u_id);
     }
 
-    public function index()
+    //Kanban Board
+    public function kanbanBoard()
     {
         $sprint = new Sprint();
         $sprints= $sprint->select('sprint_id')->get();
@@ -45,7 +47,7 @@ class TaskController extends Controller
     //\App\Status::where('user_id', '=', 1)->get();
     //auth()->user()->statuses()->with('tasks')->get();
     //['projects'=>$project, 'pros'=>$pro])
-        return view('tasks.index',['sprints'=>$sprint->all(), 'userstories'=>$userstory->all()])->with(compact('tasks','sprints','userstories'));
+        return view('tasks.kanban',['sprints'=>$sprint->all(), 'userstories'=>$userstory->all()])->with(compact('tasks','sprints','userstories'));
     //    return view('tasks.index',['tasks2'=>$tasks2,'userstories'=>$userstory,'sprint'=>$sprint,'usersprint'=>$usersprint,'projects'=>$project->all()],compact('tasks'))->with('sprint_id', $sprint_id);
     }
 

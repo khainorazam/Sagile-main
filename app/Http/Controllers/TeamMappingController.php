@@ -76,7 +76,8 @@ class TeamMappingController extends Controller
 
         return view('teammapping.index',['teammappings'=>$teammapping])
             ->with('teams', $team)
-            ->with('success', 'Team member has successfully been added to team!');
+            ->with('success', 'Team member has successfully been added to team!')
+            ->with('title', 'Team ' . $team->team_name);
 ;
 
     }

@@ -59,7 +59,7 @@
             </th>
 
             <th>
-              <button type="submit"><a href="{{action('TaskController@index2', $userstory['u_id'])}}">View</a></button>
+              <button type="submit"><a href="{{action('TaskController@index', $userstory['u_id'])}}">View</a></button>
             </th>
         </tr>
 

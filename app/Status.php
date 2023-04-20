@@ -8,7 +8,7 @@ class Status extends Model
 {
      protected $table = 'statuses';
 
-    protected $fillable = ['title', 'slug', 'order'];
+    protected $fillable = ['title', 'slug', 'order', 'project_id'];
 
     // public $primaryKey = 'id';
 
@@ -24,13 +24,4 @@ class Status extends Model
         return $this->belongsTo(User::class);
     }
 
-    // public function statuses()
-    // {
-    //     return $this->hasMany(Status::class)->orderBy('order');
-    // }
-
-        // public function user()
-    // {
-    //     return $this->belongsTo('App\User');
-    // }
 }

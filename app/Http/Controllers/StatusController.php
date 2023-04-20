@@ -6,40 +6,101 @@ use App\Status;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Auth;
-
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class StatusController extends Controller
 {
     public function index()
     {
+        //Get the project where user's team name(s) is the same with project's team name
         $user = \Auth::user();
-        $tasks = auth()->user()->statuses()->with('tasks')->get();
-        return view('status.index')->with ('statuses', $tasks->all());
+        $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
+        $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
+        
+        $projectID = $pro->pluck('id')->toArray(); // use pluck() to retrieve an array of project IDs
+        $statuses = Status::whereIn('project_id', $projectID)->get();
+
+        
+
+        return view('status.index')->with ('statuses', $statuses)
+            ->with('title', 'Status : List of Projects')
+            ->with('pros', $pro);
     }
 
-    public function create()
+    //The index for specific projects' status
+    public function indexProjectStatus($proj_id){
+
+        //Get the project where user's team name(s) is the same with project's team name
+        $user = \Auth::user();
+        $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
+        $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
+        
+        $project = \App\Project::where('id', $proj_id)->first();
+        $statuses = Status::where('project_id', $proj_id)->get();
+         
+        return view('status.project')->with ('statuses', $statuses)
+            ->with('title', 'Status for ' . $project->proj_name)
+            ->with('pros', $pro)
+            ->with('project', $project);
+    }
+
+    public function create($proj_id)
     {
 
-        $user = \Auth::user();
-
-        $status = new Status;
+        $project = \App\Project::where('id', $proj_id)->first();
         return view('status.create')
-            ->with ('statuses',$status->all());
+            ->with('title', 'Create Status for ' . $project->proj_name)
+            ->with('project', $project);
     }
 
     public function store(Request $request)
     {
-        $statuses = new Status();
-       
-        $statuses->title = $request->title;
-        $statuses->slug = $request->slug;
-        $statuses->order = $request->order;
-        $statuses->user_id = $request->user_id;
+        //validate the request
+        $validation = $request->validate([
+            'title' => 'required|unique:statuses',
+        ],[
+            'title.required' => '*The Status Name is required',
+            'title.unique' => '*There is already an existing Status with the same name',
+        ]);
 
+
+        //assign the request parameters to new Status 
+        $statuses = new Status();
+        $statuses->title = $request->title;
+
+        //Takes the title of status and changes it to lowercase and - when there is whitespace
+        $slug = $request->title;
+        $slug = Str::slug($slug, "-");
+        $slug = strtolower($slug); 
+        $statuses->slug = $slug;
+
+        //gets the highest order in the status with the same project and adds 1 order higher to the current status
+        $projectID = $request->project_id; 
+        $highestOrder = DB::table('statuses')
+                        ->select(DB::raw('MAX(`order`) AS `highest_order`'))
+                        ->where('project_id', $projectID)
+                        ->get()[0]->highest_order;
+
+        $statuses->order = $highestOrder + 1;
+        $statuses->project_id = $request->project_id;
         $statuses->save();
-        $message="successfully add!";
-        echo "<script type='text/javascript'>alert('$message');</script>";
-        return redirect()->route('status.index');
+
+
+        //Get the project where user's team name(s) is the same with project's team name
+        $user = \Auth::user();
+        $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
+        $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
+        
+        $project = \App\Project::where('id', $request->project_id)->first();
+        $statuses = Status::where('project_id', $request->project_id)->get(); 
+
+        return redirect('/status/' . $request->project_id)
+        ->with ('statuses', $statuses)
+        ->with('pros', $pro)
+        ->with('project', $project)
+        ->with('title', 'Status for ' . $project->proj_name)
+        ->with('success', 'Status has successfully been created for ' .$project->proj_name .'!');
 
     }
 
@@ -72,28 +133,23 @@ class StatusController extends Controller
 
     public function destroy(Status $status)
     {
+        $projectID = $status->project_id;
+
+        //Get the project where user's team name(s) is the same with project's team name
+        $user = \Auth::user();
+        $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
+        $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
+        
+        $project = \App\Project::where('id', $projectID)->first();
+        $statuses = Status::where('project_id', $projectID)->get(); 
+        
         $status->delete();
-        return redirect()->route('status.index', $status);
+
+        return redirect('/status/' . $projectID)
+        ->with ('statuses', $statuses)
+        ->with('pros', $pro)
+        ->with('project', $project)
+        ->with('title', 'Status for ' . $project->proj_name)
+        ->with('success', 'Status has successfully been deleted!');
     }
 }
-
-        //\App\Status::where('user_id', '=', 1)->get();
-        //auth()->user()->statuses()->with('tasks')->get();
-        //['projects'=>$project, 'pros'=>$pro])
-        //return view('tasks.index', ['tasks'=>$tasks]);
-      //  return view('status.index', compact('tasks'));
-       // $status = new Status;
-        //$status = Status::find(auth()->user()->id);
-
-                //$status->status_id = $request->status_id;
-      
-        // $this->validate($request, [
-        //     'title' => ['required', 'string', 'max:56'],
-        //     'slug' => ['required', 'string', 'max:56'],
-        //     'order' => ['required'],
-        //     'status_id' => ['required', 'exists:statuses,id']
-        // ]);
-
-        // return $request->user()
-        //     ->statuses()
-        //     ->create($request->only('title', 'slug', 'order', 'status_id'));
