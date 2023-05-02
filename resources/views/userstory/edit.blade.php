@@ -1,13 +1,10 @@
 @extends('layouts.app2')
-
 @section('dashboard')
 @include('inc.style')
-
 @include('inc.navbar')
 
 @section('content')
 @include('inc.title')
-
 <br>
 <form action="{{route('userstory.update', $userstory)}}" method="post" >
     @csrf

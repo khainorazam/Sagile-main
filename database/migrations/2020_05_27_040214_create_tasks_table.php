@@ -13,8 +13,11 @@ class CreateTasksTable extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->smallInteger('order')->default(0);
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('status_id');
+            $table->string('user_name');
+            $table->string('status_name');
+            $table->unsignedInteger('userstory_id');
+            $table->unsignedInteger('sprint_id');
+            $table->unsignedInteger('proj_id');
             $table->date('start_date');
             $table->date('end_date');
             $table->timestamps();

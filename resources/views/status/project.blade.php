@@ -13,7 +13,7 @@
         <th>Status</th>
         <th>Delete</th>
     </tr>
-    @foreach($statuses as $status)
+    @forelse($statuses as $status)
         <tr> 
             <th>
                 {{ $status->title}}
@@ -22,7 +22,11 @@
                 <button type="submit"><a href="{{route('statuses.destroy', $status)}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this status?');">Delete</button>
             </th>
         </tr>
-    @endforeach
+    @empty
+    <tr>
+        <td colspan="2">No status added yet</td>
+    </tr>
+    @endforelse
     </table>
   <br><br>
 

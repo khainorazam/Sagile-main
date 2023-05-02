@@ -2,27 +2,9 @@
 
 @extends('layouts.app2')
 @include('inc.style')
-
-@section('dashboard')
-
-{{-- @foreach($projects as $project)
-        <li>
-            <a href="{{ route('projects.edit', [$project]) }}">
-             {{ $project->proj_name }} 
-            </a>
-                     
-        </li>
-@endforeach
-        
-@if($projects->isEmpty())
-     No project.
-@endif --}}
-@endsection
-
 @include('inc.navbar')
 
 @section('content')
-
 @include('inc.title')
 <br><br>
 <form action="{{route('sprints.store')}}" method="post" enctype="multipart/form-data">

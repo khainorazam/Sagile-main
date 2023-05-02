@@ -1,74 +1,54 @@
 @extends('layouts.app2')
 @include('inc.style')
-
-@section('dashboard')
-
-@foreach($projects as $project)
-        <li>
-            <a href="{{ route('projects.edit', [$project]) }}">
-             {{ $project->proj_name }} 
-            </a>
-                     
-        </li>
-@endforeach
-        
-@if($projects->isEmpty())
-     No project.
-@endif
-@endsection
-
 @include('inc.navbar')
 
 @section('content')
-<h1>Add Task</h1>
+@include('inc.title')
 <br>
-<form action="{{route('tasks.store')}}" method="post" enctype="multipart/form-data">
-
+  <form action="{{route('tasks.store')}}" method="post" enctype="multipart/form-data">
     @csrf
+    <input type="hidden" name="userstory_id" value="{{ $userstory_id }}"> 
 
-    Sprint ID:
-     <select name="sprint_id">
-            @foreach($sprints as $sprint)
-            <option value="{{ $sprint->sprint_id}}" {{ ((isset($sprint->sprint_id) && $sprint->sprint_id== $sprint->sprint_id)? "selected":"") }}>{{$sprint->sprint_id}}</option>
-            @endforeach
-            
-      </select>
-    <br><br><br>  
-    
-    User Story ID :
-     <select name="u_id">
-            @foreach($userstories as $userstory)
-            <option value="{{ $userstory->u_id}}" {{ ((isset($userstory->u_id) && $userstory->u_id== $userstory->u_id)? "selected":"") }}>{{$userstory->u_id}}</option>
-            @endforeach
-            
-      </select>
-    <br><br><br>  
-    Task ID :<input type="text" name="id" style="margin-left:2.5em" >
-    <br><br><br>
-    Title :<input type="text" name="title" style="margin-left:2.5em" >
-    <br><br><br>
-    Description :<input type="text" name="description" style="margin-left:2.6em" >
+    Task Name :<input type="text" name="title" style="margin-left:2.5em">
+    <div class="error"><font color="red" size="2">{{ $errors->first('title') }}</p></font></div>
+    <br>
+
+    Description :<input type="text" name="description" style="margin-left:2.6em">
+    <div class="error"><font color="red" size="2">{{ $errors->first('description') }}</p></font></div>
+    <br>
+
+    Assigned to :
+    <select name="user_name">
+      @foreach($teamlist as $teammember)
+        <option value="{{ $teammember->username}}" {{ ((isset($teammember->username) && $teammember->username== $teammember->username)? "selected":"") }}>{{$teammember->username}}</option>
+      @endforeach
+    </select>
+    <div class="error"><font color="red" size="2">{{ $errors->first('user_id') }}</p></font></div>
+    <br>
+
+    Status :
+    <select name="status_name">
+      @foreach($statuses as $status)
+        <option value="{{ $status->title}}" {{ ((isset($status->title) && $status->title== $status->title)? "selected":"") }}>{{$status->title}}</option>
+      @endforeach
+    </select>
     <br><br><br>
 
-    Status ID :
-     <select name="status_id">
-            @foreach($statuses as $status)
-            <option value="{{ $status->id}}" {{ ((isset($status->id) && $status->id== $status->id)? "selected":"") }}>{{$status->id}}</option>
-            @endforeach
-            
-      </select>
-    <br><br><br>  
-
-    Start Date :<input type="date" name="start_date" style="margin-left:2.6em" value="projects->start_date" >
+    Start Date :<input type="date" name="start_date" style="margin-left:2.6em" >
+    <div class="error"><font color="red" size="2">{{ $errors->first('start_date') }}</p></font></div>
+    {{ $sprint->sprint_name }} Start Date: {{ date('d F Y', strtotime($sprint->start_sprint)) }}
     <br><br><br>
-    Completion Date :<input type="date" name="end_date" style="margin-left:2.6em" value="projects->end_date" >
+
+    End Date :<input type="date" name="end_date" style="margin-left:2.6em"  >
+    <div class="error"><font color="red" size="2">{{ $errors->first('end_date') }}</p></font></div>
+    {{ $sprint->sprint_name }} End Date: {{ date('d F Y', strtotime($sprint->end_sprint)) }}
     <br><br><br>
     
         
-        <button type="submit">Add Task</button>
+    <button type="submit">Add Task</button>
         
-    <br><br><br>
-
+    <br><br>
+  </form>
 
 
 @endsection

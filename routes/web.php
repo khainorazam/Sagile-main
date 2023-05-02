@@ -161,7 +161,9 @@ Route::post('backlogs/{backlog}/destroy', 'BacklogController@destroy')->name('ba
 Route::get('sprint/task', 'TaskController@kanbanBoard')->name('tasks.kanban'); 
 //Main Task Page 
 Route::get('task/{u_id}', 'TaskController@index')->name('tasks.index');
-Route::get('sprint/task/create', 'TaskController@create')->name('tasks.create');
+Route::get('task/{userstory}/create', 'TaskController@create')->name('tasks.create');
+Route::get('task/{id}/edit', 'TaskController@edit')->name('tasks.edit');
+Route::post('task/{task}', 'TaskController@update')->name('tasks.update');
 Route::get('task/{task}/destroy', 'TaskController@destroy')->name('tasks.destroy');
 
 //Route for security feature

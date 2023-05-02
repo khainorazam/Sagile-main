@@ -11,7 +11,7 @@
         <th>Project</th>
         <th>Status</th>
     </tr>
-    @foreach($pros as $pro)
+    @forelse($pros as $pro)
         <tr> 
             <th>
                 {{ $pro->proj_name}}
@@ -20,7 +20,11 @@
                 <button type="submit"> <a href="{{ action('StatusController@indexProjectStatus', $pro['id']) }}">View</button>
             </th>
         </tr>
-    @endforeach
+    @empty
+    <tr>
+        <td colspan="2">No existing projects yet</td>
+    </tr>
+    @endforelse
     </table>
   <br><br>
 @endsection

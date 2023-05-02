@@ -59,7 +59,7 @@
 
   @empty
   <tr>
-      <td colspan="6">No sprints added yet</td>
+      <td colspan="7">No sprints added yet</td>
   </tr>
   
   @endforelse
