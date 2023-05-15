@@ -58,7 +58,7 @@ class ProductFeatureController extends Controller
         $project = Project::where('proj_name', $proj_name)->first();
 
         //Gets all the sprints related to the project
-        $sprint = Sprint::where('proj_name', '=', "$proj_name")->get();
+        $sprint = Sprint::where('proj_name', '=', "$proj_name")->get(); 
 
         return view('profeature.index2')
             ->with('title', 'Sprints for ' . $proj_name)

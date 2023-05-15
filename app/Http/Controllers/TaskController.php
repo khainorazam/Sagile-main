@@ -39,17 +39,40 @@ class TaskController extends Controller
     //Kanban Board
     public function kanbanBoard()
     {
-        $sprint = new Sprint();
-        $sprints= $sprint->select('sprint_id')->get();
+        //the function will send the required data to the kanban board to display
+        //the kanban board will display all tasks that is related to the user's team's project
 
-        $userstory = new UserStory();
-        $userstories = $userstory->select('u_id')->get();
-
-        $tasks = auth()->user()->statuses()->with('tasks')->get();
+        $user = \Auth::user();
+        $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
+        $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
         
+        //get the task that is related to the user's team's project
+        $proj_ids = $pro->pluck('id')->toArray(); // use pluck() to retrieve an array of project IDs
+        $tasks = Task::whereIn('proj_id', $proj_ids)->get(); // use whereIn() to retrieve the tasks that have a proj_id value in the array
+        
+        //get the status that is related to the project
+        $statuses = Status::whereIn('project_id', $proj_ids)->get(); // use whereIn() to retrieve the status that have a proj_id value in the array
 
-        return view('tasks.kanban',['sprints'=>$sprint->all(), 'userstories'=>$userstory->all()])->with(compact('tasks','sprints','userstories'));
+        return view('tasks.kanban')
+            ->with('tasks', $tasks)
+            ->with('statuses', $statuses);
     }
+
+    public function updateKanbanBoard(Request $request, $id) {
+        $task = Task::find($id);
+      
+        // Check if the task exists
+        if (!$task) {
+          return response()->json(['message' => 'Task not found'], 404);
+        }
+      
+        // Update the task with the new status_name
+        $task->status_name = $request->input('status_name');
+        $task->save();
+      
+        return response()->json(['message' => 'Task updated successfully']);
+      }
+      
 
     /**
      * Show the form for creating a new resource.

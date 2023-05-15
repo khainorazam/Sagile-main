@@ -2545,20 +2545,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2567,15 +2553,13 @@ __webpack_require__.r(__webpack_exports__);
     AddTaskForm: _AddTaskForm__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   props: {
-    initialData: Array,
-    sprint: Array,
-    userstory: Array
+    tasks: Array,
+    statuses: Array
   },
   data: function data() {
     return {
+      tasks: [],
       statuses: [],
-      sprints: [],
-      userstories: [],
       newTaskForStatus: 0
     };
   },
@@ -2590,11 +2574,15 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     // 'clone' the statuses so we don't alter the prop when making changes
-    this.statuses = JSON.parse(JSON.stringify(this.initialData));
-    this.sprints = JSON.parse(JSON.stringify(this.sprint));
-    this.userstories = JSON.parse(JSON.stringify(this.userstory));
+    this.tasks = JSON.parse(JSON.stringify(this.tasks));
+    this.statuses = JSON.parse(JSON.stringify(this.statuses));
   },
   methods: {
+    filteredTasks: function filteredTasks(status) {
+      return this.tasks.filter(function (task) {
+        return task.status_name === status.title;
+      });
+    },
     openAddTaskForm: function openAddTaskForm(statusId) {
       this.newTaskForStatus = statusId;
     },
@@ -2612,11 +2600,19 @@ __webpack_require__.r(__webpack_exports__);
       this.closeAddTaskForm();
     },
     handleTaskMoved: function handleTaskMoved(evt) {
-      axios.put("/tasks/sync", {
-        columns: this.statuses
-      })["catch"](function (err) {
+      var task = evt.item; // get the task that was moved
+
+      var newStatus = evt.to; // get the status column that the task was moved to
+      // update the status_name of the task
+
+      task.status_name = newStatus.title; // save the updated task to the server
+
+      axios.put("/tasks/" + task.id, task)["catch"](function (err) {
         console.log(err.response);
-      });
+      }); // axios.put("/tasks/sync", { columns: this.statuses }).catch(err => 
+      // {
+      //   console.log(err.response);
+      // });
     }
   }
 });
@@ -24986,230 +24982,200 @@ var render = function() {
   return _c(
     "div",
     { staticClass: "relative p-2 flex overflow-x-auto h-full" },
-    _vm._l(_vm.statuses, function(status) {
-      return _c(
-        "div",
-        { key: status.slug, staticClass: "mr-6 w-4/5 max-w-xs flex-shrink-0" },
-        [
-          _c("div", { staticClass: "rounded-md shadow-md overflow-hidden" }, [
-            _c(
-              "div",
-              {
-                staticClass:
-                  "p-3 flex justify-between items-baseline bg-blue-800 "
-              },
-              [
-                _c("h4", { staticClass: "font-medium text-white" }, [
-                  _vm._v(_vm._s(status.title))
-                ]),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass:
-                      "py-1 px-2 text-sm text-orange-500 hover:underline",
-                    on: {
-                      click: function($event) {
-                        return _vm.openAddTaskForm(status.id)
-                      }
-                    }
-                  },
-                  [_vm._v("Add Task")]
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "p-2 bg-blue-100" },
-              [
-                _vm.newTaskForStatus === status.id
-                  ? _c("AddTaskForm", {
-                      attrs: {
-                        "initial-data": status.task,
-                        sprint: _vm.sprints,
-                        userstory: _vm.userstories,
-                        "status-id": status.id
-                      },
-                      on: {
-                        "task-added": _vm.handleTaskAdded,
-                        "task-canceled": _vm.closeAddTaskForm
-                      }
-                    })
-                  : _vm._e(),
-                _vm._v(" "),
-                _c(
-                  "draggable",
-                  _vm._b(
+    _vm._l(
+      _vm.statuses.sort(function(a, b) {
+        return a.order - b.order
+      }),
+      function(status, index) {
+        return _c(
+          "div",
+          { key: index, staticClass: "mr-6 w-4/5 max-w-xs flex-shrink-0" },
+          [
+            _c("div", { staticClass: "rounded-md shadow-md overflow-hidden" }, [
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "p-3 flex justify-between items-baseline bg-blue-800 "
+                },
+                [
+                  _c("h4", { staticClass: "font-medium text-white" }, [
+                    _vm._v(_vm._s(status.title))
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "button",
                     {
-                      staticClass: "flex-1 overflow-hidden",
-                      on: { end: _vm.handleTaskMoved },
-                      model: {
-                        value: status.tasks,
-                        callback: function($$v) {
-                          _vm.$set(status, "tasks", $$v)
-                        },
-                        expression: "status.tasks"
+                      staticClass:
+                        "py-1 px-2 text-sm text-orange-500 hover:underline",
+                      on: {
+                        click: function($event) {
+                          return _vm.openAddTaskForm(status.id)
+                        }
                       }
                     },
+                    [_vm._v("Add Task")]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "p-2 bg-blue-100" },
+                [
+                  _c(
                     "draggable",
-                    _vm.taskDragOptions,
-                    false
-                  ),
-                  [
-                    _c(
-                      "transition-group",
+                    _vm._b(
                       {
-                        staticClass:
-                          "flex-1 flex flex-col h-full overflow-x-hidden overflow-y-auto rounded shadow-xs",
-                        attrs: { tag: "div" }
-                      },
-                      _vm._l(status.tasks, function(task) {
-                        return _c(
-                          "div",
-                          {
-                            key: task.id,
-                            staticClass:
-                              "mb-3 p-4 flex flex-col bg-white rounded-md shadow transform hover:shadow-md cursor-pointer"
+                        staticClass: "flex-1 overflow-hidden",
+                        on: { end: _vm.handleTaskMoved },
+                        model: {
+                          value: _vm.tasks,
+                          callback: function($$v) {
+                            _vm.tasks = $$v
                           },
-                          [
-                            _c(
-                              "span",
-                              {
-                                staticClass: "block mb-2 text-xl text-gray-900"
-                              },
-                              [_vm._v(_vm._s(task.title))]
-                            ),
-                            _vm._v(" "),
-                            _c("p", { staticClass: "text-gray-700 mb-3" }, [
-                              _vm._v(_vm._s(task.description))
-                            ]),
-                            _vm._v(" "),
-                            _c("p", { staticClass: "text-gray-700 mb-1" }, [
-                              _c(
-                                "span",
-                                { staticClass: "font-semibold text-black-900" },
-                                [_vm._v("Sprint :")]
-                              ),
-                              _vm._v(_vm._s(task.sprint_id))
-                            ]),
-                            _vm._v(" "),
-                            _c("p", { staticClass: "text-gray-700 mb-1" }, [
-                              _c(
-                                "span",
-                                { staticClass: "font-semibold text-black-900" },
-                                [_vm._v("User Story :")]
-                              ),
-                              _vm._v(_vm._s(task.u_id))
-                            ]),
-                            _vm._v(" "),
-                            _c("p", { staticClass: "text-gray-700 mb-1" }, [
-                              _c(
-                                "span",
-                                { staticClass: "font-semibold text-black-900" },
-                                [_vm._v("Start Date :")]
-                              ),
-                              _vm._v(_vm._s(task.start_date))
-                            ]),
-                            _vm._v(" "),
-                            _c("p", { staticClass: "text-gray-700 mb-1" }, [
-                              _c(
-                                "span",
-                                { staticClass: "font-semibold text-black-900" },
-                                [_vm._v("End Date :")]
-                              ),
-                              _vm._v(_vm._s(task.end_date))
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              {
-                                staticClass:
-                                  "p-3 flex justify-between items-end text-sm bg-gray-100"
-                              },
-                              [
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass:
-                                      "px-3 py-1 leading-5 text-white bg-blue-600 hover:bg-blue-500 rounded",
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.openAddTaskForm(status.id)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("Edit")]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass:
-                                      "px-3 py-1 leading-5 text-white bg-red-600 hover:bg-red-500 rounded",
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.openAddTaskForm(status.id)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("Delete")]
-                                )
-                              ]
-                            )
-                          ]
-                        )
-                      }),
-                      0
-                    )
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value:
-                          !status.tasks.length &&
-                          _vm.newTaskForStatus !== status.id,
-                        expression:
-                          "!status.tasks.length && newTaskForStatus !== status.id"
-                      }
-                    ],
-                    staticClass:
-                      "flex-1 p-4 flex flex-col items-center justify-center"
-                  },
-                  [
-                    _c("span", { staticClass: "text-gray-600" }, [
-                      _vm._v("No tasks yet")
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass:
-                          "mt-1 text-sm text-orange-600 hover:underline",
-                        on: {
-                          click: function($event) {
-                            return _vm.openAddTaskForm(status.id)
-                          }
+                          expression: "tasks"
                         }
                       },
-                      [_vm._v("Add one")]
-                    )
-                  ]
-                )
-              ],
-              1
-            )
-          ])
-        ]
-      )
-    }),
+                      "draggable",
+                      _vm.taskDragOptions,
+                      false
+                    ),
+                    [
+                      _c(
+                        "transition-group",
+                        {
+                          staticClass:
+                            "flex-1 flex flex-col h-full overflow-x-hidden overflow-y-auto rounded shadow-xs",
+                          attrs: { tag: "div" }
+                        },
+                        _vm._l(_vm.filteredTasks(status), function(task) {
+                          return _c(
+                            "div",
+                            {
+                              key: task.id,
+                              staticClass:
+                                "mb-3 p-4 flex flex-col bg-white rounded-md shadow transform hover:shadow-md cursor-pointer"
+                            },
+                            [
+                              _c(
+                                "span",
+                                {
+                                  staticClass:
+                                    "block mb-2 text-xl text-gray-900"
+                                },
+                                [_vm._v(_vm._s(task.title))]
+                              ),
+                              _vm._v(" "),
+                              _c("p", { staticClass: "text-gray-700 mb-3" }, [
+                                _vm._v(_vm._s(task.description))
+                              ]),
+                              _vm._v(" "),
+                              _c("p", { staticClass: "text-gray-700 mb-1" }, [
+                                _c(
+                                  "span",
+                                  {
+                                    staticClass: "font-semibold text-black-900"
+                                  },
+                                  [_vm._v("Project :")]
+                                ),
+                                _vm._v(_vm._s(task.proj_id))
+                              ]),
+                              _vm._v(" "),
+                              _c("p", { staticClass: "text-gray-700 mb-1" }, [
+                                _c(
+                                  "span",
+                                  {
+                                    staticClass: "font-semibold text-black-900"
+                                  },
+                                  [_vm._v("Sprint :")]
+                                ),
+                                _vm._v(_vm._s(task.sprint_id))
+                              ]),
+                              _vm._v(" "),
+                              _c("p", { staticClass: "text-gray-700 mb-1" }, [
+                                _c(
+                                  "span",
+                                  {
+                                    staticClass: "font-semibold text-black-900"
+                                  },
+                                  [_vm._v("User Story :")]
+                                ),
+                                _vm._v(_vm._s(task.userstory_id))
+                              ]),
+                              _vm._v(" "),
+                              _c("p", { staticClass: "text-gray-700 mb-1" }, [
+                                _c(
+                                  "span",
+                                  {
+                                    staticClass: "font-semibold text-black-900"
+                                  },
+                                  [_vm._v("Start Date :")]
+                                ),
+                                _vm._v(_vm._s(task.start_date))
+                              ]),
+                              _vm._v(" "),
+                              _c("p", { staticClass: "text-gray-700 mb-1" }, [
+                                _c(
+                                  "span",
+                                  {
+                                    staticClass: "font-semibold text-black-900"
+                                  },
+                                  [_vm._v("End Date :")]
+                                ),
+                                _vm._v(_vm._s(task.end_date))
+                              ])
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.filteredTasks(status).length === 0,
+                          expression: "filteredTasks(status).length === 0"
+                        }
+                      ],
+                      staticClass:
+                        "flex-1 p-4 flex flex-col items-center justify-center"
+                    },
+                    [
+                      _c("span", { staticClass: "text-gray-600" }, [
+                        _vm._v("No tasks yet")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "mt-1 text-sm text-orange-600 hover:underline",
+                          on: {
+                            click: function($event) {
+                              return _vm.openAddTaskForm(status.id)
+                            }
+                          }
+                        },
+                        [_vm._v("Add one")]
+                      )
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          ]
+        )
+      }
+    ),
     0
   )
 }

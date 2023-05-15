@@ -159,6 +159,7 @@ Route::post('backlogs/{backlog}/destroy', 'BacklogController@destroy')->name('ba
 //Route for Task Assign
 //Kanban Board
 Route::get('sprint/task', 'TaskController@kanbanBoard')->name('tasks.kanban'); 
+Route::put('/tasks/{id}', 'TaskController@updateKanbanBoard');
 //Main Task Page 
 Route::get('task/{u_id}', 'TaskController@index')->name('tasks.index');
 Route::get('task/{userstory}/create', 'TaskController@create')->name('tasks.create');
