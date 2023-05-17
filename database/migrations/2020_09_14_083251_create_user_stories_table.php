@@ -16,10 +16,11 @@ class CreateUserStoriesTable extends Migration
         Schema::create('user_stories', function (Blueprint $table) {
             $table->bigIncrements('u_id');
             $table->string('user_story');
-            $table->string('desc_story');
+            $table->string('means');
             $table->string('prio_story');
             $table->string('title');
             $table->string('sprint_id');
+            $table->string('proj_id');
             $table->string('perfeature_id');
             $table->string('secfeature_id');
             $table->timestamps();

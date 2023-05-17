@@ -85,6 +85,28 @@ class ProductFeatureController extends Controller
             ->with('title', 'User Story for ' . $sprint->sprint_name);
         
     }
+
+    public function backlog($proj_id)
+    {
+        //Get the project where user's team name(s) is the same with project's team name
+        $user = \Auth::user();
+        $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
+        $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
+
+        //Get current project 
+        $project = Project::where('id', $proj_id)->first();
+        
+        $userstory = \App\UserStory::where('proj_id', $proj_id)
+            ->where('title', 'Backlog')
+            ->get();
+
+        return view('backlog.index',['userstories'=>$userstory,])
+            ->with('project', $project)
+            ->with('pros', $pro)
+            ->with('title', 'Backlog for ' . $project->proj_name);
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *

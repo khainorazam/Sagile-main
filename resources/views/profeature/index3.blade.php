@@ -15,7 +15,6 @@
     <table id=userstories>
         <tr>
             <th>User Story</th>
-            <th>Description</th>
             <th>Performance</th>
             <th>Security</th>
             <th>Status</th>
@@ -29,10 +28,6 @@
         <tr> 
             <th>
               {{$userstory->user_story}}
-            </th>
-        
-            <th>
-              {{ $userstory->desc_story }}
             </th>
            
             <!--If the perfeature_id and secfeature_id does not contain anything, it will store as the string 'null'
@@ -65,7 +60,7 @@
 
       @empty
       <tr>
-        <td colspan="8">No user stories added yet</td>
+        <td colspan="9">No user stories added yet</td>
       </tr>
 
         @endforelse

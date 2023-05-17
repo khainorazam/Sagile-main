@@ -7,7 +7,10 @@ use App\Status;
 use App\SecurityFeature;
 use App\PerformanceFeature;
 use App\Project;
+use App\Role;
 use App\Mapping;
+use App\Team;
+use App\TeamMapping;
 use App\Sprint;
 use App\Http\Controllers\Auth;
 use DB;
@@ -64,9 +67,13 @@ class UserStoryController extends Controller
     public function create($sprint_id)
     {
         $user = \Auth::user();
+        $sprint = Sprint::where('sprint_id', $sprint_id)->first();
+        $project = Project::where('proj_name', $sprint->proj_name)->first();
+        $team = Team::where('proj_name', $sprint->proj_name)->first();
+        $roles = TeamMapping::where('team_name', $team->team_name)->distinct('role_name')->pluck('role_name');
 
-        //Currently gets status related to user (might change in future)
-        $status = Status::where('user_id', $user->id)->get();
+        //send the existing statuses for the project related   
+        $status = Status::where('project_id', $project->id)->get();
         $secfeature = new SecurityFeature;
         $perfeature = new PerformanceFeature;
         $secfeatures = $secfeature->select('secfeature_name')->get();
@@ -78,7 +85,8 @@ class UserStoryController extends Controller
         return view('userstory.create',['perfeatures'=> $perfeature->all(), 'secfeatures'=> $secfeature->all()])
             ->with('title', 'Create User Story for '. $sprint->sprint_name)
             ->with('sprint_id', $sprint_id)
-            ->with('statuses', $status);
+            ->with('statuses', $status)
+            ->with('roles', $roles);
 
     }
 
@@ -92,23 +100,25 @@ class UserStoryController extends Controller
     {
         //Get the current sprint involved
         $sprint = Sprint::where('sprint_id', $request->sprint_id)->first();
+        $project = Project::where('proj_name', $sprint->proj_name)->first();
 
         //Validate the request parameters
         $validation = $request->validate([
             'user_story' => 'required|unique:user_stories,user_story,NULL,id,sprint_id,'.$request->input('sprint_id'), 
-            'desc_story' => 'required',
+            'means' => 'required',
             'title' => 'required',
+            'role' => 'required',
         ], [
             'user_story.required' => '*The User Story Name is required',
             'user_story.unique' => '*There is already an existing User Story in the sprint with the same name',
-            'desc_story.required' => '*The Description is required',
+            'means.required' => '*The means is required',
+            'role.required' => '*The role is required',
             'title.required' => '*The Status is required',
         ]);
 
         //Assign request values to new Userstory 
         $userstory = new UserStory;
         $userstory->user_story = $request->user_story;
-        $userstory->desc_story = $request->desc_story;
         $userstory->title = $request->title;
 
         $str_perfeatures = json_encode($request->perfeature_id);
@@ -118,6 +128,7 @@ class UserStoryController extends Controller
         $userstory->secfeature_id = $str_secfeatures;
         
         $userstory->sprint_id = $request->sprint_id;
+        $userstory->proj_id = $project->id;
         $userstory->save();
 
         //redirect to index3 page
@@ -154,7 +165,12 @@ class UserStoryController extends Controller
     { 
         $user = \Auth::user();
         
-        $status = Status::where('user_id', $user->id)->get();
+        $sprint = Sprint::where('sprint_id', $userstory->sprint_id)->first();
+        $project = Project::where('proj_name', $sprint->proj_name)->first();
+
+        //send the existing statuses for the project related   
+        $status = Status::where('project_id', $project->id)->get();
+        
         $secfeature = new SecurityFeature;
         $perfeature = new PerformanceFeature;
         $secfeatures = $secfeature->select('secfeature_name')->get();
@@ -163,7 +179,7 @@ class UserStoryController extends Controller
         $sprint = Sprint::where('sprint_id', $userstory->sprint_id)->first();
 
         return view('userstory.edit',['secfeatures'=>$secfeature->all(), 'perfeatures'=>$perfeature->all()])
-            ->with('title', 'Edit ' . $userstory->user_story . ' in '. $sprint->sprint_name)    
+            ->with('title', 'Edit Userstory - "' . $userstory->user_story . '" in '. $sprint->sprint_name)    
             ->with('userstory', $userstory)
             ->with('statuses', $status);
     }
@@ -180,16 +196,16 @@ class UserStoryController extends Controller
     {
         //Validate the request parameters
         $validation = $request->validate([
-            'desc_story' => 'required',
+            // 'means' => 'required',
             'title' => 'required',
         ], [
-            'desc_story.required' => '*The Description is required',
+            // 'means.required' => '*The Description is required',
             'title.required' => '*The Status is required',
         ]);
 
         //Assign request values to current Userstory 
         //user_story name and sprint ID not included because does not change
-        $userstory->desc_story = $request->desc_story;
+        // $userstory->means = $request->means;
         $userstory->title = $request->title;
 
         $str_perfeatures = json_encode($request->perfeature_id);
@@ -198,17 +214,20 @@ class UserStoryController extends Controller
         $userstory->perfeature_id = $str_perfeatures;
         $userstory->secfeature_id = $str_secfeatures;
         
-        $userstory->save();
 
         //redirect to index3 page
         $sprint = Sprint::where('sprint_id', $userstory->sprint_id)->first();
+        $project = Project::where('proj_name', $sprint->proj_name)->first();
+        $userstory->proj_id = $project->id;
+        $userstory->save();
+
         $sprint_id = $sprint->sprint_id;
         $userstories = UserStory::where('sprint_id', $sprint_id)->get();
 
         return redirect()->route('profeature.index3', ['sprint_id' => $sprint_id])
             ->with('userstories', $userstories)
             ->with('title', 'User Story for ' . $sprint->sprint_name)
-            ->with('success', $userstory->user_story . ' has successfully been updated!');
+            ->with('success', 'User Story - ' . $userstory->user_story . ' has successfully been updated!');
     }
 
     /**
@@ -219,16 +238,173 @@ class UserStoryController extends Controller
      */
     public function destroy(UserStory $userstory)
     {
+        if($userstory->sprint_id != null){
         $sprint_id = $userstory->sprint_id;
         $userstories = UserStory::where('sprint_id', $sprint_id)->get();
         $sprint = Sprint::where('sprint_id', $sprint_id)->first();
-
+        
         $userstory->delete();
 
+        
         return redirect()->route('profeature.index3', ['sprint_id' => $sprint_id])
             ->with('userstories', $userstories)
             ->with('title', 'User Story for ' . $sprint->sprint_name)
             ->with('success', 'User Story has successfully been deleted!');
+        }
+        
+        else{
+        //redirect to backlog index page
+        $userstories = \App\UserStory::where('proj_id', $userstory->proj_id)
+            ->where('title', 'Backlog')
+            ->get();
+        
+        $project = Project::where('id', $userstory->proj_id)->first();
+
+        //delete userstory
+        $userstory->delete();
+        //Get the project where user's team name(s) is the same with project's team name
+        $user = \Auth::user();
+        $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
+        $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
+
+        return redirect()->route('backlog.index', ['proj_id' => $project->id])
+            ->with('project', $project)
+            ->with('userstories', $userstories)
+            ->with('pros', $pro)
+            ->with('title', 'Backlog for ' . $project->proj_name)
+            ->with('success', 'Backlog has successfully been deleted!');
+        }
+    }
+
+    public function createBacklog($proj_id)
+    {
+        $user = \Auth::user();
+        $project = Project::where('id', $proj_id)->first();
+        $team = Team::where('proj_name', $project->proj_name)->first();
+        $roles = TeamMapping::where('team_name', $team->team_name)->distinct('role_name')->pluck('role_name');
+
+        $secfeature = new SecurityFeature;
+        $perfeature = new PerformanceFeature;
+        $secfeatures = $secfeature->select('secfeature_name')->get();
+        $perfeatures = $perfeature->select('perfeature_name')->get();
+        
+        return view('backlog.create',['perfeatures'=> $perfeature->all(), 'secfeatures'=> $secfeature->all()])
+            ->with('title', 'Create Backlog for '. $project->proj_name)
+            ->with('proj_id', $proj_id)
+            ->with('roles', $roles);
+
+    }
+
+    public function storeBacklog(Request $request)
+    {
+        //Get the current project involved
+        $project = Project::where('id', $request->proj_id)->first();
+
+        //Validate the request parameters
+        $validation = $request->validate([
+            'user_story' => 'required|unique:user_stories,user_story,NULL,id,sprint_id,'.$request->input('sprint_id'), 
+            'means' => 'required',
+            'role' => 'required',
+        ], [
+            'user_story.required' => '*The User Story Name is required',
+            'user_story.unique' => '*There is already an existing User Story in the sprint with the same name',
+            'means.required' => '*The means is required',
+            'role.required' => '*The role is required',
+        ]);
+
+        //Assign request values to new Userstory 
+        $userstory = new UserStory;
+        $userstory->user_story = $request->user_story;
+        $userstory->title = "Backlog";
+
+        $str_perfeatures = json_encode($request->perfeature_id);
+        $str_secfeatures = json_encode($request->secfeature_id);
+
+        $userstory->perfeature_id = $str_perfeatures;
+        $userstory->secfeature_id = $str_secfeatures;
+        
+        $userstory->proj_id = $project->id;
+        $userstory->save();
+
+        //redirect to backlog index page
+        $userstory = \App\UserStory::where('proj_id', $project->id)
+            ->where('title', 'Backlog')
+            ->get();
+
+        //Get the project where user's team name(s) is the same with project's team name
+        $user = \Auth::user();
+        $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
+        $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
+
+        return redirect()->route('backlog.index', ['proj_id' => $project->id])
+            ->with('project', $project)
+            ->with('userstories', $userstory)
+            ->with('pros', $pro)
+            ->with('title', 'Backlog for ' . $project->proj_name)
+            ->with('success', 'Backlog has successfully been created!');
+            
+    }
+
+    public function editBacklog(UserStory $userstory, $id =[])
+    { 
+        $user = \Auth::user();
+        
+        $project = Project::where('id', $userstory->proj_id)->first();
+        
+        $secfeature = new SecurityFeature;
+        $perfeature = new PerformanceFeature;
+        $secfeatures = $secfeature->select('secfeature_name')->get();
+        $perfeatures = $perfeature->select('perfeature_name')->get();
+
+        return view('backlog.edit',['secfeatures'=>$secfeature->all(), 'perfeatures'=>$perfeature->all()])
+            ->with('title', 'Edit Backlog - "' . $userstory->user_story . '" in '. $project->proj_name)    
+            ->with('userstory', $userstory);
+    }
+
+    public function updateBacklog(Request $request, UserStory $userstory)
+    {
+        //Validate the request parameters
+        // $validation = $request->validate([
+        //     // 'means' => 'required',
+        //     'title' => 'required',
+        // ], [
+        //     // 'means.required' => '*The Description is required',
+        //     'title.required' => '*The Status is required',
+        // ]);
+
+        //Assign request values to current Userstory 
+        //user_story name and sprint ID not included because does not change
+        // $userstory->means = $request->means;
+        // $userstory->title = $request->title;
+
+        $str_perfeatures = json_encode($request->perfeature_id);
+        $str_secfeatures = json_encode($request->secfeature_id);
+
+        $userstory->perfeature_id = $str_perfeatures;
+        $userstory->secfeature_id = $str_secfeatures;
+        
+        $userstory->save();
+
+        //Get current project
+        $project = Project::where('id', $userstory->proj_id)->first();
+
+        //redirect to backlog index page
+        $userstories = \App\UserStory::where('proj_id', $project->id)
+            ->where('title', 'Backlog')
+            ->get();
+
+        //Get the project where user's team name(s) is the same with project's team name
+        $user = \Auth::user();
+        $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
+        $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
+
+        return redirect()->route('backlog.index', ['proj_id' => $project->id])
+            ->with('project', $project)
+            ->with('userstories', $userstories)
+            ->with('pros', $pro)
+            ->with('title', 'Backlog for ' . $project->proj_name)
+            ->with('success', 'Backlog - ' . $userstory->user_story . ' has successfully been updated!');
+
     }
 }
 

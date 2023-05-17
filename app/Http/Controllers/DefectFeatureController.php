@@ -52,7 +52,7 @@ class DefectFeatureController extends Controller
         $deffeature = new DefectFeature();
 
         // $deffeature->user_story=$request->user_story;
-        // $deffeature->desc_story=$request->desc_story;
+        // $deffeature->means=$request->means;
         // $deffeature->prio_story=$request->prio_story;
         // $deffeature->status_title=$request->status_title;
         // $deffeature->defect=$request->defect;

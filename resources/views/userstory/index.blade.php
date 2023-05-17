@@ -48,7 +48,7 @@
     </th>
 
     <th>
-      {{ $userstory->desc_story }}
+      {{ $userstory->means }}
     </th>
 
     <th>

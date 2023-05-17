@@ -45,7 +45,7 @@
     </th>
 
     <th>
-      {{ $ustory->desc_story }}
+      {{ $ustory->means }}
     </th>
 
     <th>

@@ -6,7 +6,7 @@
 @section('content')
 @include('inc.title')
 <br>
-<form action="{{route('userstory.update', $userstory)}}" method="post" >
+<form action="{{route('backlog.update', $userstory)}}" method="post" >
     @csrf
 
     User Story :<input type="text" name="user_story" id="user_story" readonly value="{{$userstory->user_story}}" style="margin-left:2.5em; width: 1000px; height:50px"  >
@@ -42,19 +42,6 @@
     </select> --}}
 
 
-    <div>
-        <label for="title">Status :</label>
-        <select name="title" id="title" class="form-control">
-            <option value="" selected disabled>Select</option>
-            @foreach($statuses as $status)
-                <option value="{{ $status->title }}" @if($userstory->title == $status->title) selected @endif> {{ $status->title }}</option>
-            @endforeach
-        </select> 
-        <div class="error"><font color="red" size="2">{{ $errors->first('title') }}</font></div>
-    </div>
-    
-    <br><br>
-    
     <!--If the perfeature_id and secfeature_id does not contain anything, it will store as the string 'null'
                 This condition here displays 'an empty array if the features are empty'
                 The false condition is displaying the features if it is not empty-->  

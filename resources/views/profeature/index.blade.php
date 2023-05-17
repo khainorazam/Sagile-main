@@ -22,6 +22,7 @@
     <th>End Date</th>
     <th>Edit</th>
     <th>Delete</th>
+    <th>Backlog</th>
     <th>Sprint</th>
 </tr>
 
@@ -59,6 +60,10 @@
 
           <th>
             <button type="submit"><a href="{{route('projects.destroy', $pro)}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this project?');">Delete</button>
+          </th>
+
+          <th>
+            <button type="submit"><a href="{{route('backlog.index', $pro->id)}}">Backlog</a></button>
           </th>
 
           <th>

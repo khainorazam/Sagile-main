@@ -1,8 +1,6 @@
 <!--Create User Story Page-->
 @extends('layouts.app2')
-
 @include('inc.style')
-
 @include('inc.navbar')
 
 @section('content')
@@ -14,13 +12,28 @@
     <!--Sprint Name Value -->
     <input type="hidden" name="sprint_id" value="{{ $sprint_id }}"> 
 
-
-    User Story Name :<input type="text" name="user_story" style="margin-left:2.5em" >
-    <div class="error"><font color="red" size="2">{{ $errors->first('user_story') }}</p></font></div>
+    <div>
+        <label for="role">Role : As a</label>
+        <select name="role" id="role" class="form-control" onchange="updateUserStory()">
+            <option value="" selected disabled>Select</option>
+            @foreach($roles as $role)
+                <option value="{{ $role }}"> {{ $role }}</option>
+            @endforeach
+        </select> 
+        <div class="error"><font color="red" size="2">{{ $errors->first('role') }}</p></font></div>
+    </div>
     <br>
-
-    Description :<input type="text" name="desc_story" style="margin-left:2.6em" >
-    <div class="error"><font color="red" size="2">{{ $errors->first('desc_story') }}</p></font></div>
+    
+    Means : I am able to<input type="text" name="means" id="means" style="margin-left:2.6em" onchange="updateUserStory()">
+    <div class="error"><font color="red" size="2">{{ $errors->first('means') }}</p></font></div>
+    <br>
+    
+    Ends :so that I can<input type="text" name="ends" id="ends" style="margin-left:2.6em" onchange="updateUserStory()"> (optional)
+    {{-- <div class="error"><font color="red" size="2">{{ $errors->first('ends') }}</p></font></div> --}}
+    <br><br>
+    
+    User Story :<input type="text" name="user_story" id="user_story" style="margin-left:2.5em; width: 1000px; height:50px"  >
+    <div class="error"><font color="red" size="2">{{ $errors->first('user_story') }}</p></font></div>
     <br>
     
     {{-- Priority : 
@@ -75,4 +88,17 @@
    
     </form>
     <br><br><br>
+
+    <script>
+        function updateUserStory() {
+        var role = document.getElementById("role").value;
+        var means = document.getElementById("means").value;
+        var ends = document.getElementById("ends").value;
+        var userStory = "As a " + role + ", I am able to " + means;
+        if (ends.trim() !== "") {
+            userStory += " so that I can " + ends;
+        }
+        document.getElementById("user_story").value = userStory;
+    }
+    </script>
 @endsection

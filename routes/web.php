@@ -149,12 +149,12 @@ Route::get('userstory/{userstory}/destroy', 'UserStoryController@destroy')->name
 
 
 //Route for backlog
-Route::get('backlogs', 'BacklogController@index')->name('backlogs.index');
-Route::get('backlogs/create', 'BacklogController@create')->name('backlogs.create');
-Route::get('backlogs/{backlog}/edit', 'BacklogController@edit')->name('backlogs.edit');
-Route::post('backlogs', 'BacklogController@store')->name('backlogs.store');
-Route::post('backlogs/{backlog}', 'BacklogController@update')->name('backlogs.update');
-Route::post('backlogs/{backlog}/destroy', 'BacklogController@destroy')->name('backlogs.destroy');
+Route::get('backlog/{proj_id}', 'ProductFeatureController@backlog')->name('backlog.index');
+Route::get('backlog/{proj_id}/create', 'UserStoryController@createBacklog')->name('backlog.create');
+Route::get('backlog/{userstory}/edit', 'UserStoryController@editBacklog')->name('backlog.edit');
+Route::post('backlog', 'UserStoryController@storeBacklog')->name('backlog.store');
+Route::post('backlog/{userstory}', 'UserStoryController@updateBacklog')->name('backlog.update');
+Route::get('backlog/{userstory}/destroy', 'UserStoryController@destroy')->name('backlog.destroy');
 
 //Route for Task Assign
 //Kanban Board

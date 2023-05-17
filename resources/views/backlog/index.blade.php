@@ -1,41 +1,62 @@
-@extends ('layouts.app1')
+<!--Main User Story Page-->
+@extends('layouts.app2')
+@include('inc.success')
+@include('inc.style')
 
-@section('article')
-    <li>
-       < class="aside a"><a href="{{route('tasks.index')}}">Assign Task</a></li>
-        
-        <li class="aside a"><a href="#contact">User Stories</a></li>
-        <li class="aside a"><a href="#contact">Logout</a></li>
-    </ul>
-@endsection 
+@include('inc.dashboard')
 
-@section ('content')
-<br><br><br>
-<table>
+@include('inc.navbar')
+
+@section('content')
+@include('inc.title')
+<br><br>
+
+    @csrf
+    <table id=backlog>
         <tr>
-                <th >ID</th>
-                <th  >Title</th>
-                <th  >Workflow step</th>
-                <th >priority</th>
-                <th  >Assigned To</th>
-                <th  >Remaining</th>
+            <th>Backlog</th>
+            <th>Performance</th>
+            <th>Security</th>
+            <th>Edit</th> 
+            <th>Delete</th>
         </tr>
-</table>
-<form action="{{route('tasks.store')}}" method="post" enctype="multipart/form-data">
-    @csrf
-    @csrf
-        
-    Sprint Name :<input type="text" name="sprint_name" style="margin-left:2.5em" >
-    <br><br><br>
-    Description :<input type="text" name="sprint_desc" style="margin-left:2.6em" >
-    <br><br><br>
-    Start Date :<input type="date" name="start_sprint" style="margin-left:2.6em" >
-    <br><br><br>
-    Completion Date :<input type="date" name="end_sprint" style="margin-left:2.6em" >
-    <br><br><br>
-    
-    
-        <button type="submit">Add Sprint</button>
-        
-    <br><br><br>
+
+      @forelse($userstories as $userstory)
+        <tr> 
+            <th>
+              {{$userstory->user_story}}
+            </th>
+           
+            <!--If the perfeature_id and secfeature_id does not contain anything, it will store as the string 'null'
+                This condition here displays 'None selected if the features are empty'
+                The false condition is displaying the features if it is not empty-->            
+            <th>
+              {{ $userstory->perfeature_id == 'null' ? 'None selected' : $userstory->perfeature_id }}
+            </th>
+
+            <th>
+              {{ $userstory->secfeature_id == 'null' ? 'None selected' : $userstory->secfeature_id }}
+            </th>
+            
+            <th>
+              <button type="submit"><a href="{{route('backlog.edit', [$userstory->u_id])}}">Edit</a></button>
+            </th>
+
+            <th>
+              <button type="submit"><a href="{{route('backlog.destroy', $userstory)}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this Backlog?');">Delete</button>
+            </th>
+        </tr>
+
+      @empty
+      <tr>
+        <td colspan="5">No user stories added yet</td>
+      </tr>
+
+        @endforelse
+      </table>
+
+        <br><br><br>
+        <button type="submit"><a href="{{ route('backlog.create', $project->id) }}">Create Backlog</a></button>
+       <br><br>
+      
 @endsection
