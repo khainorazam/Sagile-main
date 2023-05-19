@@ -276,6 +276,7 @@ class UserStoryController extends Controller
         }
     }
 
+    //Backlog in Project Page -- START
     public function createBacklog($proj_id)
     {
         $user = \Auth::user();
@@ -406,6 +407,49 @@ class UserStoryController extends Controller
             ->with('success', 'Backlog - ' . $userstory->user_story . ' has successfully been updated!');
 
     }
+    //END BACKLOG FOR PROJECT 
+
+    //BACKLOG FOR USERSTORY
+    public function backlog($sprint_id)
+    {
+        //Get the project where user's team name(s) is the same with project's team name
+        $user = \Auth::user();
+        $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
+        $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
+
+        //Get current project 
+        $sprint = Sprint::where('sprint_id', $sprint_id)->first();
+        $project = Project::where('proj_name', $sprint->proj_name)->first();
+        
+        $userstory = \App\UserStory::where('proj_id', $project->id)
+            ->where('title', 'Backlog')
+            ->whereNull('sprint_id')
+            ->get();
+
+        return view('userstory.backlog',['userstories'=>$userstory,])
+            ->with('project', $project)
+            ->with('sprint_id', $sprint_id)
+            ->with('pros', $pro)
+            ->with('title', 'Assign Backlog from ' . $project->proj_name. ' to ' . $sprint->sprint_name);
+    }
+
+
+    public function assignUserstory($sprint_id, UserStory $userstory)
+    {
+        $userstories = UserStory::where('sprint_id', $sprint_id)->get();
+        $sprint = Sprint::where('sprint_id', $sprint_id)->first();
+        
+        $userstory->sprint_id = $sprint_id;
+        $userstory->save();
+        
+        return redirect()->route('profeature.index3', ['sprint_id' => $sprint_id])
+            ->with('userstories', $userstories)
+            ->with('title', 'User Story for ' . $sprint->sprint_name)
+            ->with('success', 'User Story has successfully been assigned from Backlog!');
+    }
+
+    //END BACKLOG FOR USERSTORY
+
 }
 
        

@@ -1,10 +1,8 @@
-<!--Main Backlog Page-->
+<!--Assign Backlog for Userstory Page-->
 @extends('layouts.app2')
 @include('inc.success')
 @include('inc.style')
-
 @include('inc.dashboard')
-
 @include('inc.navbar')
 
 @section('content')
@@ -12,13 +10,12 @@
 <br><br>
 
     @csrf
-    <table id=backlog>
+    <table id=backlogUserstory>
         <tr>
             <th>Backlog</th>
             <th>Performance</th>
             <th>Security</th>
-            <th>Edit</th> 
-            <th>Delete</th>
+            <th>Assign</th> 
         </tr>
 
       @forelse($userstories as $userstory)
@@ -39,24 +36,18 @@
             </th>
             
             <th>
-              <button type="submit"><a href="{{route('backlog.edit', [$userstory->u_id])}}">Edit</a></button>
+                <button type="submit"><a href="{{ route('userstory.assign', ['userstory' => $userstory, 'sprint_id' => $sprint_id]) }}" class="btn btn-danger" onclick="return confirm('Are you sure you want to assign this Backlog to Sprint 1?');">Assign</button>
             </th>
-
-            <th>
-              <button type="submit"><a href="{{route('backlog.destroy', $userstory)}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this Backlog?');">Delete</button>
-            </th>
-        </tr>
+          </tr>
 
       @empty
       <tr>
-        <td colspan="5">No backlog added yet</td>
+        <td colspan="4">No backlog added yet</td>
       </tr>
 
         @endforelse
       </table>
 
-        <br><br><br>
-        <button type="submit"><a href="{{ route('backlog.create', $project->id) }}">Create Backlog</a></button>
-       <br><br>
+      <br><br>
       
 @endsection

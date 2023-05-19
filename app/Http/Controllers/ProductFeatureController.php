@@ -98,6 +98,7 @@ class ProductFeatureController extends Controller
         
         $userstory = \App\UserStory::where('proj_id', $proj_id)
             ->where('title', 'Backlog')
+            ->whereNull('sprint_id')
             ->get();
 
         return view('backlog.index',['userstories'=>$userstory,])

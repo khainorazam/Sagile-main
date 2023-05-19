@@ -60,7 +60,7 @@ class APIAuthController extends BaseController
     *
     * @return \Illuminate\Http\Response
     */
-    public function retrieve(Request $request)
+    public function user(Request $request)
     {
         $access_token = $request->header('Authorization');
         if($access_token != ''){

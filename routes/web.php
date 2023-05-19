@@ -146,6 +146,10 @@ Route::get('userstory/{userstory}/edit', 'UserStoryController@edit')->name('user
 Route::post('userstory', 'UserStoryController@store')->name('userstory.store');
 Route::post('userstory/{userstory}', 'UserStoryController@update')->name('userstory.update');
 Route::get('userstory/{userstory}/destroy', 'UserStoryController@destroy')->name('userstory.destroy');
+//backlog for userstories
+Route::get('userstory/backlog/{sprint_id}', 'UserStoryController@backlog')->name('userstory.backlog');
+Route::get('userstory/backlog/assign/{sprint_id}/{userstory}', 'UserStoryController@assignUserstory')->name('userstory.assign');
+
 
 
 //Route for backlog

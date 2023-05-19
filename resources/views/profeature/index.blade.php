@@ -63,7 +63,7 @@
           </th>
 
           <th>
-            <button type="submit"><a href="{{route('backlog.index', $pro->id)}}">Backlog</a></button>
+            <button type="submit"><a href="{{route('backlog.index', $pro->id)}}">View</a></button>
           </th>
 
           <th>
