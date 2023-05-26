@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Sprint;
 use App\Project;
+use App\UserStory;
+use App\Task;
 use App\User;
 use App\ProductFeature;
 use App\Http\Controllers\Auth;
@@ -48,6 +50,21 @@ class SprintController extends Controller
         $sprints = Sprint::where('proj_name', $proj_name)->get();
         $project = Project::where('proj_name', $proj_name)->first();
 
+        // Get user stories related to the sprint
+        $userstories = UserStory::where('sprint_id', $sprint->sprint_id)->get();
+
+        foreach ($userstories as $userstory) {
+            // Get tasks related to each user story
+            $tasks = Task::where('userstory_id', $userstory->u_id)->get();
+            
+            // Delete tasks related to the user story
+            $tasks->each->delete();
+            
+            // Delete the user story
+            $userstory->delete();
+        }
+
+        // Delete the sprint
         $sprint->delete();
 
         return redirect()->route('profeature.index2', ['proj_name' => $proj_name])

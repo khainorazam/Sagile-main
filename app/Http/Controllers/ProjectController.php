@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 use App\Project;
 use App\Team;
+use App\Sprint;
+use App\UserStory;
+use App\Task;
 use App\TeamMapping;
 use App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
@@ -147,8 +150,30 @@ class ProjectController extends Controller
         //deletes the team and team mapping records that are associated with the project
         $team = \App\Team::where('proj_name', $project->proj_name)->first();
         $teammapping = \App\Teammapping::where('team_name', $team->team_name)->delete();
-
         $team->delete();
+
+        //Get sprints related to project
+        $sprints = Sprint::where('proj_name', $project->proj_name)->get();
+
+        foreach ($sprints as $sprint) {
+            // Get userstories related to each sprint
+            $userstories = UserStory::where('sprint_id', $sprint->sprint_id)->get();
+            
+            foreach ($userstories as $userstory){
+                //Get tasks related to each user story
+                $tasks = Task::where('userstory_id', $userstory->u_id)->get();
+
+                // Delete tasks related to the user story
+                $tasks->each->delete();
+
+                // Delete the user story
+                $userstory->delete();
+            }
+            
+            //Delete the sprint 
+            $sprint->delete();
+            
+        }
 
         //delete the project record
         $project->delete();
