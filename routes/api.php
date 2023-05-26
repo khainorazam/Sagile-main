@@ -17,8 +17,8 @@ use Illuminate\Support\Facades\Route;
 // API_CHANGES
 Route::post('register', 'API\APIAuthController@register');
 Route::post('login', 'API\APIAuthController@login');
-Route::get('user', 'API\APIAuthController@user');
 // Route::post('logout', 'API\APIAuthController@logout')->middleware('auth:api'); 
-Route::middleware('auth')->group( function () {
-    Route::resource('projects', 'API\APIProjectController');
+Route::middleware('auth:api')->group( function () {
+    Route::get('user', 'API\APIAuthController@user');
+    Route::resource('project', 'API\APIProjectController');
 });

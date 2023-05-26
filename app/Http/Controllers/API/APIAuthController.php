@@ -46,7 +46,6 @@ class APIAuthController extends BaseController
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
             $user = Auth::user(); 
             $success['token'] =  $user->createToken('MyApp')->accessToken; 
-            error_log($request);
 
             return $this->sendResponse($success, 'User login successfully.');
         } 
@@ -62,6 +61,7 @@ class APIAuthController extends BaseController
     */
     public function user(Request $request)
     {
+        $user_id = auth('api')->user()->id;
         $access_token = $request->header('Authorization');
         if($access_token != ''){
             $auth_header = explode(' ', $access_token);
