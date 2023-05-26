@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 19, 2023 at 11:00 AM
+-- Generation Time: May 19, 2023 at 11:44 AM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.6
 
@@ -21,77 +21,12 @@ SET time_zone = "+00:00";
 -- Database: `kanban`
 --
 
--- --------------------------------------------------------
-
---
--- Table structure for table `attachments`
---
-
-CREATE TABLE `attachments` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `file_path` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 --
 -- Dumping data for table `attachments`
 --
 
 INSERT INTO `attachments` (`id`, `name`, `file_path`, `created_at`, `updated_at`) VALUES
 (1, '1611019679_intro.docx', '/storage/uploads/1611019678_intro.docx', '2021-01-18 17:27:59', '2021-01-18 17:27:59');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `boards`
---
-
-CREATE TABLE `boards` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `boardId` int(11) NOT NULL,
-  `totalTaskFilter` int(11) NOT NULL,
-  `tasksDoneFilter` int(11) NOT NULL,
-  `slug` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `charts`
---
-
-CREATE TABLE `charts` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `boardId` int(11) NOT NULL,
-  `sprintname` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `storyPointsTotal` double(5,1) NOT NULL,
-  `tasksTotal` double(5,1) NOT NULL,
-  `tasksDone` double(5,1) NOT NULL,
-  `storyPointsDone` double(5,1) NOT NULL,
-  `startDate` date NOT NULL,
-  `endDate` date NOT NULL,
-  `sprintDay` date NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `coding_standards`
---
-
-CREATE TABLE `coding_standards` (
-  `codestand_id` bigint(20) UNSIGNED NOT NULL,
-  `codestand_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `coding_standards`
@@ -102,57 +37,6 @@ INSERT INTO `coding_standards` (`codestand_id`, `codestand_name`, `created_at`, 
 (4, 'QR code', '2021-06-14 21:00:39', '2021-06-14 21:00:39'),
 (6, 'example', '2021-06-26 18:53:35', '2021-06-26 18:53:35'),
 (7, 'Coding Standard Example', '2023-04-12 21:02:51', '2023-04-12 21:02:51');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `defect_features`
---
-
-CREATE TABLE `defect_features` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `title` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `desc` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `defect_features`
---
-
-INSERT INTO `defect_features` (`id`, `title`, `desc`, `created_at`, `updated_at`) VALUES
-(1, 'login', 'cannot input email', '2021-06-26 16:25:51', '2021-06-26 16:25:51');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `failed_jobs`
---
-
-CREATE TABLE `failed_jobs` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `mappings`
---
-
-CREATE TABLE `mappings` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `ustory_id` int(11) NOT NULL,
-  `type_NFR` int(11) NOT NULL,
-  `id_NFR` int(11) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `mappings`
@@ -172,61 +56,6 @@ INSERT INTO `mappings` (`id`, `ustory_id`, `type_NFR`, `id_NFR`, `created_at`, `
 (11, 25, 2, 2, '2021-06-26 02:01:26', '2021-06-26 02:01:26'),
 (12, 38, 1, 1, '2021-06-26 07:45:51', '2021-06-26 07:45:51'),
 (13, 38, 2, 2, '2021-06-26 07:45:51', '2021-06-26 07:45:51');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `migrations`
---
-
-CREATE TABLE `migrations` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `batch` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `migrations`
---
-
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(1, '2014_10_12_100000_create_password_resets_table', 1),
-(2, '2019_03_16_084930_create_roles_table', 1),
-(3, '2019_03_27_154105_create_projects_table', 1),
-(4, '2019_05_05_171853_create_priorities_table', 1),
-(5, '2019_05_05_174636_create_security_features_table', 1),
-(6, '2019_05_07_143235_create_performance_features_table', 1),
-(7, '2019_05_09_031717_create_product_features_table', 1),
-(8, '2019_05_26_195719_create_defect_features_table', 1),
-(9, '2019_06_29_163059_create_mappings_table', 1),
-(10, '2019_08_19_000000_create_failed_jobs_table', 1),
-(11, '2020_05_27_040214_create_tasks_table', 1),
-(12, '2020_05_27_042541_create_statuses_table', 1),
-(13, '2020_08_09_024542_create_teams_table', 1),
-(14, '2020_08_18_123517_create_users_table', 1),
-(15, '2020_08_20_012325_create_attachments_table', 1),
-(16, '2020_08_23_090144_create_team_mappings_table', 1),
-(17, '2020_09_12_015732_create_sprint_table', 1),
-(18, '2020_09_14_083251_create_user_stories_table', 1),
-(19, '2020_09_17_133209_create_coding_standards_table', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `oauth_access_tokens`
---
-
-CREATE TABLE `oauth_access_tokens` (
-  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `client_id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `scopes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `revoked` tinyint(1) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `expires_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `oauth_access_tokens`
@@ -305,60 +134,12 @@ INSERT INTO `oauth_access_tokens` (`id`, `user_id`, `client_id`, `name`, `scopes
 ('f6d5fcb23de7402a12999b87ec9d9a31a91005642fc85d5b041858c84d9f14eba8397e2377140df2', 17, 1, 'MyApp', '[]', 0, '2023-05-01 13:10:26', '2023-05-01 13:10:26', '2024-05-01 21:10:26'),
 ('fede000097599dc3cd22fed13a04f173c3d53a0762caaf0d70f08618d343c33ca6ed9c1dadc41d1d', 17, 1, 'MyApp', '[]', 0, '2023-05-01 13:14:21', '2023-05-01 13:14:21', '2024-05-01 21:14:21');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `oauth_auth_codes`
---
-
-CREATE TABLE `oauth_auth_codes` (
-  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `client_id` bigint(20) UNSIGNED NOT NULL,
-  `scopes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `revoked` tinyint(1) NOT NULL,
-  `expires_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `oauth_clients`
---
-
-CREATE TABLE `oauth_clients` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `secret` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `provider` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `redirect` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `personal_access_client` tinyint(1) NOT NULL,
-  `password_client` tinyint(1) NOT NULL,
-  `revoked` tinyint(1) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 --
 -- Dumping data for table `oauth_clients`
 --
 
 INSERT INTO `oauth_clients` (`id`, `user_id`, `name`, `secret`, `provider`, `redirect`, `personal_access_client`, `password_client`, `revoked`, `created_at`, `updated_at`) VALUES
 (1, NULL, 'user', 'TerivfYirjTVFxrEEGZRbXW9Dm3e8gxKu8wjANkb', NULL, 'http://localhost', 1, 0, 0, '2023-04-17 17:24:00', '2023-04-17 17:24:00');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `oauth_personal_access_clients`
---
-
-CREATE TABLE `oauth_personal_access_clients` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `client_id` bigint(20) UNSIGNED NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `oauth_personal_access_clients`
@@ -367,51 +148,15 @@ CREATE TABLE `oauth_personal_access_clients` (
 INSERT INTO `oauth_personal_access_clients` (`id`, `client_id`, `created_at`, `updated_at`) VALUES
 (1, 1, '2023-04-17 17:24:00', '2023-04-17 17:24:00');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `oauth_refresh_tokens`
---
-
-CREATE TABLE `oauth_refresh_tokens` (
-  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `access_token_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `revoked` tinyint(1) NOT NULL,
-  `expires_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `password_resets`
---
-
-CREATE TABLE `password_resets` (
-  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 --
 -- Dumping data for table `password_resets`
 --
 
 INSERT INTO `password_resets` (`email`, `token`, `created_at`) VALUES
 ('nadia.nzr26@gmail.com', '$2y$10$yKi0wckYnSUcWTgvOF7oLul7Cg9bWg5fRUqNq2Y/HbFBXY89rifmW', '2021-06-12 23:02:51'),
+('nadia.nzr26@gmail.com', '$2y$10$yKi0wckYnSUcWTgvOF7oLul7Cg9bWg5fRUqNq2Y/HbFBXY89rifmW', '2021-06-12 23:02:51'),
+('nadia.nzr26@gmail.com', '$2y$10$yKi0wckYnSUcWTgvOF7oLul7Cg9bWg5fRUqNq2Y/HbFBXY89rifmW', '2021-06-12 23:02:51'),
 ('nadia.nzr26@gmail.com', '$2y$10$yKi0wckYnSUcWTgvOF7oLul7Cg9bWg5fRUqNq2Y/HbFBXY89rifmW', '2021-06-12 23:02:51');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `performance_features`
---
-
-CREATE TABLE `performance_features` (
-  `perfeature_id` bigint(20) UNSIGNED NOT NULL,
-  `perfeature_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `performance_features`
@@ -424,19 +169,6 @@ INSERT INTO `performance_features` (`perfeature_id`, `perfeature_name`, `created
 (4, 'Time', '2021-01-18 17:26:55', '2021-01-18 17:26:55'),
 (6, 'Loadings times', '2021-06-14 20:59:39', '2021-06-14 20:59:39');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `priorities`
---
-
-CREATE TABLE `priorities` (
-  `prio_id` bigint(20) UNSIGNED NOT NULL,
-  `prio_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 --
 -- Dumping data for table `priorities`
 --
@@ -445,68 +177,24 @@ INSERT INTO `priorities` (`prio_id`, `prio_name`, `created_at`, `updated_at`) VA
 (1, '1', NULL, NULL),
 (2, '2', NULL, NULL);
 
--- --------------------------------------------------------
-
---
--- Table structure for table `product_features`
---
-
-CREATE TABLE `product_features` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `profeature_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `projects`
---
-
-CREATE TABLE `projects` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` int(10) NOT NULL,
-  `team_name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `proj_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `proj_desc` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `start_date` date NOT NULL,
-  `end_date` date NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 --
 -- Dumping data for table `projects`
 --
 
-INSERT INTO `projects` (`id`, `user_id`, `team_name`, `proj_name`, `proj_desc`, `start_date`, `end_date`, `created_at`, `updated_at`) VALUES
-(1, 1, NULL, 'Java', 'Programming', '2021-01-05', '2021-07-30', NULL, '2021-06-14 20:51:45'),
-(2, 1, NULL, 'Newy', 'New', '2021-06-10', '2021-07-10', '2021-06-10 00:03:17', '2021-06-13 22:44:05'),
-(13, 3, NULL, 'fs', 'ad', '2021-06-23', '2021-07-23', '2021-06-22 22:27:33', '2021-06-22 22:27:33'),
-(17, 1, NULL, 'New', 'Project', '2021-06-27', '2021-07-27', '2021-06-26 18:47:11', '2021-06-26 18:47:11'),
-(18, 1, NULL, 'SDA', 'SDA prototype', '2022-01-25', '2022-02-25', '2022-01-25 05:52:01', '2022-01-25 05:52:01'),
-(19, 17, 'Team Test 1', 'Project A', 'Project A', '2023-04-06', '2023-05-06', '2023-04-05 19:26:15', '2023-04-06 23:15:10'),
-(24, 17, NULL, 'Project C', 'Project C', '2023-04-10', '2023-04-20', '2023-04-09 19:10:59', '2023-04-09 19:10:59'),
-(23, 17, 'Team Test 2', 'Project B', 'Project B', '2023-04-10', '2023-05-10', '2023-04-09 18:54:47', '2023-04-09 19:21:08'),
-(25, 17, NULL, 'Project D', 'Project D', '2023-04-12', '2023-04-28', '2023-04-09 19:14:18', '2023-04-09 19:14:18'),
-(26, 17, 'Team Test Z', 'Project Z', 'Project Z', '2023-04-10', '2023-04-20', '2023-04-10 07:15:42', '2023-04-10 07:16:26'),
-(34, 20, NULL, 'Project 1', 'Project 1', '2023-04-11', '2023-04-20', '2023-04-10 16:54:40', '2023-04-10 16:54:40'),
-(42, 17, 'Team Test Status', 'Project 55', 'Project 55', '2023-04-19', '2023-04-27', '2023-04-18 23:19:36', '2023-04-18 23:20:52'),
-(43, 17, '300', 'Project 300', 'Project 300', '2023-04-19', '2023-04-28', '2023-04-19 00:13:25', '2023-04-19 00:13:42');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `roles`
---
-
-CREATE TABLE `roles` (
-  `role_id` bigint(20) UNSIGNED NOT NULL,
-  `role_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO `projects` (`id`, `team_name`, `proj_name`, `proj_desc`, `start_date`, `end_date`, `created_at`, `updated_at`) VALUES
+(1, NULL, 'Java', 'Programming', '2021-01-05', '2021-07-30', NULL, '2021-06-14 20:51:45'),
+(2, NULL, 'Newy', 'New', '2021-06-10', '2021-07-10', '2021-06-10 00:03:17', '2021-06-13 22:44:05'),
+(13, NULL, 'fs', 'ad', '2021-06-23', '2021-07-23', '2021-06-22 22:27:33', '2021-06-22 22:27:33'),
+(17, NULL, 'New', 'Project', '2021-06-27', '2021-07-27', '2021-06-26 18:47:11', '2021-06-26 18:47:11'),
+(18, NULL, 'SDA', 'SDA prototype', '2022-01-25', '2022-02-25', '2022-01-25 05:52:01', '2022-01-25 05:52:01'),
+(19, 'Team Test 1', 'Project A', 'Project A', '2023-04-06', '2023-05-06', '2023-04-05 19:26:15', '2023-04-06 23:15:10'),
+(24, NULL, 'Project C', 'Project C', '2023-04-10', '2023-04-20', '2023-04-09 19:10:59', '2023-04-09 19:10:59'),
+(23, 'Team Test 2', 'Project B', 'Project B', '2023-04-10', '2023-05-10', '2023-04-09 18:54:47', '2023-04-09 19:21:08'),
+(25, NULL, 'Project D', 'Project D', '2023-04-12', '2023-04-28', '2023-04-09 19:14:18', '2023-04-09 19:14:18'),
+(26, 'Team Test Z', 'Project Z', 'Project Z', '2023-04-10', '2023-04-20', '2023-04-10 07:15:42', '2023-04-10 07:16:26'),
+(34, NULL, 'Project 1', 'Project 1', '2023-04-11', '2023-04-20', '2023-04-10 16:54:40', '2023-04-10 16:54:40'),
+(42, 'Team Test Status', 'Project 55', 'Project 55', '2023-04-19', '2023-04-27', '2023-04-18 23:19:36', '2023-04-18 23:20:52'),
+(43, '300', 'Project 300', 'Project 300', '2023-04-19', '2023-04-28', '2023-04-19 00:13:25', '2023-04-19 00:13:42');
 
 --
 -- Dumping data for table `roles`
@@ -520,20 +208,6 @@ INSERT INTO `roles` (`role_id`, `role_name`, `created_at`, `updated_at`) VALUES
 (12, 'Product Owner', '2023-03-27 19:22:47', '2023-03-27 19:22:47'),
 (14, 'Developer', '2023-03-27 19:23:01', '2023-03-27 19:23:01');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `security_features`
---
-
-CREATE TABLE `security_features` (
-  `secfeature_id` bigint(20) UNSIGNED NOT NULL,
-  `secfeature_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `secfeature_desc` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 --
 -- Dumping data for table `security_features`
 --
@@ -545,24 +219,6 @@ INSERT INTO `security_features` (`secfeature_id`, `secfeature_name`, `secfeature
 (6, 'DDos', 'asdasd', '2021-06-26 04:29:39', '2021-06-26 04:29:39'),
 (7, 'test', 'test', '2021-06-26 08:34:30', '2021-06-26 08:34:30'),
 (8, 'example', 'ex', '2021-06-26 18:52:51', '2021-06-26 18:52:51');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `sprint`
---
-
-CREATE TABLE `sprint` (
-  `sprint_id` bigint(20) UNSIGNED NOT NULL,
-  `sprint_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `sprint_desc` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `start_sprint` date NOT NULL,
-  `end_sprint` date NOT NULL,
-  `proj_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `users_name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `sprint`
@@ -586,20 +242,6 @@ INSERT INTO `sprint` (`sprint_id`, `sprint_name`, `sprint_desc`, `start_sprint`,
 (28, 'Sprint 2', 'Sprint 2', '2023-04-12', '2023-04-20', 'Project A', NULL, '2023-04-11 19:48:02', '2023-04-11 19:48:02'),
 (29, 'Sprint 3', 'Sprint 3', '2023-04-12', '2023-04-28', 'Project A', NULL, '2023-04-11 19:53:06', '2023-04-11 19:53:06');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `statuses`
---
-
-CREATE TABLE `statuses` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `title` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `order` smallint(6) NOT NULL DEFAULT 0,
-  `project_id` int(10) UNSIGNED NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 --
 -- Dumping data for table `statuses`
 --
@@ -610,28 +252,6 @@ INSERT INTO `statuses` (`id`, `title`, `slug`, `order`, `project_id`) VALUES
 (104, 'In Progress', 'in-progress', 3, 19),
 (103, 'Up Next', 'up-next', 2, 19),
 (102, 'Backlog', 'backlog', 1, 19);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tasks`
---
-
-CREATE TABLE `tasks` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `title` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `start_date` date DEFAULT NULL,
-  `end_date` date DEFAULT NULL,
-  `order` smallint(6) DEFAULT 0,
-  `user_name` varchar(199) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status_name` varchar(199) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `userstory_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `sprint_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `proj_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `tasks`
@@ -648,21 +268,6 @@ INSERT INTO `tasks` (`id`, `title`, `description`, `start_date`, `end_date`, `or
 (8, 'login', 'login', '0000-00-00', '0000-00-00', 1, '', '', '2', '', '0', '2021-06-26 18:51:25', '2021-06-26 19:00:29'),
 (9, 'Task Test 1', 'Task Test Satu', '2023-04-13', '2023-04-19', 0, 'azamproductowner', 'In Progress', '52', '27', '19', '2023-04-30 03:03:31', '2023-05-01 16:09:04'),
 (11, 'Task Test 3', 'Task Test 3', '2023-04-13', '2023-04-19', 0, 'khainorazam', 'Done', '52', '27', '19', '2023-04-30 03:06:48', '2023-04-30 03:06:48');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `teammappings`
---
-
-CREATE TABLE `teammappings` (
-  `teammapping_id` int(10) UNSIGNED NOT NULL,
-  `username` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `role_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `team_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `teammappings`
@@ -681,20 +286,6 @@ INSERT INTO `teammappings` (`teammapping_id`, `username`, `role_name`, `team_nam
 (37, 'khainorazam', 'Scrum Master', 'Team Test Status', '2023-04-18 23:23:31', '2023-04-18 23:23:31'),
 (38, 'khainorazam', 'Project Manager', '300', '2023-04-19 00:13:54', '2023-04-19 00:13:54');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `teams`
---
-
-CREATE TABLE `teams` (
-  `team_id` int(10) UNSIGNED NOT NULL,
-  `team_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `proj_name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 --
 -- Dumping data for table `teams`
 --
@@ -710,25 +301,6 @@ INSERT INTO `teams` (`team_id`, `team_name`, `proj_name`, `created_at`, `updated
 (25, 'Team Test 2', 'Project B', '2023-04-09 19:21:08', '2023-04-09 19:21:08'),
 (27, 'Team Test Status', 'Project 55', '2023-04-18 23:20:52', '2023-04-18 23:20:52'),
 (28, '300', 'Project 300', '2023-04-19 00:13:42', '2023-04-19 00:13:42');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
-
-CREATE TABLE `users` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `username` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `country` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
@@ -751,26 +323,6 @@ INSERT INTO `users` (`id`, `name`, `username`, `country`, `email`, `email_verifi
 (20, 'Manza', 'manzadeveloper', 'Afghanistan', 'manza@gmail.com', NULL, '$2y$10$xgQaErK4dpuv0LB.rRU2h.vbFV4uj6mqsSPjfwlNg3eGLQynDYaQu', 'yV9KiRgWJG5JXYQW7MGdCIiMfteWisHtTe8XUS2CVgVfRfimcRGVeaghm5SF', '2023-03-30 00:10:03', '2023-03-30 00:10:03'),
 (21, 'Ali Rahman', 'alirahman', 'Barbados', 'alirahman@gmail.com', NULL, '$2y$10$g4k8IZkRY1Ftbhn.hy0QXeH19gD3snTw/66JUQM91NqqJTujUzHTm', NULL, '2023-04-05 17:31:57', '2023-04-05 17:31:57');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `user_stories`
---
-
-CREATE TABLE `user_stories` (
-  `u_id` bigint(20) UNSIGNED NOT NULL,
-  `user_story` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `means` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `prio_story` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `title` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `proj_id` varchar(199) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `sprint_id` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `perfeature_id` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `secfeature_id` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 --
 -- Dumping data for table `user_stories`
 --
@@ -789,324 +341,6 @@ INSERT INTO `user_stories` (`u_id`, `user_story`, `means`, `prio_story`, `title`
 (53, 'As a Project Manager, I am able to test this so that I can to ensure I get this right', NULL, NULL, 'In Progress', '19', '27', '[\"Loading Time\"]', '[\"SQL Injection\"]', '2023-05-15 06:28:12', '2023-05-15 07:05:17'),
 (55, 'As a Project Manager, I am able to test out the backlog so that I can make sure it works', NULL, NULL, 'Backlog', '19', '27', '[\"Loading Time\"]', '[\"SQL Injection\",\"Cross_Site Scripting\"]', '2023-05-15 08:20:09', '2023-05-17 19:52:42'),
 (57, 'As a Product Owner, I am able to test second backlog', NULL, NULL, 'Backlog', '19', NULL, '[\"Loading Time\"]', 'null', '2023-05-17 19:46:57', '2023-05-17 19:46:57');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `attachments`
---
-ALTER TABLE `attachments`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `boards`
---
-ALTER TABLE `boards`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `boards_slug_unique` (`slug`);
-
---
--- Indexes for table `charts`
---
-ALTER TABLE `charts`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `charts_sprintname_index` (`sprintname`),
-  ADD KEY `charts_slug_index` (`slug`);
-
---
--- Indexes for table `coding_standards`
---
-ALTER TABLE `coding_standards`
-  ADD PRIMARY KEY (`codestand_id`);
-
---
--- Indexes for table `defect_features`
---
-ALTER TABLE `defect_features`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `failed_jobs`
---
-ALTER TABLE `failed_jobs`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `mappings`
---
-ALTER TABLE `mappings`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `migrations`
---
-ALTER TABLE `migrations`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `oauth_access_tokens`
---
-ALTER TABLE `oauth_access_tokens`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `oauth_access_tokens_user_id_index` (`user_id`);
-
---
--- Indexes for table `oauth_auth_codes`
---
-ALTER TABLE `oauth_auth_codes`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `oauth_auth_codes_user_id_index` (`user_id`);
-
---
--- Indexes for table `oauth_clients`
---
-ALTER TABLE `oauth_clients`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `oauth_clients_user_id_index` (`user_id`);
-
---
--- Indexes for table `oauth_personal_access_clients`
---
-ALTER TABLE `oauth_personal_access_clients`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `oauth_refresh_tokens`
---
-ALTER TABLE `oauth_refresh_tokens`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `oauth_refresh_tokens_access_token_id_index` (`access_token_id`);
-
---
--- Indexes for table `password_resets`
---
-ALTER TABLE `password_resets`
-  ADD KEY `password_resets_email_index` (`email`);
-
---
--- Indexes for table `performance_features`
---
-ALTER TABLE `performance_features`
-  ADD PRIMARY KEY (`perfeature_id`);
-
---
--- Indexes for table `priorities`
---
-ALTER TABLE `priorities`
-  ADD PRIMARY KEY (`prio_id`);
-
---
--- Indexes for table `product_features`
---
-ALTER TABLE `product_features`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `projects`
---
-ALTER TABLE `projects`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `roles`
---
-ALTER TABLE `roles`
-  ADD PRIMARY KEY (`role_id`);
-
---
--- Indexes for table `security_features`
---
-ALTER TABLE `security_features`
-  ADD PRIMARY KEY (`secfeature_id`);
-
---
--- Indexes for table `sprint`
---
-ALTER TABLE `sprint`
-  ADD PRIMARY KEY (`sprint_id`);
-
---
--- Indexes for table `statuses`
---
-ALTER TABLE `statuses`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `tasks`
---
-ALTER TABLE `tasks`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `teammappings`
---
-ALTER TABLE `teammappings`
-  ADD PRIMARY KEY (`teammapping_id`);
-
---
--- Indexes for table `teams`
---
-ALTER TABLE `teams`
-  ADD PRIMARY KEY (`team_id`),
-  ADD UNIQUE KEY `team_name` (`team_name`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `users_email_unique` (`email`),
-  ADD UNIQUE KEY `users_username_unique` (`username`);
-
---
--- Indexes for table `user_stories`
---
-ALTER TABLE `user_stories`
-  ADD PRIMARY KEY (`u_id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `attachments`
---
-ALTER TABLE `attachments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `boards`
---
-ALTER TABLE `boards`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `charts`
---
-ALTER TABLE `charts`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `coding_standards`
---
-ALTER TABLE `coding_standards`
-  MODIFY `codestand_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT for table `defect_features`
---
-ALTER TABLE `defect_features`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `failed_jobs`
---
-ALTER TABLE `failed_jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `mappings`
---
-ALTER TABLE `mappings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
-
---
--- AUTO_INCREMENT for table `migrations`
---
-ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
-
---
--- AUTO_INCREMENT for table `oauth_clients`
---
-ALTER TABLE `oauth_clients`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `oauth_personal_access_clients`
---
-ALTER TABLE `oauth_personal_access_clients`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `performance_features`
---
-ALTER TABLE `performance_features`
-  MODIFY `perfeature_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `priorities`
---
-ALTER TABLE `priorities`
-  MODIFY `prio_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `product_features`
---
-ALTER TABLE `product_features`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `projects`
---
-ALTER TABLE `projects`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
-
---
--- AUTO_INCREMENT for table `roles`
---
-ALTER TABLE `roles`
-  MODIFY `role_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
-
---
--- AUTO_INCREMENT for table `security_features`
---
-ALTER TABLE `security_features`
-  MODIFY `secfeature_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
-
---
--- AUTO_INCREMENT for table `sprint`
---
-ALTER TABLE `sprint`
-  MODIFY `sprint_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
-
---
--- AUTO_INCREMENT for table `statuses`
---
-ALTER TABLE `statuses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
-
---
--- AUTO_INCREMENT for table `tasks`
---
-ALTER TABLE `tasks`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
---
--- AUTO_INCREMENT for table `teammappings`
---
-ALTER TABLE `teammappings`
-  MODIFY `teammapping_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
-
---
--- AUTO_INCREMENT for table `teams`
---
-ALTER TABLE `teams`
-  MODIFY `team_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
-
---
--- AUTO_INCREMENT for table `user_stories`
---
-ALTER TABLE `user_stories`
-  MODIFY `u_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
