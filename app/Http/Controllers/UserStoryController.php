@@ -12,6 +12,7 @@ use App\Mapping;
 use App\Team;
 use App\TeamMapping;
 use App\Sprint;
+use App\Task;
 use App\Http\Controllers\Auth;
 use DB;
 use Illuminate\Http\Request;
@@ -238,11 +239,17 @@ class UserStoryController extends Controller
      */
     public function destroy(UserStory $userstory)
     {
+        //condition for user story with no sprint ID which means it is from Project Backlog
         if($userstory->sprint_id != null){
         $sprint_id = $userstory->sprint_id;
         $userstories = UserStory::where('sprint_id', $sprint_id)->get();
         $sprint = Sprint::where('sprint_id', $sprint_id)->first();
+
+        //get task related to user story
+        $tasks = Task::where('userstory_id', $userstory->u_id)->get();
         
+        //deletes user stories and all task related to user stories
+        $tasks->delete();
         $userstory->delete();
 
         
@@ -260,8 +267,16 @@ class UserStoryController extends Controller
         
         $project = Project::where('id', $userstory->proj_id)->first();
 
-        //delete userstory
+        // Get tasks related to the user story
+        $tasks = Task::where('userstory_id', $userstory->u_id)->get();
+
+        // Delete tasks related to the user story
+        $tasks->each->delete();
+
+        // Delete the user story
         $userstory->delete();
+
+
         //Get the project where user's team name(s) is the same with project's team name
         $user = \Auth::user();
         $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
