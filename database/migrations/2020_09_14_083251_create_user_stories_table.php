@@ -18,7 +18,7 @@ class CreateUserStoriesTable extends Migration
             $table->string('user_story');
             $table->string('means');
             $table->string('prio_story');
-            $table->string('title');
+            $table->string('status_id');
             $table->string('sprint_id');
             $table->string('proj_id');
             $table->string('perfeature_id');

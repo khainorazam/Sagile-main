@@ -42,7 +42,12 @@
             </th>
             
             <th>
-              {{ $userstory->title }}
+
+            <?php
+              $status = $statuses->firstWhere('id', $userstory->status_id);
+            ?>
+
+            {{ $status->title }}
             </th>
 
             <th>

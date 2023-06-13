@@ -26,13 +26,18 @@
     <div class="error"><font color="red" size="2">{{ $errors->first('user_id') }}</p></font></div>
     <br>
 
-    Status :
-    <select name="status_name">
-      @foreach($statuses as $status)
-        <option value="{{ $status->title}}" {{ ((isset($status->title) && $status->title== $status->title)? "selected":"") }}>{{$status->title}}</option>
-      @endforeach
-    </select>
-    <br><br><br>
+
+    <div>
+      <label for="status_id">Status :</label>
+      <select name="status_id" id="status_id" class="form-control">
+          <option value="" selected disabled>Select</option>
+          @foreach($statuses as $status)
+              <option value="{{ $status->id }}">{{ $status->title }}</option>
+          @endforeach
+      </select> 
+      <div class="error"><font color="red" size="2">{{ $errors->first('status_id') }}</font></div>
+  </div>
+  <br>
 
     Start Date :<input type="date" name="start_date" style="margin-left:2.6em" >
     <div class="error"><font color="red" size="2">{{ $errors->first('start_date') }}</p></font></div>

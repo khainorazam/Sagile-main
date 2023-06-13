@@ -6,6 +6,7 @@ use App\Project;
 use App\TeamMapping;
 use App\Sprint;
 use App\User;
+use App\Status;
 use App\UserStory;
 use App\ProductFeature;
 use Illuminate\Http\Request;
@@ -75,6 +76,7 @@ class ProductFeatureController extends Controller
         $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
         $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
 
+        $statuses = Status::all();
         //Get current sprint 
         $sprint = Sprint::where('sprint_id', $sprint_id)->first();
         
@@ -82,6 +84,7 @@ class ProductFeatureController extends Controller
         return view('profeature.index3',['userstories'=>$userstory,])
             ->with('sprint_id', $sprint->sprint_id)
             ->with('pros', $pro)
+            ->with('statuses', $statuses)
             ->with('title', 'User Story for ' . $sprint->sprint_name);
         
     }
@@ -97,7 +100,6 @@ class ProductFeatureController extends Controller
         $project = Project::where('id', $proj_id)->first();
         
         $userstory = \App\UserStory::where('proj_id', $proj_id)
-            ->where('title', 'Backlog')
             ->whereNull('sprint_id')
             ->get();
 

@@ -30,14 +30,16 @@
     <br>
 
     <div>
-        <label for="status_name">Status :</label>
-        <select name="status_name" id="status_name" class="form-control">
+        <label for="status_id">Status :</label>
+        <select name="status_id" id="status_id" class="form-control">
             <option value="" selected disabled>Select</option>
             @foreach($statuses as $status)
-                <option value="{{ $status->title }}" @if($task->status_name == $status->title) selected @endif> {{ $status->title }}</option>
+                <option value="{{ $status->id }}" @if($task->status_id == $status->id) selected @endif> {{ $status->title }}</option>
             @endforeach
-        </select> 
+        </select>
+        <div class="error"><font color="red" size="2">{{ $errors->first('status_id') }}</font></div>
     </div>
+
     <br><br>
 
     Start Date :<input type="date" name="start_date" style="margin-left:2.6em" value="{{$task->start_date}}">

@@ -30,9 +30,13 @@
               {{ $task->user_name }}
             </th>
             <th>
-              {{ $task->status_name }}
+
+              <?php
+                $status = $statuses->firstWhere('id', $task->status_id);
+              ?>
+  
+              {{ $status->title }}
             </th>
-            <!--Not Done-->
             <th>
               <button type="submit"><a href="{{route('tasks.edit', [$task->id])}}">Edit</a></button>
             </th>

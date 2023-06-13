@@ -28,16 +28,18 @@ class TaskController extends Controller
 
         //Get the userstory that is passed in the parameter
         $userstory = UserStory::where('u_id', $userstory_id)->first();
+        $statuses = Status::all();
 
         return view('tasks.index')
             ->with('userstory_id', $userstory_id)
             ->with('tasks', $tasks)
+            ->with('statuses', $statuses)
             ->with('title', 'Tasks for ' . $userstory->user_story)
             ->with('pros', $pro);
     }
 
-    //Kanban Board
-    public function kanbanBoard()
+    //index Kanban Board
+    public function indexKanbanBoard() 
     {
         //the function will send the required data to the kanban board to display
         //the kanban board will display all tasks that is related to the user's team's project
@@ -46,17 +48,29 @@ class TaskController extends Controller
         $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
         $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
         
-        //get the task that is related to the user's team's project
-        $proj_ids = $pro->pluck('id')->toArray(); // use pluck() to retrieve an array of project IDs
-        $tasks = Task::whereIn('proj_id', $proj_ids)->get(); // use whereIn() to retrieve the tasks that have a proj_id value in the array
-        
-        //get the status that is related to the project
-        $statuses = Status::whereIn('project_id', $proj_ids)->get(); // use whereIn() to retrieve the status that have a proj_id value in the array
-
         return view('tasks.kanban')
+            ->with('pro', $pro);
+    }
+
+    //view specific Kanban Board
+    public function viewKanbanBoard($proj_id) 
+    {
+        //the function will send the required data to the kanban board to display
+        //the kanban board will display all tasks that is related to specific project 
+
+        //get the task that is related to specific project
+        $tasks = Task::whereIn('proj_id', [$proj_id])->get();
+        $project = Project::where('id', $proj_id)->first();
+
+        //get the status that is related to the project
+        $statuses = Status::whereIn('project_id', [$proj_id])->get();
+
+        return view('tasks.viewkanban')
+            ->with('title', $project->proj_name)
             ->with('tasks', $tasks)
             ->with('statuses', $statuses);
     }
+
 
     public function updateKanbanBoard(Request $request, $id) {
         $task = Task::find($id);
@@ -147,7 +161,7 @@ class TaskController extends Controller
         $task->title = $request->title;
         $task->description = $request->description;
         $task->user_name = $request->user_name;
-        $task->status_name = $request->status_name;
+        $task->status_id = $request->status_id;
         $task->start_date = $request->start_date;
         $task->end_date = $request->end_date;
         $task->proj_id = $project->id;
@@ -159,11 +173,13 @@ class TaskController extends Controller
         $user = \Auth::user();
         $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
         $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
+        $statuses = Status::all();
 
         return redirect()->route('tasks.index', ['u_id' => $userstory->u_id])
             ->with('title', 'Tasks for ' . $userstory->user_story)
             ->with('success', 'Task has successfully been created!')
             ->with('task', $tasks)
+            ->with('statuses', $statuses)
             ->with('userstory_id', $userstory->u_id)
             ->with('pros', $pro);
     }
@@ -252,7 +268,7 @@ class TaskController extends Controller
         $task->title = $request->title;
         $task->description = $request->description;
         $task->user_name = $request->user_name;
-        $task->status_name = $request->status_name;
+        $task->status_id = $request->status_id;
         $task->start_date = $request->start_date;
         $task->end_date = $request->end_date;
         $task->save();
@@ -263,12 +279,13 @@ class TaskController extends Controller
         $user = \Auth::user();
         $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
         $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
-
+        $statuses = Status::all();
         
         return redirect()->route('tasks.index', ['u_id' => $userstory->u_id])
         ->with('title', 'Tasks for ' . $userstory->user_story)
         ->with('success', 'Task has successfully been updated!')
         ->with('task', $tasks)
+        ->with('statuses', $statuses)
         ->with('userstory_id', $userstory->u_id)
         ->with('pros', $pro);
 
@@ -283,6 +300,7 @@ class TaskController extends Controller
         $user = \Auth::user();
         $teammapping = \App\TeamMapping::where('username', '=', $user->username)->pluck('team_name')->toArray(); // use pluck() to retrieve an array of team names
         $pro = \App\Project::whereIn('team_name', $teammapping)->get(); // use whereIn() to retrieve the projects that have a team_name value in the array
+        $statuses = Status::all();
 
 
         $task->delete();
@@ -291,6 +309,7 @@ class TaskController extends Controller
         ->with('title', 'Tasks for ' . $userstory->user_story)
         ->with('success', 'Task has successfully been deleted!')
         ->with('task', $tasks)
+        ->with('statuses', $statuses)
         ->with('userstory_id', $userstory->u_id)
         ->with('pros', $pro);
     }
