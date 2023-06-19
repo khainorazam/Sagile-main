@@ -47,11 +47,12 @@
         <select name="title" id="title" class="form-control">
             <option value="" selected disabled>Select</option>
             @foreach($statuses as $status)
-                <option value="{{ $status->title }}" @if($userstory->title == $status->title) selected @endif> {{ $status->title }}</option>
+                <option value="{{ $status->id }}" @if($userstory->title == $status->id) selected @endif> {{ $status->title }}</option>
             @endforeach
-        </select> 
+        </select>
         <div class="error"><font color="red" size="2">{{ $errors->first('title') }}</font></div>
     </div>
+    
     
     <br><br>
     

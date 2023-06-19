@@ -188,6 +188,97 @@ Route::post('perfeatures/{perfeature}', 'PerformanceFeatureController@update')->
 Route::get('perfeatures/{perfeature}/destroy', 'PerformanceFeatureController@destroy')->name('perfeature.destroy');
 
 
+//Route for role
+Route::get('role', 'RoleController@index')->name('role.index');
+Route::get('roles/create', 'RoleController@create')->name('roles.create');
+Route::get('roles/{role}/edit', 'RoleController@edit')->name('roles.edit');
+Route::post('roles', 'RoleController@store')->name('roles.store');
+Route::post('roles/{role}', 'RoleController@update')->name('roles.update');
+Route::get('roles/{role}/destroy', 'RoleController@destroy')->name('roles.destroy');
+
+//Route for Coding Standard
+Route::get('codestand', 'CodingStandardController@index')->name('codestand.index');
+Route::get('codestand/create', 'CodingStandardController@create')->name('codestand.create');
+Route::get('codestand/show', 'CodingStandardController@show')->name('codestand.show');
+Route::get('codestand/{codestand}/edit', 'CodingStandardController@edit')->name('codestand.edit');
+Route::post('codestand', 'CodingStandardController@store')->name('codestand.store');
+Route::post('codestand/{codestand}', 'CodingStandardController@update')->name('codestand.update');
+Route::get('codestand/{codestand}/destroy', 'CodingStandardController@destroy')->name('codestand.destroy');
+
+//Route for attachment
+//Route::get('uploadfile','UploadFileController@index')->name('uploadfile.index');
+//Route::post('/uploadfile','UploadFileController@showUploadFile');
+Route::get('attachment', 'AttachmentController@index')->name('attachment.index');
+//Route::get('attachment', 'AttachmentController@index')->name('attachment.index');
+Route::get('attachment/create', 'AttachmentController@createForm')->name('attachment.createForm');
+Route::post('attachments', 'AttachmentController@fileUpload')->name('attachment.fileUpload');
+Route::get('attachments/{attachment}/destroy', 'AttachmentController@destroy')->name('attachments.destroy');
+
+//Route for Team Mapping (Assign Team Member to Team)
+//Route::get('teammapping', 'TeamMappingController@index')->name('teammapping.index');
+
+//view team members
+Route::get('teammappings/{team_name}', 'TeamMappingController@index')->name('teammapping.index'); 
+Route::get('teammappings/{team_name}/create', 'TeamMappingController@create')->name('teammappings.create');
+Route::get('teammappings/show', 'TeamMappingController@show')->name('teammappings.show');
+Route::get('teammappings/{teammapping_id}/edit', 'TeamMappingController@edit')->name('teammappings.edit');
+Route::post('teammappings', 'TeamMappingController@store')->name('teammappings.store');
+Route::get('teammappings/{teammapping}/destroy', 'TeamMappingController@destroy')->name('teammappings.destroy');
+Route::get('teammappings','TeamMappingController@search')->name('teammappings.search');
+Route::get('teammappings', 'TeamMappingController@getUsers');
+Route::post('getUsers', 'TeamMappingController@getUsers')->name('getUsers.post');
+
+//Route for user stories
+Route::get('userstory', 'UserStoryController@getID')->name('userstory.getID');
+Route::get('userstory', 'UserStoryController@index')->name('userstory.index');
+Route::get('userstory/{sprint_id}/create', 'UserStoryController@create')->name('userstory.create');
+Route::get('userstory/{userstory}/edit', 'UserStoryController@edit')->name('userstory.edit');
+Route::post('userstory', 'UserStoryController@store')->name('userstory.store');
+Route::post('userstory/{userstory}', 'UserStoryController@update')->name('userstory.update');
+Route::get('userstory/{userstory}/destroy', 'UserStoryController@destroy')->name('userstory.destroy');
+//backlog for userstories
+Route::get('userstory/backlog/{sprint_id}', 'UserStoryController@backlog')->name('userstory.backlog');
+Route::get('userstory/backlog/assign/{sprint_id}/{userstory}', 'UserStoryController@assignUserstory')->name('userstory.assign');
+
+
+
+//Route for backlog
+Route::get('backlog/{proj_id}', 'ProductFeatureController@backlog')->name('backlog.index');
+Route::get('backlog/{proj_id}/create', 'UserStoryController@createBacklog')->name('backlog.create');
+Route::get('backlog/{userstory}/edit', 'UserStoryController@editBacklog')->name('backlog.edit');
+Route::post('backlog', 'UserStoryController@storeBacklog')->name('backlog.store');
+Route::post('backlog/{userstory}', 'UserStoryController@updateBacklog')->name('backlog.update');
+Route::get('backlog/{userstory}/destroy', 'UserStoryController@destroy')->name('backlog.destroy');
+
+//Route for Task Assign
+//Kanban Board
+Route::get('sprint/task', 'TaskController@indexKanbanBoard')->name('tasks.kanban'); 
+Route::get('kanban/{proj_id}', 'TaskController@viewKanbanBoard')->name('tasks.viewkanban');
+Route::put('/tasks/{id}', 'TaskController@updateKanbanBoard');
+//Main Task Page 
+Route::get('task/{u_id}', 'TaskController@index')->name('tasks.index');
+Route::get('task/{userstory}/create', 'TaskController@create')->name('tasks.create');
+Route::get('task/{id}/edit', 'TaskController@edit')->name('tasks.edit');
+Route::post('task/{task}', 'TaskController@update')->name('tasks.update');
+Route::get('task/{task}/destroy', 'TaskController@destroy')->name('tasks.destroy');
+
+//Route for security feature
+Route::get('secfeatures', 'SecurityFeatureController@index')->name('secfeature.index');
+Route::get('secfeatures/create', 'SecurityFeatureController@create')->name('secfeature.create');
+Route::get('secfeatures/{secfeature}/edit', 'SecurityFeatureController@edit')->name('secfeature.edit');
+Route::post('secfeatures', 'SecurityFeatureController@store')->name('secfeature.store');
+Route::post('secfeatures/{secfeature}', 'SecurityFeatureController@update')->name('secfeature.update');
+Route::get('secfeatures/{secfeature}/destroy', 'SecurityFeatureController@destroy')->name('secfeature.destroy');
+
+//Route for Performance Feature
+Route::get('perfeatures', 'PerformanceFeatureController@index')->name('perfeature.index');
+Route::get('perfeatures/create', 'PerformanceFeatureController@create')->name('perfeature.create');
+Route::get('perfeatures/{perfeature}/edit', 'PerformanceFeatureController@edit')->name('perfeature.edit');
+Route::post('perfeatures', 'PerformanceFeatureController@store')->name('perfeature.store');
+Route::post('perfeatures/{perfeature}', 'PerformanceFeatureController@update')->name('perfeature.update');
+Route::get('perfeatures/{perfeature}/destroy', 'PerformanceFeatureController@destroy')->name('perfeature.destroy');
+
+
 
 //Route for delete Mapping
 Route::post('mapping/destroy', 'MappingController@destroy')->name('mapping.destroy');

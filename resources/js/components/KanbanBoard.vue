@@ -8,7 +8,7 @@
 
       <div class="p-3 flex justify-between items-baseline bg-blue-800 ">
           <h4 class="font-medium text-white">{{ status.title }}</h4>
-          <button @click="openAddTaskForm(status.id)" class="py-1 px-2 text-sm text-orange-500 hover:underline">Add Task</button>
+          <!-- <button @click="openAddTaskForm(status.id)" class="py-1 px-2 text-sm text-orange-500 hover:underline">Add Task</button> -->
       </div>
 
       <div class="p-2 bg-blue-100">
@@ -19,11 +19,11 @@
           <div v-for="task in filteredTasks(status)" :key="task.id" class="mb-3 p-4 flex flex-col bg-white rounded-md shadow transform hover:shadow-md cursor-pointer">
             <span class="block mb-2 text-xl text-gray-900">{{ task.title }}</span>
               <p class="text-gray-700 mb-3">{{ task.description }}</p>
-              <p class="text-gray-700 mb-1"><span class="font-semibold text-black-900">Project :</span>{{ task.proj_id }}</p>
-              <p class="text-gray-700 mb-1"><span class="font-semibold text-black-900">Sprint :</span>{{ task.sprint_id }}</p>
-              <p class="text-gray-700 mb-1"><span class="font-semibold text-black-900">User Story :</span>{{ task.userstory_id }}</p>
-              <p class="text-gray-700 mb-1"><span class="font-semibold text-black-900">Start Date :</span>{{ task.start_date }}</p>
-              <p class="text-gray-700 mb-1"><span class="font-semibold text-black-900">End Date :</span>{{ task.end_date }}</p>
+              <!-- <p class="text-gray-700 mb-1"><span class="font-semibold text-black-900">Project : </span>{{ task.proj_id }}</p> -->
+              <p class="text-gray-700 mb-1"><span class="font-semibold text-black-900">Sprint : </span>{{ task.sprint_id }}</p>
+              <p class="text-gray-700 mb-1"><span class="font-semibold text-black-900">User Story : </span>{{ task.userstory_id }}</p>
+              <p class="text-gray-700 mb-1"><span class="font-semibold text-black-900">Start Date: </span>{{ formatDate(task.start_date) }}</p>              
+              <p class="text-gray-700 mb-1"><span class="font-semibold text-black-900">End Date : </span>{{ formatDate(task.end_date) }}</p>
 
             <!--Button to Edit or Delete the Task in the status-->
             <!-- <div class="p-3 flex justify-between items-end text-sm bg-gray-100">
@@ -37,7 +37,7 @@
       <!-- If there is no tasks -->
       <div v-show="filteredTasks(status).length === 0" class="flex-1 p-4 flex flex-col items-center justify-center">
         <span class="text-gray-600">No tasks yet</span>
-        <button class="mt-1 text-sm text-orange-600 hover:underline" @click="openAddTaskForm(status.id)">Add one</button>
+        <!-- <button class="mt-1 text-sm text-orange-600 hover:underline" @click="openAddTaskForm(status.id)">Add one</button> -->
         <!-- <addtask-form :sprint="sprints" :userstory="userstories"></addtask-form> -->
       </div>
 
@@ -91,6 +91,11 @@ export default {
   },
   methods: 
   {
+    formatDate(date) {
+      const options = { day: 'numeric', month: 'long', year: 'numeric' };
+      const formattedDate = new Date(date).toLocaleDateString('en-US', options);
+      return formattedDate;
+    },
     filteredTasks(status) {
     return this.tasks.filter(task => task.status_name === status.title)
     },

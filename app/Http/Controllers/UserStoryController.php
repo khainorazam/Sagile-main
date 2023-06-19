@@ -107,20 +107,20 @@ class UserStoryController extends Controller
         $validation = $request->validate([
             'user_story' => 'required|unique:user_stories,user_story,NULL,id,sprint_id,'.$request->input('sprint_id'), 
             'means' => 'required',
-            'title' => 'required',
+            'status_id' => 'required',
             'role' => 'required',
         ], [
             'user_story.required' => '*The User Story Name is required',
             'user_story.unique' => '*There is already an existing User Story in the sprint with the same name',
             'means.required' => '*The means is required',
             'role.required' => '*The role is required',
-            'title.required' => '*The Status is required',
+            'status_id.required' => '*The Status is required',
         ]);
 
         //Assign request values to new Userstory 
         $userstory = new UserStory;
         $userstory->user_story = $request->user_story;
-        $userstory->title = $request->title;
+        $userstory->status_id = $request->status_id;
 
         $str_perfeatures = json_encode($request->perfeature_id);
         $str_secfeatures = json_encode($request->secfeature_id);
@@ -135,9 +135,12 @@ class UserStoryController extends Controller
         //redirect to index3 page
         $sprint_id = $request->sprint_id;
         $userstory = UserStory::where('sprint_id', $sprint_id)->get();
+        $statuses = Status::all();
+
 
         return redirect()->route('profeature.index3', ['sprint_id' => $sprint_id])
             ->with('userstories', $userstory)
+            ->with('statuses', $statuses)
             ->with('title', 'User Story for ' . $sprint->sprint_name)
             ->with('success', 'User Story has successfully been created!');
             
@@ -198,16 +201,16 @@ class UserStoryController extends Controller
         //Validate the request parameters
         $validation = $request->validate([
             // 'means' => 'required',
-            'title' => 'required',
+            'status_id' => 'required',
         ], [
             // 'means.required' => '*The Description is required',
-            'title.required' => '*The Status is required',
+            'status_id.required' => '*The Status is required',
         ]);
 
         //Assign request values to current Userstory 
         //user_story name and sprint ID not included because does not change
         // $userstory->means = $request->means;
-        $userstory->title = $request->title;
+        $userstory->status_id = $request->status_id;
 
         $str_perfeatures = json_encode($request->perfeature_id);
         $str_secfeatures = json_encode($request->secfeature_id);
@@ -224,10 +227,13 @@ class UserStoryController extends Controller
 
         $sprint_id = $sprint->sprint_id;
         $userstories = UserStory::where('sprint_id', $sprint_id)->get();
+        $statuses = Status::all();
+
 
         return redirect()->route('profeature.index3', ['sprint_id' => $sprint_id])
             ->with('userstories', $userstories)
             ->with('title', 'User Story for ' . $sprint->sprint_name)
+            ->with('statuses', $statuses)
             ->with('success', 'User Story - ' . $userstory->user_story . ' has successfully been updated!');
     }
 
@@ -239,7 +245,7 @@ class UserStoryController extends Controller
      */
     public function destroy(UserStory $userstory)
     {
-        //condition for user story with no sprint ID which means it is from Project Backlog
+        //Normal condition
         if($userstory->sprint_id != null){
         $sprint_id = $userstory->sprint_id;
         $userstories = UserStory::where('sprint_id', $sprint_id)->get();
@@ -251,18 +257,22 @@ class UserStoryController extends Controller
         //deletes user stories and all task related to user stories
         $tasks->delete();
         $userstory->delete();
+        $statuses = Status::all();
+
 
         
         return redirect()->route('profeature.index3', ['sprint_id' => $sprint_id])
             ->with('userstories', $userstories)
+            ->with('statuses', $statuses)
             ->with('title', 'User Story for ' . $sprint->sprint_name)
             ->with('success', 'User Story has successfully been deleted!');
         }
         
+        //Backlog condition because do not have sprint_id
         else{
         //redirect to backlog index page
         $userstories = \App\UserStory::where('proj_id', $userstory->proj_id)
-            ->where('title', 'Backlog')
+            ->whereNull('sprint_id')
             ->get();
         
         $project = Project::where('id', $userstory->proj_id)->first();
@@ -331,7 +341,12 @@ class UserStoryController extends Controller
         //Assign request values to new Userstory 
         $userstory = new UserStory;
         $userstory->user_story = $request->user_story;
-        $userstory->title = "Backlog";
+
+        //Status for backlog 
+        $status = Status::where('project_id', $request->proj_id)
+                        ->where('title', 'Backlog')
+                        ->first();
+        $userstory->status_id = $status->id;
 
         $str_perfeatures = json_encode($request->perfeature_id);
         $str_secfeatures = json_encode($request->secfeature_id);
@@ -344,7 +359,7 @@ class UserStoryController extends Controller
 
         //redirect to backlog index page
         $userstory = \App\UserStory::where('proj_id', $project->id)
-            ->where('title', 'Backlog')
+            ->whereNull('sprint_id')
             ->get();
 
         //Get the project where user's team name(s) is the same with project's team name
@@ -406,7 +421,7 @@ class UserStoryController extends Controller
 
         //redirect to backlog index page
         $userstories = \App\UserStory::where('proj_id', $project->id)
-            ->where('title', 'Backlog')
+            ->whereNull('sprint_id')
             ->get();
 
         //Get the project where user's team name(s) is the same with project's team name
@@ -437,7 +452,6 @@ class UserStoryController extends Controller
         $project = Project::where('proj_name', $sprint->proj_name)->first();
         
         $userstory = \App\UserStory::where('proj_id', $project->id)
-            ->where('title', 'Backlog')
             ->whereNull('sprint_id')
             ->get();
 
@@ -456,9 +470,12 @@ class UserStoryController extends Controller
         
         $userstory->sprint_id = $sprint_id;
         $userstory->save();
+
+        $statuses = Status::all();
         
         return redirect()->route('profeature.index3', ['sprint_id' => $sprint_id])
             ->with('userstories', $userstories)
+            ->with('statuses', $statuses)
             ->with('title', 'User Story for ' . $sprint->sprint_name)
             ->with('success', 'User Story has successfully been assigned from Backlog!');
     }

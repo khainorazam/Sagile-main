@@ -2578,6 +2578,15 @@ __webpack_require__.r(__webpack_exports__);
     this.statuses = JSON.parse(JSON.stringify(this.statuses));
   },
   methods: {
+    formatDate: function formatDate(date) {
+      var options = {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      };
+      var formattedDate = new Date(date).toLocaleDateString('en-US', options);
+      return formattedDate;
+    },
     filteredTasks: function filteredTasks(status) {
       return this.tasks.filter(function (task) {
         return task.status_name === status.title;
@@ -25001,21 +25010,7 @@ var render = function() {
                 [
                   _c("h4", { staticClass: "font-medium text-white" }, [
                     _vm._v(_vm._s(status.title))
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass:
-                        "py-1 px-2 text-sm text-orange-500 hover:underline",
-                      on: {
-                        click: function($event) {
-                          return _vm.openAddTaskForm(status.id)
-                        }
-                      }
-                    },
-                    [_vm._v("Add Task")]
-                  )
+                  ])
                 ]
               ),
               _vm._v(" "),
@@ -25077,18 +25072,7 @@ var render = function() {
                                   {
                                     staticClass: "font-semibold text-black-900"
                                   },
-                                  [_vm._v("Project :")]
-                                ),
-                                _vm._v(_vm._s(task.proj_id))
-                              ]),
-                              _vm._v(" "),
-                              _c("p", { staticClass: "text-gray-700 mb-1" }, [
-                                _c(
-                                  "span",
-                                  {
-                                    staticClass: "font-semibold text-black-900"
-                                  },
-                                  [_vm._v("Sprint :")]
+                                  [_vm._v("Sprint : ")]
                                 ),
                                 _vm._v(_vm._s(task.sprint_id))
                               ]),
@@ -25099,7 +25083,7 @@ var render = function() {
                                   {
                                     staticClass: "font-semibold text-black-900"
                                   },
-                                  [_vm._v("User Story :")]
+                                  [_vm._v("User Story : ")]
                                 ),
                                 _vm._v(_vm._s(task.userstory_id))
                               ]),
@@ -25110,9 +25094,9 @@ var render = function() {
                                   {
                                     staticClass: "font-semibold text-black-900"
                                   },
-                                  [_vm._v("Start Date :")]
+                                  [_vm._v("Start Date: ")]
                                 ),
-                                _vm._v(_vm._s(task.start_date))
+                                _vm._v(_vm._s(_vm.formatDate(task.start_date)))
                               ]),
                               _vm._v(" "),
                               _c("p", { staticClass: "text-gray-700 mb-1" }, [
@@ -25121,9 +25105,9 @@ var render = function() {
                                   {
                                     staticClass: "font-semibold text-black-900"
                                   },
-                                  [_vm._v("End Date :")]
+                                  [_vm._v("End Date : ")]
                                 ),
-                                _vm._v(_vm._s(task.end_date))
+                                _vm._v(_vm._s(_vm.formatDate(task.end_date)))
                               ])
                             ]
                           )
@@ -25151,21 +25135,7 @@ var render = function() {
                     [
                       _c("span", { staticClass: "text-gray-600" }, [
                         _vm._v("No tasks yet")
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "mt-1 text-sm text-orange-600 hover:underline",
-                          on: {
-                            click: function($event) {
-                              return _vm.openAddTaskForm(status.id)
-                            }
-                          }
-                        },
-                        [_vm._v("Add one")]
-                      )
+                      ])
                     ]
                   )
                 ],
