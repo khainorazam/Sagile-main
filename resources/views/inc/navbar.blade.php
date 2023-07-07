@@ -8,7 +8,7 @@ E.g.:
     <li class="aside a {{ Request::is('profeature*') || Request::is('projects*') || Request::is('sprint*') || Request::is('userstory*') ? 'active' : '' }}"><a href="{{ route('profeature.index') }}">Project List</a></li>
     <li class="aside a {{ Request::is('team*') ? 'active' : '' }}"><a href="{{route('team.index')}}">Team</a></li>
     <li class="aside a {{ Request::is('status*') ? 'active' : '' }}"><a href="{{route('status.index')}}">Status</a></li>
-    <li class="aside a {{ Request::is('tasks*') ? 'active' : '' }}"><a href="{{route('tasks.kanban')}}">Kanban Board</a></li>
+    {{-- <li class="aside a {{ Request::is('tasks*') ? 'active' : '' }}"><a href="{{route('tasks.kanban')}}">Kanban Board</a></li> --}}
     <li class="aside a {{ Request::is('perfeature*') ? 'active' : '' }}"><a href="{{route('perfeature.index')}}">Performance Feature</a></li>
     <li class="aside a {{ Request::is('secfeature*') ? 'active' : '' }}"><a href="{{route('secfeature.index')}}">Security Feature</a></li>
     <li class="aside a {{ Request::is('codestand*') ? 'active' : '' }}"><a href="{{route('codestand.index')}}">Coding Standard</a></li>

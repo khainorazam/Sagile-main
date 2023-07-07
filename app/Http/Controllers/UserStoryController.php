@@ -255,7 +255,9 @@ class UserStoryController extends Controller
         $tasks = Task::where('userstory_id', $userstory->u_id)->get();
         
         //deletes user stories and all task related to user stories
-        $tasks->delete();
+        foreach ($tasks as $task) {
+            $task->delete();
+        }
         $userstory->delete();
         $statuses = Status::all();
 

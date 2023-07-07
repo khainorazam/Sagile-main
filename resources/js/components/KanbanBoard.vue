@@ -17,7 +17,7 @@
         <draggable class="flex-1 overflow-hidden" v-model="tasks" v-bind="taskDragOptions" @end="handleTaskMoved">
         <transition-group class="flex-1 flex flex-col h-full overflow-x-hidden overflow-y-auto rounded shadow-xs" tag="div">
           <div v-for="task in filteredTasks(status)" :key="task.id" class="mb-3 p-4 flex flex-col bg-white rounded-md shadow transform hover:shadow-md cursor-pointer">
-            <span class="block mb-2 text-xl text-gray-900">{{ task.title }}</span>
+            <span class="block mb-2 text-xl text-gray-900">{{ task.status_id }}</span>
               <p class="text-gray-700 mb-3">{{ task.description }}</p>
               <!-- <p class="text-gray-700 mb-1"><span class="font-semibold text-black-900">Project : </span>{{ task.proj_id }}</p> -->
               <p class="text-gray-700 mb-1"><span class="font-semibold text-black-900">Sprint : </span>{{ task.sprint_id }}</p>
@@ -97,7 +97,7 @@ export default {
       return formattedDate;
     },
     filteredTasks(status) {
-    return this.tasks.filter(task => task.status_name === status.title)
+      return this.tasks.filter(task => task.status_id === status.id);
     },
     openAddTaskForm(statusId) 
     {

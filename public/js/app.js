@@ -2589,7 +2589,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     filteredTasks: function filteredTasks(status) {
       return this.tasks.filter(function (task) {
-        return task.status_name === status.title;
+        return task.status_id === status.id;
       });
     },
     openAddTaskForm: function openAddTaskForm(statusId) {
@@ -25059,7 +25059,7 @@ var render = function() {
                                   staticClass:
                                     "block mb-2 text-xl text-gray-900"
                                 },
-                                [_vm._v(_vm._s(task.title))]
+                                [_vm._v(_vm._s(task.status_id))]
                               ),
                               _vm._v(" "),
                               _c("p", { staticClass: "text-gray-700 mb-3" }, [

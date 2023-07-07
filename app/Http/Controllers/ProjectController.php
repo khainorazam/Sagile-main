@@ -37,6 +37,7 @@ class ProjectController extends Controller
         return view('project.index')->with ('projects',$project->all());
     }
 
+
     /**
      * Show the form for creating a new resource.
      *
@@ -62,12 +63,10 @@ class ProjectController extends Controller
     {
        
         $project =new Project();
-        $project->user_id = \Auth::user()->id;
         $project->proj_name=$request->proj_name;
         $project->proj_desc=$request->proj_desc;
         $project->start_date=$request->start_date;
         $project->end_date=$request->end_date; 
-        //it will store the current logged in user id in user_id field
         
         $validation = $request->validate([
             'proj_name' => 'required|unique:projects',

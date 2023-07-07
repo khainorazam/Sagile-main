@@ -64,13 +64,7 @@ class APIAuthController extends BaseController
     {
         $access_token = $request->header('Authorization');
         if($access_token != ''){
-            $auth_header = explode(' ', $access_token);
-            $token = $auth_header[1];
-            $token_parts = explode('.', $token);
-            $token_header = $token_parts[1];
-            $token_header_json = base64_decode($token_header);
-            $token_header_array = json_decode($token_header_json, true);
-            $token_id = $token_header_array['jti'];
+            $token_id = json_decode(base64_decode(explode('.', explode(' ', $access_token)[1])[1]), true)['jti'];
     
             $success['user'] = Token::find($token_id)->user;
             return $this->sendResponse($success, 'User retrieved successfully.');
