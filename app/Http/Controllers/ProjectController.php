@@ -83,9 +83,20 @@ class ProjectController extends Controller
         
 
         $project->save();
-        return redirect()->route('profeature.index')
-            ->with('success', 'Project has successfully been created! Assign this project in Team to start working on the project!');
+        // return redirect()->route('profeature.index')
+        //     ->with('success', 'Project has successfully been created! Assign this project in Team to start working on the project!');
+
+        // Retrieve the projects with team_name == null 
+        $projects = Project::whereNull('team_name')->get();
+
+        return redirect()->route('teams.create')
+            ->with('project', $projects->all())
+            ->with('current_project', $project->proj_name)
+            ->with('title', 'Create Team')
+            ->with('success', 'Project has successfully been created and listed in existing project(s)! Select this project for your team!');
+    
     }
+    
 
     /**
      * Display the specified resource.
@@ -178,7 +189,7 @@ class ProjectController extends Controller
         $project->delete();
 
         return redirect()->route('profeature.index', $project)
-            ->with('success', 'Project has been deleted successfully');
+            ->with('success', 'Project and Team associated has been deleted successfully');
         
     }
 }

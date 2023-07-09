@@ -27,11 +27,8 @@
 </tr>
 
 @if ($pros->isEmpty())
-    <h3>If you don't have a team:</h3>
-    <p>Assign yourself to a team in <b>Team</b></p>
-
-    <h3>If your team does not have project:</h3>
-    <p>Create a project here and then assign it to your team in <b>Team</b></p>
+    <h3>There are no projects yet:</h3>
+    <p>Add a new team or assign yourself to a team in <b>Team</b></p>
     
 @else
 
@@ -71,6 +68,7 @@
         </th>
       </tr>
 
+
 @endforeach
 
 @endif
@@ -78,6 +76,6 @@
   </table>
   <br><br><br>
 
-  <button type="submit"><a href="{{route('projects.create')}}">Add Project</a></button>
+  {{-- <button type="submit"><a href="{{route('projects.create')}}">Add Project</a></button> --}}
 
 @endsection

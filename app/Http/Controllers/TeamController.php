@@ -39,11 +39,14 @@ class TeamController extends Controller
 
         // Retrieve the projects with team_name == null 
         $project = Project::whereNull('team_name')->get();
+
+        $current_project = "";
         
         return view('team.create')
             ->with('teams',$team->all())
             ->with('project', $project->all())
-            ->with('title', 'Create Team');
+            ->with('title', 'Create Team')
+            ->with('current_project', $current_project);
     }
     
     public function store(Request $request)
@@ -61,18 +64,27 @@ class TeamController extends Controller
 
 
         $user = \Auth::user();
-        $team =new Team();
         
-
+        //create new team
+        $team =new Team();
         $team->team_name = $request->team_name;
         $team->proj_name = $request->proj_name;
 
+        //assign project to team
         $project = Project::where('proj_name', $request->proj_name)->first();
         $project->team_name = $request->team_name;
 
         $project->save();
         $team->save();
-        return redirect()->route('team.index')->with('success', 'Team has successfully been created!');
+
+        //assign user who creates to team with role of Project Manager
+        $teammapping = new TeamMapping();
+        $teammapping->username = $user->username;
+        $teammapping->role_name = "Project Manager";
+        $teammapping->team_name = $request->team_name;
+        $teammapping->save();
+
+        return redirect()->route('team.index')->with('success', 'Team has successfully been created! You have been enrolled in the team as Project Manager');
     }
 
     public function show(Team $team)
@@ -127,7 +139,7 @@ class TeamController extends Controller
 
         $team->delete();
         return redirect()->route('team.index', $team)
-            ->with('success', 'Team has been deleted successfully');
+            ->with('success', 'Team has been deleted successfully, Project will remain to exist');
 
     }
 }
