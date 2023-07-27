@@ -21,16 +21,17 @@ services:
             PMA_PORT: 3306
             PMA_USER: root
             PMA_PASSWORD: root
+    # jenkins:
+    #     build: 
+    #         context: .
+    #         dockerfile: Dockerfile.jenkins
+    #     ports:
+    #         - 4000:8080
     main:
         build: 
             context: .
             dockerfile: Dockerfile
         restart: always
-        # tty: true
-        # command: /bin/bash -c  'php artisan migrate; php artisan serve --host=0.0.0.0;'
         command: 'php artisan serve --host=0.0.0.0'
-        # command: 'php artisan migrate'
-        # volumes:
-        #     - .:/app
         ports:
             - 8000:8000
